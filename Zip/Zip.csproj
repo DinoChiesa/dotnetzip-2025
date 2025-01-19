@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyTitle>Ionic's Zip Library</AssemblyTitle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonSrc\CRC32.cs">
+      <Link>CRC32.cs</Link>
+    </Compile>
+    <Compile Include="..\BZip2\*.cs">
+      <Link>BZip2\%(FileName)</Link>
+    </Compile>
+    <Compile Include="..\Zlib\*.cs">
+      <Link>Zlib\%(FileName)</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CodeDom" Version="9.0.1" />
+    <PackageReference Include="System.Security.Permissions" Version="9.0.1" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.1" />
+  </ItemGroup>
+
+</Project>

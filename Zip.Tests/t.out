@@ -1,0 +1,498 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Zip -> C:\Users\dpchi\dev\dotnet\DotNetZip-2025\Zip\bin\Debug\net9.0\Zip.dll
+  Zip.Tests -> C:\Users\dpchi\dev\dotnet\DotNetZip-2025\Zip.Tests\bin\Debug\net9.0\Zip.Tests.dll
+Test run for C:\Users\dpchi\dev\dotnet\DotNetZip-2025\Zip.Tests\bin\Debug\net9.0\Zip.Tests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.12.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+C:\Users\dpchi\dev\dotnet\DotNetZip-2025\Zip.Tests\bin\Debug\net9.0\Zip.Tests.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 9.0.0)
+[xUnit.net 00:00:00.09]   Discovering: Zip.Tests
+[xUnit.net 00:00:00.13]   Discovered:  Zip.Tests
+[xUnit.net 00:00:00.14]   Starting:    Zip.Tests
+[xUnit.net 00:00:05.10]   Finished:    Zip.Tests
+  Passed Ionic.Zip.Tests.BasicTests.CreateZip_UpdateDirectory [4 s]
+  Standard Output Messages:
+ 
+
+**
+BasicTests.cs **
+ 
+------------
+Creating files ...
+ chk[dir-path-in-archive/dir0000/file0000.x]= 2648265705378f28d671ea89e417856b
+ chk[dir-path-in-archive/dir0000/file0001.x]= 32c46d708fdde5979a0e601b91ac07e1
+ chk[dir-path-in-archive/dir0000/file0002.x]= bda0c0bc08026bfe1058c77d36c58e2c
+ chk[dir-path-in-archive/dir0000/file0003.x]= 2916b4ff76573dffced7f0bbd169ac0e
+ chk[dir-path-in-archive/dir0000/file0004.x]= 72f3c807e7440123ccef96ccec6716b3
+ chk[dir-path-in-archive/dir0000/file0005.x]= c12f2b99be4b2373de70f3d1609310ee
+ chk[dir-path-in-archive/dir0000/file0006.x]= 7e13c9414bbc04c277db198b884d51f8
+ chk[dir-path-in-archive/dir0000/file0007.x]= c44e71dc16d41f9a3aaa76e01bbb451e
+ chk[dir-path-in-archive/dir0000/file0008.x]= 8b706f4bc6af82b76403f1408f8a3a7a
+ chk[dir-path-in-archive/dir0000/file0009.x]= 6e1bf18fca8f10259939533cffdb2594
+ chk[dir-path-in-archive/dir0001/file0000.x]= 5ad341978ff9522df576ddda46d7e229
+ chk[dir-path-in-archive/dir0001/file0001.x]= 072641f76fb140573f35936f15fb49a6
+ chk[dir-path-in-archive/dir0001/file0002.x]= cba8a3371eaada8a638359a72754183c
+ chk[dir-path-in-archive/dir0001/file0003.x]= a6c0f8967f9b38a9ce3b878fd5c7d461
+ chk[dir-path-in-archive/dir0001/file0004.x]= 805b7eb0f7b81f123172b125c2c4035f
+ chk[dir-path-in-archive/dir0001/file0005.x]= b9c68c7ef9e56ef0f3b37c0459f1829d
+ chk[dir-path-in-archive/dir0001/file0006.x]= 4a91706b3cd08919a52e52a5455ff7a9
+ chk[dir-path-in-archive/dir0001/file0007.x]= 9ca89390eb95e5481ae47bef1617128f
+ chk[dir-path-in-archive/dir0001/file0008.x]= 425a74eeac46f7fa3047d037aa26471a
+ chk[dir-path-in-archive/dir0001/file0009.x]= ae3d28c24d1cd1acd47d95f9650c1c46
+ chk[dir-path-in-archive/dir0001/file0010.x]= ce06a53691d19832e49dd350dd2d7452
+ chk[dir-path-in-archive/dir0001/file0011.x]= c78d7ed68fa0d1070fb5aa0476a78a72
+ chk[dir-path-in-archive/dir0001/file0012.x]= e6077c41e28c67b4dc21cc98b9b1b457
+ chk[dir-path-in-archive/dir0001/file0013.x]= b659866ef7ee35c8887951aee6a310bc
+ chk[dir-path-in-archive/dir0002/file0000.x]= c2eb1f8570eb64d62118240365e8fe6d
+ chk[dir-path-in-archive/dir0002/file0001.x]= 3d6eb78a450b81823240c6c7dcf4d262
+ chk[dir-path-in-archive/dir0002/file0002.x]= 60130cdf8d6a4c92ea0f86cb7e237663
+ chk[dir-path-in-archive/dir0002/file0003.x]= c1c6533a66179f438716c710ebb88f5b
+ chk[dir-path-in-archive/dir0002/file0004.x]= ae12de4b9df9507e5ad16a74b6524160
+ chk[dir-path-in-archive/dir0002/file0005.x]= 5ae444f6a8cfb40452bcc61b0b046097
+ chk[dir-path-in-archive/dir0002/file0006.x]= f6ea9cb643d3bd3cf4456a341ac46e0b
+ chk[dir-path-in-archive/dir0002/file0007.x]= d94e3fd1f98aefd2d8878b6cab1024bb
+ chk[dir-path-in-archive/dir0002/file0008.x]= 10c34f6817293c9983f0e1ae708248f3
+ chk[dir-path-in-archive/dir0002/file0009.x]= c325d4e3981354ea931518528b285362
+ chk[dir-path-in-archive/dir0002/file0010.x]= 635c028b9b49edbe9ea8256456a88e78
+ chk[dir-path-in-archive/dir0002/file0011.x]= b074c8e5abf3096684de9a6e6afd5649
+ chk[dir-path-in-archive/dir0003/file0000.x]= 278313cfdcbbd678db365a073f5c506f
+ chk[dir-path-in-archive/dir0003/file0001.x]= 061826876633e00f0eef176ab45e732e
+ chk[dir-path-in-archive/dir0003/file0002.x]= 60ad3a33001197c08bdafe64fe13da45
+ chk[dir-path-in-archive/dir0003/file0003.x]= 015c5c14853060b35048f733cf218595
+ chk[dir-path-in-archive/dir0003/file0004.x]= 0f0882332e7dead33780ec0be8d5ce47
+ chk[dir-path-in-archive/dir0003/file0005.x]= 8c8a98fb5edf93b160ea84e8d3137f2c
+ chk[dir-path-in-archive/dir0003/file0006.x]= e1fd293eff6118426f18d90243904474
+ chk[dir-path-in-archive/dir0004/file0000.x]= 8645cdccc5c5ba73b45376a9f79717b8
+ chk[dir-path-in-archive/dir0004/file0001.x]= d829e9aad8a1a8241723139e7d88a7ca
+ chk[dir-path-in-archive/dir0004/file0002.x]= cb51850661045b7065114cd25179f703
+ chk[dir-path-in-archive/dir0004/file0003.x]= 1881b29fd103255d15bbf06359826680
+ chk[dir-path-in-archive/dir0004/file0004.x]= 4f7fc39bdf6c2b7d432ca0216701f399
+ chk[dir-path-in-archive/dir0004/file0005.x]= 8aca8ee223789261dc10920d2ddbdcfa
+ chk[dir-path-in-archive/dir0004/file0006.x]= d25bbc065a7f973e066762381688e2d9
+ chk[dir-path-in-archive/dir0004/file0007.x]= 48fb48fe08f238833c27668fabc902c7
+ chk[dir-path-in-archive/dir0005/file0000.x]= 7d267a6de5f37d44710fecf453a68578
+ chk[dir-path-in-archive/dir0005/file0001.x]= b9952ae16dd503d64105def968a70b7a
+ chk[dir-path-in-archive/dir0005/file0002.x]= 7a7c7e532811edc5ffdd898b41473bc1
+ chk[dir-path-in-archive/dir0005/file0003.x]= f6b6d8f6609390fa3adf4f99a6751c1f
+ chk[dir-path-in-archive/dir0005/file0004.x]= b9778b062d2a65bef813dfc06cedfbb6
+ chk[dir-path-in-archive/dir0005/file0005.x]= 3b1325d3eaa18849f123479a09c33011
+ chk[dir-path-in-archive/dir0005/file0006.x]= ad1b280fdab2d09b3b22427e18427980
+ chk[dir-path-in-archive/dir0005/file0007.x]= e18e80f3970ec914b507ad02611620c1
+ chk[dir-path-in-archive/dir0005/file0008.x]= c187445fd5cdae65c71acf2990c9a16c
+ chk[dir-path-in-archive/dir0005/file0009.x]= c3d23e50827ad005f3d5f00c67b5f94f
+ chk[dir-path-in-archive/dir0005/file0010.x]= ad6d145ce38ec4da960f192f61d36442
+ chk[dir-path-in-archive/dir0005/file0011.x]= 6a78e92e31d06e400ab79e02fd88d114
+ chk[dir-path-in-archive/dir0005/file0012.x]= 4aec1f3add8f7d0755d5ace1a2c6074e
+ chk[dir-path-in-archive/dir0006/file0000.x]= 0a45abc06cedd299011dac1c179ec882
+ chk[dir-path-in-archive/dir0006/file0001.x]= aeae1e8db1fdc76d87a1747171b0460a
+ chk[dir-path-in-archive/dir0006/file0002.x]= 4261af81548a9a2fc2e735be19edcdf9
+ chk[dir-path-in-archive/dir0006/file0003.x]= fe9a82251fe290ca44a466f9b7393098
+ chk[dir-path-in-archive/dir0006/file0004.x]= 713c0704ef77e2acbb65ebb33a4d8eca
+ chk[dir-path-in-archive/dir0006/file0005.x]= ce9502590cd38559fb8e2b00199694ce
+ chk[dir-path-in-archive/dir0006/file0006.x]= b5a4619b46a3bcf7cca225a76e737cbc
+ chk[dir-path-in-archive/dir0007/file0000.x]= 860a11aa93b30d8236af5e460b7042b3
+ chk[dir-path-in-archive/dir0007/file0001.x]= 4c93d7224eeb2af019451f70a2e551d2
+ chk[dir-path-in-archive/dir0007/file0002.x]= 6a29ce63f0b7a6fc56c39cfef5e329ec
+ chk[dir-path-in-archive/dir0007/file0003.x]= 4ebd217f523b78250a60f609f86d9d53
+ chk[dir-path-in-archive/dir0007/file0004.x]= a40609f2b2b4081a630b31b5b7f298f2
+ chk[dir-path-in-archive/dir0007/file0005.x]= 23b2da7f564b69cc55efa97aa277cc82
+ chk[dir-path-in-archive/dir0007/file0006.x]= 0af29d4a558794793794c57c961a5fb8
+ chk[dir-path-in-archive/dir0007/file0007.x]= ea7d577e19649e03e2a6835b78200f94
+ chk[dir-path-in-archive/dir0007/file0008.x]= 5a0e748ca28be10ebc8635bf202d6f68
+ chk[dir-path-in-archive/dir0007/file0009.x]= 1c5ef74e2ccc0b92e595524448bb48cb
+ chk[dir-path-in-archive/dir0007/file0010.x]= af97f8e564d787f689d46ff342a36253
+ chk[dir-path-in-archive/dir0007/file0011.x]= 6dc65574e98ca26ca215ae4e36d1b731
+ chk[dir-path-in-archive/dir0007/file0012.x]= 819a6d5d777270dd8204917ac10cf8ea
+ chk[dir-path-in-archive/dir0007/file0013.x]= 4a08effa2068ca5e668c0b471b2ffaca
+ chk[dir-path-in-archive/dir0008/file0000.x]= 45c49d64b5cac5de9ec3aa1e1e7f9aef
+ chk[dir-path-in-archive/dir0008/file0001.x]= 50e35f0e0e0e4bbb42bf8bcfe8052566
+ chk[dir-path-in-archive/dir0008/file0002.x]= 0710fc0a8e3e92f8a0a7734c4adcad43
+ chk[dir-path-in-archive/dir0008/file0003.x]= eb5d49ba329c5779ca9757dd4dce3410
+ chk[dir-path-in-archive/dir0008/file0004.x]= 3cd897d51d34a5041d429a2d492edde8
+ chk[dir-path-in-archive/dir0008/file0005.x]= 652a27bce2899f6433c65e9bacc5a497
+ chk[dir-path-in-archive/dir0008/file0006.x]= d15cd098de27d27d286af9d0ca49827e
+ chk[dir-path-in-archive/dir0008/file0007.x]= 79f75753ab27a924df3313bf4318fa1d
+ chk[dir-path-in-archive/dir0008/file0008.x]= f311b53b91e15d1cd3736e173cdae1d3
+ chk[dir-path-in-archive/dir0008/file0009.x]= d76adfb3102c3c562c050b1539dd164e
+ chk[dir-path-in-archive/dir0009/file0000.x]= e1b4ebadc233de80359f2ac772679086
+ chk[dir-path-in-archive/dir0009/file0001.x]= 4d05cb125d4791fe88899430a33a4faa
+ chk[dir-path-in-archive/dir0009/file0002.x]= 743a74a18aa6be33a6a8a2d9dc70c7fb
+ chk[dir-path-in-archive/dir0009/file0003.x]= e1c88d5485ec5a84ce8b36c3fd4d896e
+ chk[dir-path-in-archive/dir0009/file0004.x]= db28483543e26599b1b3d722fe7dad37
+ chk[dir-path-in-archive/dir0009/file0005.x]= 454283c0606f4d751c73382335717e34
+ chk[dir-path-in-archive/dir0009/file0006.x]= 7997cfd37b1ee920033f3325eac33f84
+ chk[dir-path-in-archive/dir0009/file0007.x]= 743e3bd2b61446cbbf468cc4cc9d00f3
+ chk[dir-path-in-archive/dir0009/file0008.x]= cda9f5e9ff783b77d8886731a2f5f5a5
+ chk[dir-path-in-archive/dir0010/file0000.x]= 9fa6b752799edff293de28b39838853f
+ chk[dir-path-in-archive/dir0010/file0001.x]= 43639711ee50e7e06a1ac77d4ffc5379
+ chk[dir-path-in-archive/dir0010/file0002.x]= 6888e6944eae45ebcb89f221c69dd75a
+ chk[dir-path-in-archive/dir0010/file0003.x]= c41e687eb42dedd93e07a29a845fe9a6
+ chk[dir-path-in-archive/dir0010/file0004.x]= 1015935f691ccbf557234b9b719561d5
+ chk[dir-path-in-archive/dir0010/file0005.x]= 73f6bf3d7c4d1ad72881e828388f050a
+ chk[dir-path-in-archive/dir0010/file0006.x]= 4b47697da1f2a8062dfcfb26f70b9d64
+ chk[dir-path-in-archive/dir0010/file0007.x]= 39667b090fcacf6b35947c5c2ab6e397
+ chk[dir-path-in-archive/dir0010/file0008.x]= a37abeead6663eedc6bad6e8198e2ccc
+ chk[dir-path-in-archive/dir0010/file0009.x]= 3dc4eb78ca847e639b2f4e9729cc93a1
+ chk[dir-path-in-archive/dir0010/file0010.x]= 989a80ce1175c94731a99869fd71438c
+ chk[dir-path-in-archive/dir0010/file0011.x]= 4f0429349540544f6f4dd11aa11d8fc5
+ chk[dir-path-in-archive/dir0011/file0000.x]= 50776e4b7aabde5ed839651841661782
+ chk[dir-path-in-archive/dir0011/file0001.x]= ef343637b635c42d995ba0239bb6b9e4
+ chk[dir-path-in-archive/dir0011/file0002.x]= 0be6a8d2ecf43290c70257699f9a943b
+ chk[dir-path-in-archive/dir0011/file0003.x]= f2141e2b3f695dece0bcb922c21a736a
+ chk[dir-path-in-archive/dir0011/file0004.x]= d870e74cc092eef89ff938cabb0f4073
+ chk[dir-path-in-archive/dir0011/file0005.x]= d812dc66f0076f1ceba33f2c4530f16f
+ chk[dir-path-in-archive/dir0011/file0006.x]= 80c39be9ae5d7ce153de3240b30f4df4
+ chk[dir-path-in-archive/dir0011/file0007.x]= bc9e1317ea4b0d0ee6d0d6414d9d2256
+ chk[dir-path-in-archive/dir0011/file0008.x]= 13628fc67f454bb78f377460f7107141
+ chk[dir-path-in-archive/dir0011/file0009.x]= afec5e278d6cc3f488a05071e4825600
+ chk[dir-path-in-archive/dir0012/file0000.x]= 781e612e45b718dd927199781c6843f0
+ chk[dir-path-in-archive/dir0012/file0001.x]= c206a5516b053c4534ea26d63454a86a
+ chk[dir-path-in-archive/dir0012/file0002.x]= 1362a17d070946a29c07c1e6815db403
+ chk[dir-path-in-archive/dir0012/file0003.x]= 8ce583c782a275bb5c1e6e28e2a79356
+ chk[dir-path-in-archive/dir0012/file0004.x]= 1640a32ea74cf732165f550b41c490cb
+ chk[dir-path-in-archive/dir0012/file0005.x]= 6a8077006256c09d7d4f8a72a6600e3d
+ chk[dir-path-in-archive/dir0012/file0006.x]= e9fd870208d6fbb73ed5053f04729419
+ chk[dir-path-in-archive/dir0013/file0000.x]= fd16bd5281ae458e890611875cee438b
+ chk[dir-path-in-archive/dir0013/file0001.x]= df78d80687b435cd92dcddda37e26b15
+ chk[dir-path-in-archive/dir0013/file0002.x]= da23cd821ac54a686585fd97e94bf1b4
+ chk[dir-path-in-archive/dir0013/file0003.x]= 3520139c572ad46b28ae759d123d4a83
+ chk[dir-path-in-archive/dir0013/file0004.x]= f0369f62bc45694152a7c71d268aea7a
+ chk[dir-path-in-archive/dir0013/file0005.x]= 69f5549cbe4cf7057c63415c77dcc57d
+ chk[dir-path-in-archive/dir0013/file0006.x]= 8c2995ec4e134706b0e416fc18b836af
+ chk[dir-path-in-archive/dir0013/file0007.x]= d641750d93249a5b5949b6f7ab347230
+ chk[dir-path-in-archive/dir0013/file0008.x]= e2c80e5b25652cf7f09a83e2cb915c08
+ chk[dir-path-in-archive/dir0014/file0000.x]= 9f6a9d4e80c3a8f8d627bc841985ab8d
+ chk[dir-path-in-archive/dir0014/file0001.x]= fb8102c85e73ced10358f69c0dbb037f
+ chk[dir-path-in-archive/dir0014/file0002.x]= ff67a65c7f2cdd7e76180cf383a0cd42
+ chk[dir-path-in-archive/dir0014/file0003.x]= f61e26e5c48a90fd3fcbb5b64e4126ef
+ chk[dir-path-in-archive/dir0014/file0004.x]= 0cdaefb9149587f6bc4b3c2047e1411a
+ chk[dir-path-in-archive/dir0014/file0005.x]= c2fe8d7df59619f0962bb0f9135e3868
+ chk[dir-path-in-archive/dir0014/file0006.x]= 08955c3ae218eacbe3e7d2f0ec1ad4f6
+ chk[dir-path-in-archive/dir0014/file0007.x]= 448cb896c6f956f022740baa196d398b
+ chk[dir-path-in-archive/dir0014/file0008.x]= 72025a917021097be18a3afa1804fd3d
+ chk[dir-path-in-archive/dir0015/file0000.x]= ad205a003d24009033636cbf15972576
+ chk[dir-path-in-archive/dir0015/file0001.x]= f81437daa53e47ca4d9b09a243c65dc0
+ chk[dir-path-in-archive/dir0015/file0002.x]= 18c179d853869fcc02ec410ae78f433e
+ chk[dir-path-in-archive/dir0015/file0003.x]= 0063212af998b75058d78382c59be2eb
+ chk[dir-path-in-archive/dir0015/file0004.x]= 93b3d8e11c1f4c9d13d4d0f378c4984c
+ chk[dir-path-in-archive/dir0015/file0005.x]= cf07e1165cdc9a2159b7ff1a84db5da6
+ chk[dir-path-in-archive/dir0015/file0006.x]= c044c04e4bee0e6ea905a06bba22d162
+ chk[dir-path-in-archive/dir0015/file0007.x]= b45f1b7584060bde1a3bbc6bd009d58b
+ chk[dir-path-in-archive/dir0016/file0000.x]= 08da6cc27f3155928f0ac2e3e984fd31
+ chk[dir-path-in-archive/dir0016/file0001.x]= cda82bb5e36fb09d13a2255076de4d6b
+ chk[dir-path-in-archive/dir0016/file0002.x]= 7db66239be8cc481b7bcc3605a6d7f83
+ chk[dir-path-in-archive/dir0016/file0003.x]= b28e89dd3894903d41e6474ceaa74947
+ chk[dir-path-in-archive/dir0016/file0004.x]= 47bef52b5ec1bf39c174e8e2a12bdea5
+ chk[dir-path-in-archive/dir0016/file0005.x]= 6b2118713a402e84c570f0bcf1eb617e
+ chk[dir-path-in-archive/dir0016/file0006.x]= 93b6bca5f9168f31a3ece548dacac4c4
+ chk[dir-path-in-archive/dir0016/file0007.x]= 151c32a48a286da9e0fb28abd950f18f
+ chk[dir-path-in-archive/dir0016/file0008.x]= 05be14edae44684352eab6d9d2e6d388
+ 
+------------
+Adding files into the Zip...
+ 
+
+ 
+------------
+Extracting and validating checksums...
+ 
+------------
+Creating some new files ...
+ chk[dir-path-in-archive/dir0000/file0000.x]= 7d3f26657134c596fec63b495c5cac31
+ chk[dir-path-in-archive/dir0000/file0001.x]= 1be919114ca246c7388da216847f938e
+ chk[dir-path-in-archive/dir0000/file0005.x]= 38c202c0287537a37c75b585c7e69015
+ chk[dir-path-in-archive/dir0000/file0006.x]= 2628991057d1eeec39cf59c9835d63c8
+ chk[dir-path-in-archive/dir0000/file0008.x]= ef1f0f6fd75b05e13b98f02a250b32a8
+ chk[dir-path-in-archive/dir0000/file0009.x]= 59941ccb9d25358868913a325af9379e
+ chk[dir-path-in-archive/dir0001/file0000.x]= 1b291ba9496b33ed372270a0df50c390
+ chk[dir-path-in-archive/dir0001/file0001.x]= b9520d8aa9777056033ac6f41182ed4a
+ chk[dir-path-in-archive/dir0001/file0002.x]= 3bbd33b667321f5dc2aa85f056bbc280
+ chk[dir-path-in-archive/dir0001/file0004.x]= 01c0b038dcffa7496cda0b24681f4193
+ chk[dir-path-in-archive/dir0001/file0005.x]= 8e4876c7a1b90926c43b6d17136d7a1b
+ chk[dir-path-in-archive/dir0001/file0007.x]= 07e74a425769273fff8f1f2fc022fb43
+ chk[dir-path-in-archive/dir0001/file0009.x]= bd796d58f0159b59c54a2376de173fba
+ chk[dir-path-in-archive/dir0001/file0010.x]= deacd8f0ec8f01efe5f31bb90d9ba6fe
+ chk[dir-path-in-archive/dir0001/file0011.x]= 03f46704d99992c15f39cf597c1caacc
+ chk[dir-path-in-archive/dir0001/file0013.x]= dae6e4c819aa1e1cf4a3622de6fea541
+ chk[dir-path-in-archive/dir0002/file0005.x]= 9bf7166e0f0e1e2a4411b6d33089b193
+ chk[dir-path-in-archive/dir0002/file0007.x]= 22204ecd8ac25c72c50145c851d36254
+ chk[dir-path-in-archive/dir0002/file0011.x]= c6746b17c6a0a89637ac9142664143d0
+ chk[dir-path-in-archive/dir0003/file0001.x]= 8579bd899127ff359969184d84b5de85
+ chk[dir-path-in-archive/dir0003/file0002.x]= 8ca51b5491a4ee6d0418971f64570b29
+ chk[dir-path-in-archive/dir0003/file0004.x]= 82ea03c5f725e010101114add094a741
+ chk[dir-path-in-archive/dir0003/file0005.x]= 39a7b2f90731e7e03095287693c5cbe0
+ chk[dir-path-in-archive/dir0004/file0000.x]= c1122a0ce6566912999f52f8c33db2be
+ chk[dir-path-in-archive/dir0004/file0001.x]= dfcaea4b9653cd4871c7ca0262d89204
+ chk[dir-path-in-archive/dir0004/file0002.x]= 540e91993a4d432ea05f18a81fffa9dd
+ chk[dir-path-in-archive/dir0004/file0003.x]= 331b45377bee2d017df4a14b839b173e
+ chk[dir-path-in-archive/dir0004/file0005.x]= 1c863da75adb13f4b528c5f092ada98c
+ chk[dir-path-in-archive/dir0005/file0000.x]= 07600d98d4cbff46cd78942d3e8be367
+ chk[dir-path-in-archive/dir0005/file0002.x]= 9661efafbdb37df321e541d87ae2a091
+ chk[dir-path-in-archive/dir0005/file0003.x]= 14358cb3c8d25fe4544cfb3359b270d9
+ chk[dir-path-in-archive/dir0005/file0006.x]= 537eba838a2e49e3a3c6d836234eeb6a
+ chk[dir-path-in-archive/dir0005/file0007.x]= ee513ecf823e11fb61f2285d0f0b597e
+ chk[dir-path-in-archive/dir0005/file0008.x]= 6c0e050ae48d8309c29e2d8174630cb0
+ chk[dir-path-in-archive/dir0005/file0009.x]= 42d0f957baf7dc3d23b9af748b4099f3
+ chk[dir-path-in-archive/dir0005/file0011.x]= daf568aaf2f0b7f77da822d1caf5f9fc
+ chk[dir-path-in-archive/dir0005/file0012.x]= b1b5b594323dcc41ac92b315d6f554fb
+ chk[dir-path-in-archive/dir0006/file0000.x]= 1e7a6694bdb0411c076b04c7ed331b25
+ chk[dir-path-in-archive/dir0006/file0001.x]= fb2fee41a80c795333a7f663f09b41b8
+ chk[dir-path-in-archive/dir0006/file0002.x]= 7818829dd45c584c5ee6136ebc47f469
+ chk[dir-path-in-archive/dir0006/file0003.x]= 121fad7f68d8d2c4d0eca594e48c7f47
+ chk[dir-path-in-archive/dir0006/file0004.x]= f9e10f1042d217a27238891009bb74a1
+ chk[dir-path-in-archive/dir0006/file0005.x]= b53af3b8e406670c6f7922b4fb0930bf
+ chk[dir-path-in-archive/dir0007/file0001.x]= 58a2df993eb6aa860f01c592e82b25fb
+ chk[dir-path-in-archive/dir0007/file0003.x]= 3d8671766587b53ffa10b4aaa06389b0
+ chk[dir-path-in-archive/dir0007/file0006.x]= 70e0789e36d8e6e008ead6ab8d1a9487
+ chk[dir-path-in-archive/dir0007/file0008.x]= 4c21ae598375b932a73d2d47a6c6112b
+ chk[dir-path-in-archive/dir0007/file0009.x]= 409618cf18a52b038f3c21983b308272
+ chk[dir-path-in-archive/dir0007/file0010.x]= 86966a17f6a2b8f2a52952c2d28d549c
+ chk[dir-path-in-archive/dir0007/file0011.x]= dd861d8c00ec3ad186ff1c3dda2123f3
+ chk[dir-path-in-archive/dir0007/file0012.x]= ecba8151b45e54f047feafbefeca7394
+ chk[dir-path-in-archive/dir0008/file0001.x]= 75edb3dcd9e6a6e681ebb4aa90d32564
+ chk[dir-path-in-archive/dir0008/file0002.x]= 46bc1ff74ab702d82201a24e56310650
+ chk[dir-path-in-archive/dir0008/file0003.x]= 69d6dca08f628037cc4fbdd6751ed415
+ chk[dir-path-in-archive/dir0008/file0008.x]= 0a39d97ab6130146f3b699224bda1570
+ chk[dir-path-in-archive/dir0008/file0009.x]= ad92f52e9be83c42ed929bafe0b2917e
+ chk[dir-path-in-archive/dir0009/file0000.x]= 40f1eb9e39e6ff89ac539ec8bc7bab18
+ chk[dir-path-in-archive/dir0009/file0001.x]= 0342bd41c08d992bc65ec4ea92d557c9
+ chk[dir-path-in-archive/dir0009/file0002.x]= 9306aab7655477a1352b7d0cba70e99d
+ chk[dir-path-in-archive/dir0009/file0003.x]= 0a6fc503879d4b109bd23421daf702d4
+ chk[dir-path-in-archive/dir0009/file0004.x]= 874d0ac34f87d41d6d8cb56d0b9c0413
+ chk[dir-path-in-archive/dir0009/file0005.x]= 41d5eecca213e9813e518180e8583294
+ chk[dir-path-in-archive/dir0009/file0006.x]= 92f329db0e75ecba5dd13a06cc7a860e
+ chk[dir-path-in-archive/dir0009/file0007.x]= 8e853a1d30e8b0b08f7dab10ff03d33b
+ chk[dir-path-in-archive/dir0009/file0008.x]= c0d88e86ecef308f2716b377ef0a4750
+ chk[dir-path-in-archive/dir0010/file0000.x]= 02ae6f6e0331fefb8deeb3f335596c28
+ chk[dir-path-in-archive/dir0010/file0004.x]= 27369a5672ea3dad5630c6d13e83bea9
+ chk[dir-path-in-archive/dir0010/file0005.x]= a6bbb8077c1e1e34b1a2a5a276f43115
+ chk[dir-path-in-archive/dir0010/file0010.x]= bed56ee8ab64f0c66f1f7843e0c260c1
+ chk[dir-path-in-archive/dir0010/file0011.x]= e4162cd4dea7997a88d21e7aa507bd18
+ chk[dir-path-in-archive/dir0011/file0000.x]= fac66692503ff22ff409d450f310cbf5
+ chk[dir-path-in-archive/dir0011/file0002.x]= c0480aeb14bcc8eea1cdfaaf61ecfd9e
+ chk[dir-path-in-archive/dir0011/file0003.x]= c017e98da065aab43eee2d6eefeb3566
+ chk[dir-path-in-archive/dir0011/file0004.x]= 4cc8e336ccd0c479aa23a3dddb84545e
+ chk[dir-path-in-archive/dir0012/file0000.x]= 926b1d2369c9e6993511fd710f36cd07
+ chk[dir-path-in-archive/dir0012/file0001.x]= 5a62ee05bdb710c2c12556869c78313c
+ chk[dir-path-in-archive/dir0013/file0002.x]= 6ba8785da0082c19f174ea6b5b6c738b
+ chk[dir-path-in-archive/dir0013/file0005.x]= 2e524fd8367a593e3f4b63b5106f85a5
+ chk[dir-path-in-archive/dir0013/file0008.x]= ea8b789c8f8a18badb5c55f26131bd99
+ chk[dir-path-in-archive/dir0014/file0000.x]= ce5cf1c4f40b72e057fde8b7e9a791a0
+ chk[dir-path-in-archive/dir0014/file0001.x]= 90a258c7ce63659f2d86cf4069ea91a5
+ chk[dir-path-in-archive/dir0014/file0002.x]= 5cab6262bf46fc63d1642552b7717153
+ chk[dir-path-in-archive/dir0014/file0004.x]= fbeec4bc4a7aa007edbde176523340dc
+ chk[dir-path-in-archive/dir0014/file0006.x]= 2508022c0281b3ec1e84632bd05b4d31
+ chk[dir-path-in-archive/dir0015/file0000.x]= d01b8b28fafe925da4142982c861580b
+ chk[dir-path-in-archive/dir0015/file0001.x]= 6b59225f7650b351a5007524caab4486
+ chk[dir-path-in-archive/dir0015/file0002.x]= 299139f85fb284d6d31b9bd041b2de2a
+ chk[dir-path-in-archive/dir0015/file0003.x]= bf27ebae18e64597b7048fe4f750f457
+ chk[dir-path-in-archive/dir0015/file0005.x]= 0dc8b1d5493d2adb91cc4c06f6d26090
+ chk[dir-path-in-archive/dir0016/file0000.x]= 4b6b499f67d001e53c525880627a7b0c
+ chk[dir-path-in-archive/dir0016/file0001.x]= 714b8fce8fbe859544bafc4f2865e142
+ chk[dir-path-in-archive/dir0016/file0002.x]= b62d0a6356e5631a836e258a34a92c2d
+ chk[dir-path-in-archive/dir0016/file0004.x]= d71ee24b89a4d4de3c86661beb029051
+ chk[dir-path-in-archive/dir0016/file0005.x]= 949bf0f59f37ca10cd538a8d7c0ea550
+ chk[dir-path-in-archive/dir0016/file0006.x]= 77a1365076532d88adebb971a8698fa2
+ chk[dir-path-in-archive/dir0016/file0007.x]= 1ef32350caa44aacae7d5df47f16fdd0
+ 
+------------
+Updating some of the files in the zip...
+ 
+------------
+Validating the checksums for all of the files ...
+ Found entry: dir-path-in-archive/
+ Found entry: dir-path-in-archive/dir0000/
+ Found entry: dir-path-in-archive/dir0000/file0000.x
+ Found entry: dir-path-in-archive/dir0000/file0001.x
+ Found entry: dir-path-in-archive/dir0000/file0002.x
+ Found entry: dir-path-in-archive/dir0000/file0003.x
+ Found entry: dir-path-in-archive/dir0000/file0004.x
+ Found entry: dir-path-in-archive/dir0000/file0005.x
+ Found entry: dir-path-in-archive/dir0000/file0006.x
+ Found entry: dir-path-in-archive/dir0000/file0007.x
+ Found entry: dir-path-in-archive/dir0000/file0008.x
+ Found entry: dir-path-in-archive/dir0000/file0009.x
+ Found entry: dir-path-in-archive/dir0001/
+ Found entry: dir-path-in-archive/dir0001/file0000.x
+ Found entry: dir-path-in-archive/dir0001/file0001.x
+ Found entry: dir-path-in-archive/dir0001/file0002.x
+ Found entry: dir-path-in-archive/dir0001/file0003.x
+ Found entry: dir-path-in-archive/dir0001/file0004.x
+ Found entry: dir-path-in-archive/dir0001/file0005.x
+ Found entry: dir-path-in-archive/dir0001/file0006.x
+ Found entry: dir-path-in-archive/dir0001/file0007.x
+ Found entry: dir-path-in-archive/dir0001/file0008.x
+ Found entry: dir-path-in-archive/dir0001/file0009.x
+ Found entry: dir-path-in-archive/dir0001/file0010.x
+ Found entry: dir-path-in-archive/dir0001/file0011.x
+ Found entry: dir-path-in-archive/dir0001/file0012.x
+ Found entry: dir-path-in-archive/dir0001/file0013.x
+ Found entry: dir-path-in-archive/dir0002/
+ Found entry: dir-path-in-archive/dir0002/file0000.x
+ Found entry: dir-path-in-archive/dir0002/file0001.x
+ Found entry: dir-path-in-archive/dir0002/file0002.x
+ Found entry: dir-path-in-archive/dir0002/file0003.x
+ Found entry: dir-path-in-archive/dir0002/file0004.x
+ Found entry: dir-path-in-archive/dir0002/file0005.x
+ Found entry: dir-path-in-archive/dir0002/file0006.x
+ Found entry: dir-path-in-archive/dir0002/file0007.x
+ Found entry: dir-path-in-archive/dir0002/file0008.x
+ Found entry: dir-path-in-archive/dir0002/file0009.x
+ Found entry: dir-path-in-archive/dir0002/file0010.x
+ Found entry: dir-path-in-archive/dir0002/file0011.x
+ Found entry: dir-path-in-archive/dir0003/
+ Found entry: dir-path-in-archive/dir0003/file0000.x
+ Found entry: dir-path-in-archive/dir0003/file0001.x
+ Found entry: dir-path-in-archive/dir0003/file0002.x
+ Found entry: dir-path-in-archive/dir0003/file0003.x
+ Found entry: dir-path-in-archive/dir0003/file0004.x
+ Found entry: dir-path-in-archive/dir0003/file0005.x
+ Found entry: dir-path-in-archive/dir0003/file0006.x
+ Found entry: dir-path-in-archive/dir0004/
+ Found entry: dir-path-in-archive/dir0004/file0000.x
+ Found entry: dir-path-in-archive/dir0004/file0001.x
+ Found entry: dir-path-in-archive/dir0004/file0002.x
+ Found entry: dir-path-in-archive/dir0004/file0003.x
+ Found entry: dir-path-in-archive/dir0004/file0004.x
+ Found entry: dir-path-in-archive/dir0004/file0005.x
+ Found entry: dir-path-in-archive/dir0004/file0006.x
+ Found entry: dir-path-in-archive/dir0004/file0007.x
+ Found entry: dir-path-in-archive/dir0005/
+ Found entry: dir-path-in-archive/dir0005/file0000.x
+ Found entry: dir-path-in-archive/dir0005/file0001.x
+ Found entry: dir-path-in-archive/dir0005/file0002.x
+ Found entry: dir-path-in-archive/dir0005/file0003.x
+ Found entry: dir-path-in-archive/dir0005/file0004.x
+ Found entry: dir-path-in-archive/dir0005/file0005.x
+ Found entry: dir-path-in-archive/dir0005/file0006.x
+ Found entry: dir-path-in-archive/dir0005/file0007.x
+ Found entry: dir-path-in-archive/dir0005/file0008.x
+ Found entry: dir-path-in-archive/dir0005/file0009.x
+ Found entry: dir-path-in-archive/dir0005/file0010.x
+ Found entry: dir-path-in-archive/dir0005/file0011.x
+ Found entry: dir-path-in-archive/dir0005/file0012.x
+ Found entry: dir-path-in-archive/dir0006/
+ Found entry: dir-path-in-archive/dir0006/file0000.x
+ Found entry: dir-path-in-archive/dir0006/file0001.x
+ Found entry: dir-path-in-archive/dir0006/file0002.x
+ Found entry: dir-path-in-archive/dir0006/file0003.x
+ Found entry: dir-path-in-archive/dir0006/file0004.x
+ Found entry: dir-path-in-archive/dir0006/file0005.x
+ Found entry: dir-path-in-archive/dir0006/file0006.x
+ Found entry: dir-path-in-archive/dir0007/
+ Found entry: dir-path-in-archive/dir0007/file0000.x
+ Found entry: dir-path-in-archive/dir0007/file0001.x
+ Found entry: dir-path-in-archive/dir0007/file0002.x
+ Found entry: dir-path-in-archive/dir0007/file0003.x
+ Found entry: dir-path-in-archive/dir0007/file0004.x
+ Found entry: dir-path-in-archive/dir0007/file0005.x
+ Found entry: dir-path-in-archive/dir0007/file0006.x
+ Found entry: dir-path-in-archive/dir0007/file0007.x
+ Found entry: dir-path-in-archive/dir0007/file0008.x
+ Found entry: dir-path-in-archive/dir0007/file0009.x
+ Found entry: dir-path-in-archive/dir0007/file0010.x
+ Found entry: dir-path-in-archive/dir0007/file0011.x
+ Found entry: dir-path-in-archive/dir0007/file0012.x
+ Found entry: dir-path-in-archive/dir0007/file0013.x
+ Found entry: dir-path-in-archive/dir0008/
+ Found entry: dir-path-in-archive/dir0008/file0000.x
+ Found entry: dir-path-in-archive/dir0008/file0001.x
+ Found entry: dir-path-in-archive/dir0008/file0002.x
+ Found entry: dir-path-in-archive/dir0008/file0003.x
+ Found entry: dir-path-in-archive/dir0008/file0004.x
+ Found entry: dir-path-in-archive/dir0008/file0005.x
+ Found entry: dir-path-in-archive/dir0008/file0006.x
+ Found entry: dir-path-in-archive/dir0008/file0007.x
+ Found entry: dir-path-in-archive/dir0008/file0008.x
+ Found entry: dir-path-in-archive/dir0008/file0009.x
+ Found entry: dir-path-in-archive/dir0009/
+ Found entry: dir-path-in-archive/dir0009/file0000.x
+ Found entry: dir-path-in-archive/dir0009/file0001.x
+ Found entry: dir-path-in-archive/dir0009/file0002.x
+ Found entry: dir-path-in-archive/dir0009/file0003.x
+ Found entry: dir-path-in-archive/dir0009/file0004.x
+ Found entry: dir-path-in-archive/dir0009/file0005.x
+ Found entry: dir-path-in-archive/dir0009/file0006.x
+ Found entry: dir-path-in-archive/dir0009/file0007.x
+ Found entry: dir-path-in-archive/dir0009/file0008.x
+ Found entry: dir-path-in-archive/dir0010/
+ Found entry: dir-path-in-archive/dir0010/file0000.x
+ Found entry: dir-path-in-archive/dir0010/file0001.x
+ Found entry: dir-path-in-archive/dir0010/file0002.x
+ Found entry: dir-path-in-archive/dir0010/file0003.x
+ Found entry: dir-path-in-archive/dir0010/file0004.x
+ Found entry: dir-path-in-archive/dir0010/file0005.x
+ Found entry: dir-path-in-archive/dir0010/file0006.x
+ Found entry: dir-path-in-archive/dir0010/file0007.x
+ Found entry: dir-path-in-archive/dir0010/file0008.x
+ Found entry: dir-path-in-archive/dir0010/file0009.x
+ Found entry: dir-path-in-archive/dir0010/file0010.x
+ Found entry: dir-path-in-archive/dir0010/file0011.x
+ Found entry: dir-path-in-archive/dir0011/
+ Found entry: dir-path-in-archive/dir0011/file0000.x
+ Found entry: dir-path-in-archive/dir0011/file0001.x
+ Found entry: dir-path-in-archive/dir0011/file0002.x
+ Found entry: dir-path-in-archive/dir0011/file0003.x
+ Found entry: dir-path-in-archive/dir0011/file0004.x
+ Found entry: dir-path-in-archive/dir0011/file0005.x
+ Found entry: dir-path-in-archive/dir0011/file0006.x
+ Found entry: dir-path-in-archive/dir0011/file0007.x
+ Found entry: dir-path-in-archive/dir0011/file0008.x
+ Found entry: dir-path-in-archive/dir0011/file0009.x
+ Found entry: dir-path-in-archive/dir0012/
+ Found entry: dir-path-in-archive/dir0012/file0000.x
+ Found entry: dir-path-in-archive/dir0012/file0001.x
+ Found entry: dir-path-in-archive/dir0012/file0002.x
+ Found entry: dir-path-in-archive/dir0012/file0003.x
+ Found entry: dir-path-in-archive/dir0012/file0004.x
+ Found entry: dir-path-in-archive/dir0012/file0005.x
+ Found entry: dir-path-in-archive/dir0012/file0006.x
+ Found entry: dir-path-in-archive/dir0013/
+ Found entry: dir-path-in-archive/dir0013/file0000.x
+ Found entry: dir-path-in-archive/dir0013/file0001.x
+ Found entry: dir-path-in-archive/dir0013/file0002.x
+ Found entry: dir-path-in-archive/dir0013/file0003.x
+ Found entry: dir-path-in-archive/dir0013/file0004.x
+ Found entry: dir-path-in-archive/dir0013/file0005.x
+ Found entry: dir-path-in-archive/dir0013/file0006.x
+ Found entry: dir-path-in-archive/dir0013/file0007.x
+ Found entry: dir-path-in-archive/dir0013/file0008.x
+ Found entry: dir-path-in-archive/dir0014/
+ Found entry: dir-path-in-archive/dir0014/file0000.x
+ Found entry: dir-path-in-archive/dir0014/file0001.x
+ Found entry: dir-path-in-archive/dir0014/file0002.x
+ Found entry: dir-path-in-archive/dir0014/file0003.x
+ Found entry: dir-path-in-archive/dir0014/file0004.x
+ Found entry: dir-path-in-archive/dir0014/file0005.x
+ Found entry: dir-path-in-archive/dir0014/file0006.x
+ Found entry: dir-path-in-archive/dir0014/file0007.x
+ Found entry: dir-path-in-archive/dir0014/file0008.x
+ Found entry: dir-path-in-archive/dir0015/
+ Found entry: dir-path-in-archive/dir0015/file0000.x
+ Found entry: dir-path-in-archive/dir0015/file0001.x
+ Found entry: dir-path-in-archive/dir0015/file0002.x
+ Found entry: dir-path-in-archive/dir0015/file0003.x
+ Found entry: dir-path-in-archive/dir0015/file0004.x
+ Found entry: dir-path-in-archive/dir0015/file0005.x
+ Found entry: dir-path-in-archive/dir0015/file0006.x
+ Found entry: dir-path-in-archive/dir0015/file0007.x
+ Found entry: dir-path-in-archive/dir0016/
+ Found entry: dir-path-in-archive/dir0016/file0000.x
+ Found entry: dir-path-in-archive/dir0016/file0001.x
+ Found entry: dir-path-in-archive/dir0016/file0002.x
+ Found entry: dir-path-in-archive/dir0016/file0003.x
+ Found entry: dir-path-in-archive/dir0016/file0004.x
+ Found entry: dir-path-in-archive/dir0016/file0005.x
+ Found entry: dir-path-in-archive/dir0016/file0006.x
+ Found entry: dir-path-in-archive/dir0016/file0007.x
+ Found entry: dir-path-in-archive/dir0016/file0008.x
+
+
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 6.0596 Seconds

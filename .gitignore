@@ -1,0 +1,10 @@
+# dotenv
+.env
+
+# dotnet
+*/**/bin/*
+*/**/obj/*
+
+*.log
+**/*~
+**/*.*~

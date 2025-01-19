@@ -1,0 +1,14 @@
+Saturday, 18 January 2025, 20:51
+
+
+run tests
+
+  dotnet test 
+
+with detailed logs
+
+  dotnet test  --logger "console;verbosity=detailed" 
+
+just one specific test
+
+  dotnet test  --logger "console;verbosity=detailed"  --filter CreateZip_AddItem_WithDirectory
