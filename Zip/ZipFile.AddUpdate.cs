@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2025-January-18 19:25:48>
+// Time-stamp: <2025-January-19 21:01:33>
 //
 // ------------------------------------------------------------------
 //
@@ -293,8 +293,6 @@ namespace Ionic.Zip
 
 
 
-
-
         /// <summary>
         ///   Adds a File to a Zip file archive, potentially overriding the path to be
         ///   used within the zip archive.
@@ -387,10 +385,10 @@ namespace Ionic.Zip
         ///
         /// <param name="directoryPathInArchive">
         ///   Specifies a directory path to use to override any path in the fileName.
-        ///   This path may, or may not, correspond to a real directory in the current
+        ///   This path does not correspond to a real directory in the current
         ///   filesystem.  If the files within the zip are later extracted, this is the
         ///   path used for the extracted file.  Passing <c>null</c> (<c>Nothing</c> in
-        ///   VB) will use the path on the fileName, if any.  Passing the empty string
+        ///   VB) will use the path on the fileName, if any. Passing the empty string
         ///   ("") will insert the item at the root path within the archive.
         /// </param>
         ///
@@ -1978,7 +1976,7 @@ namespace Ionic.Zip
         ///
         /// <param name="directoryPathInArchive">
         ///   Specifies a directory path to use to override any path in the
-        ///   DirectoryName.  This path may, or may not, correspond to a real directory
+        ///   DirectoryName.  This path need not, correspond to a real directory
         ///   in the current filesystem.  If the zip is later extracted, this is the
         ///   path used for the extracted file or directory.  Passing <c>null</c>
         ///   (<c>Nothing</c> in VB) or the empty string ("") will insert the items at

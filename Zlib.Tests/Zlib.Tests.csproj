@@ -16,6 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\CommonTestSrc\TestUtilities.cs">
+      <Link>TestUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonTestSrc\RandomTextGenerator.cs">
+      <Link>RandomTextGenerator.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

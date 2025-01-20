@@ -1,39 +1,25 @@
 // TestUtilities.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009-2011 Dino Chiesa.
+// Copyright (c) 2009-2011, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
-//
-// ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-18 19:18:23>
-//
-// ------------------------------------------------------------------
 //
 // This module defines some utility classes used by the unit tests for
 // DotNetZip.
 //
 // ------------------------------------------------------------------
+//
+// This code is licensed under the Apache 2.0 Public License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
+//
+// ------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Net;
-using System.IO;
-using Ionic.Zip;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
 using Xunit.Abstractions;
-using Assert = XunitAssertMessages.AssertM;
+//using Assert = XunitAssertMessages.AssertM;
 
 namespace Ionic.Zip.Tests.Utilities
 {
@@ -48,54 +34,54 @@ namespace Ionic.Zip.Tests.Utilities
             cdir = Directory.GetCurrentDirectory();
         }
 
-
-
         #region Test Init and Cleanup
 
         internal static void Initialize(out string TopLevelDir)
         {
             if (cdir == null) cdir = Directory.GetCurrentDirectory();
 
-            TopLevelDir = TestUtilities.GenerateUniquePathname("tmp");
+            TopLevelDir = GenerateUniquePathname("tmp");
             Directory.CreateDirectory(TopLevelDir);
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(TopLevelDir));
+            
+            // probably this is harmful - tests run concurrently, so this is not stable
+            //Directory.SetCurrentDirectory(Path.GetDirectoryName(TopLevelDir));
         }
 
-        internal static void Cleanup(string CurrentDir, List<String> FilesToRemove)
-        {
-            Assert.NotEqual<string>(Path.GetFileName(CurrentDir), "Temp");
-            Directory.SetCurrentDirectory(CurrentDir);
-            IOException GotException = null;
-            int Tries = 0;
-            do
-            {
-                try
-                {
-                    GotException = null;
-                    foreach (string filename in FilesToRemove)
-                    {
-                        if (Directory.Exists(filename))
-                        {
-                            // turn off any ReadOnly attributes
-                            ClearReadOnly(filename);
-                            Directory.Delete(filename, true);
-                        }
-                        if (File.Exists(filename))
-                        {
-                            File.Delete(filename);
-                        }
-                    }
-                    Tries++;
-                }
-                catch (IOException ioexc)
-                {
-                    GotException = ioexc;
-                    // use an backoff interval before retry
-                    System.Threading.Thread.Sleep(200 * Tries);
-                }
-            } while ((GotException != null) && (Tries < 4));
-            if (GotException != null) throw GotException;
-        }
+        // internal static void Cleanup(string CurrentDir, List<String> FilesToRemove)
+        // {
+        //     Assert.NotEqual<string>(Path.GetFileName(CurrentDir), "Temp");
+        //     Directory.SetCurrentDirectory(CurrentDir);
+        //     IOException gotException = null;
+        //     int Tries = 0;
+        //     do
+        //     {
+        //         try
+        //         {
+        //             gotException = null;
+        //             foreach (string filename in FilesToRemove)
+        //             {
+        //                 if (Directory.Exists(filename))
+        //                 {
+        //                     // turn off any ReadOnly attributes
+        //                     ClearReadOnly(filename);
+        //                     Directory.Delete(filename, true);
+        //                 }
+        //                 if (File.Exists(filename))
+        //                 {
+        //                     File.Delete(filename);
+        //                 }
+        //             }
+        //             Tries++;
+        //         }
+        //         catch (IOException ioexc)
+        //         {
+        //             gotException = ioexc;
+        //             // use an backoff interval before retry
+        //             System.Threading.Thread.Sleep(200 * Tries);
+        //         }
+        //     } while ((gotException != null) && (Tries < 4));
+        //     if (gotException != null) throw gotException;
+        // }
 
 
         public static void ClearReadOnly(string dirname)
@@ -125,8 +111,6 @@ namespace Ionic.Zip.Tests.Utilities
                 }
             }
         }
-
-
 
         #endregion
 
@@ -420,11 +404,12 @@ namespace Ionic.Zip.Tests.Utilities
             if (parentDir == null) return null;
 
             int index = 0;
+            int r = _rnd.Next(30000); // need this to uniquify parallel tests
             do
             {
                 index++;
-                string Name = String.Format("{0}-{1}-{2}.{3}",
-                                            AppName, System.DateTime.Now.ToString("yyyyMMMdd-HHmmss"), index, extension);
+                string Name = String.Format("{0}-{1}-{2}-{3}.{4}",
+                    AppName, System.DateTime.Now.ToString("yyyyMMMdd-HHmmss"), r, index, extension);
                 candidate = Path.Combine(parentDir, Name);
             } while (File.Exists(candidate));
 
@@ -433,17 +418,18 @@ namespace Ionic.Zip.Tests.Utilities
             return candidate;
         }
 
-        internal static int CountEntries(string zipfile)
+        internal static string GetMarker()
         {
-            int entries = 0;
-            using (ZipFile zip = ZipFile.Read(zipfile))
-            {
-                foreach (ZipEntry e in zip)
-                    if (!e.IsDirectory) entries++;
-            }
-            return entries;
+            return Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
         }
-
+        
+        internal static string UniqueDir(string baseName)
+        {
+            int c = 0;
+            baseName += "-" + GetMarker();
+            while (Directory.Exists(baseName + c)) c++;
+            return baseName + c;
+        }
 
         internal static string GetCheckSumString(string filename)
         {
@@ -708,7 +694,8 @@ namespace Ionic.Zip.Tests.Utilities
             //return GetTestDependentDir(startingPoint, "Zip Tests\\bin\\Debug");
             var loc = System.Reflection.Assembly.GetExecutingAssembly().Location;
             return Path.GetDirectoryName(loc);
-            // will be something like  C:\Users\someone\dev\DotNetZip\Zip.Tests\bin\Debug\net9.0
+            // This will be something like  C:\Users\someone\dev\DotNetZip\Zip.Tests\bin\Debug\net9.0 
+            // depending on which test is being run. 
         }
 
         internal static string GetTestSrcDir(/* string startingPoint */)
@@ -897,7 +884,6 @@ namespace Ionic.Zip.Tests.Utilities
             "\n";
 
         static string[] LoremIpsumWords;
-
 
     }
 

@@ -1,7 +1,7 @@
 // RandomTextGenerator.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009 Dino Chiesa
+// Copyright (c) 2009, 2025 Dino Chiesa
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2025-January-18 17:08:23>
+// Time-stamp: <2025-January-19 16:11:09>
 //
 // ------------------------------------------------------------------
 //
@@ -24,19 +24,10 @@
 //
 // ------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Net;
-using System.IO;
-using Ionic.Zip;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
 
 namespace Ionic.Zip.Tests.Utilities
 {
-
     public class RandomTextGenerator
     {
         static string[] uris = new string[]
@@ -456,7 +447,5 @@ namespace Ionic.Zip.Tests.Utilities
         {
         }
     }
-
-
 
 }

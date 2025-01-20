@@ -5,21 +5,12 @@
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
-//
-// ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-18 20:58:49>
-//
-// ------------------------------------------------------------------
-//
 // This module defines the base class for DotNetZip test classes.
+//
+// ------------------------------------------------------------------
+//
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 
@@ -28,19 +19,19 @@ using Assert = XunitAssertMessages.AssertM;
 
 namespace Ionic.Zip.Tests.Utilities
 {
-    public class IonicTestClass
+    public class IonicTestClass : IDisposable
     {
         protected System.Random _rnd;
-        protected System.Collections.Generic.List<string> _FilesToRemove;
-        protected static string CurrentDir = null;
+        protected System.Collections.Generic.List<string> _DirsToRemove;
+        protected string CurrentDir = null;
         protected string TopLevelDir = null;
         private string _wzunzip = null;
         private string _wzzip = null;
         private string _sevenzip = null;
-        private string _zipit = null;
+        private string _gzip = null;
         private string _infozipzip = null;
         private string _infozipunzip = null;
-        private bool? _ZipitIsPresent;
+        private bool? _GZipIsPresent;
         private bool? _WinZipIsPresent;
         private bool? _SevenZipIsPresent;
         private bool? _InfoZipIsPresent;
@@ -52,14 +43,58 @@ namespace Ionic.Zip.Tests.Utilities
         public IonicTestClass()
         {
             _rnd = new System.Random();
-            _FilesToRemove = new System.Collections.Generic.List<string>();
-            
+            _DirsToRemove = new System.Collections.Generic.List<string>();
             CurrentDir = Directory.GetCurrentDirectory();
-            Assert.NotEqual<string>(Path.GetFileName(CurrentDir), "Temp");
-
             TestUtilities.Initialize(out TopLevelDir);
-            _FilesToRemove.Add(TopLevelDir);
-            Directory.SetCurrentDirectory(TopLevelDir);
+            _DirsToRemove.Add(TopLevelDir);
+        }
+
+        public void Dispose()
+        {
+            //System.IO.Directory.SetCurrentDirectory(System.Environment.GetEnvironmentVariable("TEMP"));
+            //System.IO.Directory.Delete(TopLevelDir, true);
+            System.IO.Directory.SetCurrentDirectory(CurrentDir); //  to allow the TopLevelDir to be deleted
+
+            // There is a strange race condition... dirs get removed before all
+            // the tests are complete, And then some of the tests fail, because the files are gone.
+            //
+            // Not sure how that happens.  xunit is a pain to use.
+
+            _DirsToRemove.ForEach(dirPath =>
+            {
+                try {
+                    if (Directory.Exists(dirPath))
+                    {
+                        // Some of the files to be deleted will be ReadOnly, which means they
+                        // will be undelete-able via Directory.Delete(dirPath, true).  To handle
+                        // that, we need to recursively check each file. "
+                        DeleteDirectoryRecursive(new DirectoryInfo(dirPath));
+                        Console.WriteLine("Deleted directory {0}.", dirPath);
+                    }
+                }
+                catch (IOException ex) {
+                    Console.WriteLine($"Error deleting directory {dirPath}: {ex.Message}");
+                }
+            });
+        }
+
+
+        private static void DeleteDirectoryRecursive(DirectoryInfo dir)
+        {
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                if (file.IsReadOnly)
+                {
+                    file.Attributes = FileAttributes.Normal;
+                }
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdir in dir.GetDirectories())
+            {
+                DeleteDirectoryRecursive(subdir);
+            }
+            dir.Delete(true);
         }
 
 
@@ -179,9 +214,9 @@ namespace Ionic.Zip.Tests.Utilities
             get { return SevenZipIsPresent ? _sevenzip : null; }
         }
 
-        protected string zipit
+        protected string gzip
         {
-            get { return ZipitIsPresent ? _zipit : null; }
+            get { return GZipIsPresent ? _gzip : null; }
         }
 
         protected string infoZip
@@ -204,22 +239,20 @@ namespace Ionic.Zip.Tests.Utilities
             get { return WinZipIsPresent ? _wzunzip : null; }
         }
 
-        protected bool ZipitIsPresent
+        protected bool GZipIsPresent
         {
             get
             {
-                if (_ZipitIsPresent == null)
+                if (_GZipIsPresent == null)
                 {
-                    string sourceDir = CurrentDir;
-                    for (int i = 0; i < 3; i++)
-                        sourceDir = Path.GetDirectoryName(sourceDir);
 
-                    _zipit =
-                        Path.Combine(sourceDir, "Tools\\Zipit\\bin\\Debug\\Zipit.exe");
+                    string sourceDir = TestUtilities.GetTestSrcDir();
+                    _gzip =
+                        Path.Combine(sourceDir, "..\\Tools\\GZip\\bin\\Debug\\net9.0\\GZip.exe");
 
-                    _ZipitIsPresent = new Nullable<bool>(File.Exists(_zipit));
+                    _GZipIsPresent = new Nullable<bool>(File.Exists(_gzip));
                 }
-                return _ZipitIsPresent.Value;
+                return _GZipIsPresent.Value;
             }
         }
 
@@ -316,8 +349,8 @@ namespace Ionic.Zip.Tests.Utilities
             else
 #endif
             {
+                string tld = Path.GetDirectoryName(zipfile);
 
-                Assert.NotNull(_output, "outputhelper is null");
                 _output.WriteLine("Verifying zip file...");
                 _output.WriteLine("Verifying zip file {0} with DotNetZip", zipfile??"--null--");
 
@@ -325,7 +358,7 @@ namespace Ionic.Zip.Tests.Utilities
                 if (emitOutput)
                     options.StatusMessageWriter = new StringWriter();
 
-                string extractDir = UniqueDir("verify");
+                string extractDir = Path.Combine(tld, TestUtilities.UniqueDir("verify"));
 
                 using (ZipFile zip2 = ZipFile.Read(zipfile, options))
                 {
@@ -340,15 +373,6 @@ namespace Ionic.Zip.Tests.Utilities
 
                 return extractDir;
             }
-        }
-
-
-        internal string UniqueDir(string baseName)
-        {
-            int c = 0;
-            baseName += "-";
-            while (Directory.Exists(baseName + c)) c++;
-            return baseName + c;
         }
 
         internal static void CreateFilesAndChecksums(string subdir,
@@ -477,6 +501,18 @@ namespace Ionic.Zip.Tests.Utilities
 
             Assert.Equal<Int32>(checksums.Count, count, "There's a mismatch between the checksums and the filesToCheck.");
         }
+
+        internal static int CountEntries(string zipfile)
+        {
+            int entries = 0;
+            using (ZipFile zip = ZipFile.Read(zipfile))
+            {
+                foreach (ZipEntry e in zip)
+                    if (!e.IsDirectory) entries++;
+            }
+            return entries;
+        }
+
     }
 
 

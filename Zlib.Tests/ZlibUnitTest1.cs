@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Ionic.Zip.Tests.Utilities;
+using System.Text;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
 
@@ -7,7 +8,11 @@ namespace Ionic.Zlib.Tests
     public class UnitTest1 : IDisposable
     {
         System.Random rnd;
+        protected System.Collections.Generic.List<string> _DirsToRemove;
+        private string CurrentDir = null;
+        private string TopLevelDir = null;
         Dictionary<String,String> TestStrings;
+
         private ITestOutputHelper _output;
 
         public UnitTest1(ITestOutputHelper output) 
@@ -24,7 +29,11 @@ namespace Ionic.Zlib.Tests
                     { "IhaveaDream", IhaveaDream },
                     { "LoremIpsum", LoremIpsum },
                 };
-            _Initialize();
+            
+            _DirsToRemove = new System.Collections.Generic.List<string>();
+            CurrentDir = System.IO.Directory.GetCurrentDirectory(); 
+            TestUtilities.Initialize(out TopLevelDir);
+            _DirsToRemove.Add(TopLevelDir);
         }
 
         static UnitTest1()
@@ -33,38 +42,30 @@ namespace Ionic.Zlib.Tests
                                                StringSplitOptions.RemoveEmptyEntries);
         }
 
-
-        #region Additional test attributes
-
-        private string CurrentDir = null;
-        private string TopLevelDir = null;
-
-        private void _Initialize()
-        {
-            CurrentDir = System.IO.Directory.GetCurrentDirectory();
-            Assert.NotEqual<string>(System.IO.Path.GetFileName(CurrentDir), "Temp", "at start");
-
-            string parentDir = System.Environment.GetEnvironmentVariable("TEMP");
-
-            TopLevelDir = System.IO.Path.Combine(parentDir, String.Format("Ionic.ZlibTest-{0}.tmp", System.DateTime.Now.ToString("yyyyMMMdd-HHmmss")));
-            System.IO.Directory.CreateDirectory(TopLevelDir);
-            System.IO.Directory.SetCurrentDirectory(TopLevelDir);
-        }
-
-
         public void Dispose()
         {
-            System.IO.Directory.SetCurrentDirectory(System.Environment.GetEnvironmentVariable("TEMP"));
-            System.IO.Directory.Delete(TopLevelDir, true);
-            Assert.NotEqual<string>(System.IO.Path.GetFileName(CurrentDir), "Temp", "at finish");
-            System.IO.Directory.SetCurrentDirectory(CurrentDir);
+            //System.IO.Directory.SetCurrentDirectory(System.Environment.GetEnvironmentVariable("TEMP"));
+            //System.IO.Directory.Delete(TopLevelDir, true);
+            System.IO.Directory.SetCurrentDirectory(CurrentDir); //  to allow the TopLEvelDir to be deleted
+
+            _DirsToRemove.ForEach(dirPath =>
+            {
+                try {
+                    if (Directory.Exists(dirPath))
+                    {
+                        Directory.Delete(dirPath, true);
+                        Console.WriteLine("Deleted directory {0}.", dirPath);
+                    }
+                }
+                catch (IOException ex) {
+                    Console.WriteLine($"Error deleting directory {dirPath}: {ex.Message}");
+                }
+            });
         }
-        #endregion
+
 
         #region Helpers
-        /// <summary>
-        /// Converts a string to a MemoryStream.
-        /// </summary>
+
         static MemoryStream StringToMemoryStream(string s)
         {
             System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
@@ -75,11 +76,6 @@ namespace Ionic.Zlib.Tests
             return ms;
         }
 
-        /// <summary>
-        /// Converts a MemoryStream to a string. Makes some assumptions about the content of the stream.
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
         static String MemoryStreamToString(System.IO.MemoryStream ms)
         {
             byte[] ByteArray = ms.ToArray();
@@ -109,15 +105,10 @@ namespace Ionic.Zlib.Tests
             return location;
         }
 
-        private static string GetTestBinDir(string startingPoint)
-        {
-            return GetTestDependentDir(startingPoint, "Zlib Tests\\bin\\Debug");
-        }
-
         private string GetContentFile(string fileName)
         {
-            string testBin = GetTestBinDir(CurrentDir);
-            string path = Path.Combine(testBin, String.Format("Resources\\{0}", fileName));
+            string srcDir = TestUtilities.GetTestSrcDir();
+            string path = Path.Combine(srcDir, "Resources", fileName);
             Assert.True(File.Exists(path), String.Format("file ({0}) does not exist", path));
             return path;
         }
@@ -330,12 +321,12 @@ namespace Ionic.Zlib.Tests
         [Fact]
         public void GZ_Utility()
         {
-            var gzbin = GetTestDependentDir(CurrentDir, "Tools\\GZip\\bin\\Debug");
-            var dnzGzipexe = Path.Combine(gzbin, "gzip.exe");
-            Assert.True(File.Exists(dnzGzipexe), String.Format("Gzip.exe is missing {0}",
+            var srcDir = TestUtilities.GetTestSrcDir();
+            var dnzGzipexe = Path.Combine(srcDir, "..", "Tools\\GZip\\bin\\Debug", "net9.0", "GZip.exe");
+            Assert.True(File.Exists(dnzGzipexe), String.Format("GZip.exe is missing {0}",
                 dnzGzipexe));
-            var unxGzipexe = "\\bin\\gzip.exe";
-            Assert.True(File.Exists(unxGzipexe), String.Format("Gzip.exe is missing {0}",
+            var unxGzipexe = Path.Combine(srcDir, "Resources\\gzip.exe");
+            Assert.True(File.Exists(unxGzipexe), String.Format("gzip.exe is missing {0}",
                 unxGzipexe));
 
             foreach (var key in TestStrings.Keys)
@@ -1318,48 +1309,47 @@ namespace Ionic.Zlib.Tests
 
 
         [Fact]
-//        [ExpectedException(typeof(System.ObjectDisposedException))]
         public void Zlib_DisposedException_DeflateStream()
         {
             string TextToCompress = LetMeDoItNow;
 
-                MemoryStream ms1= new MemoryStream();
+            MemoryStream ms1= new MemoryStream();
 
-                Stream compressor= new DeflateStream(ms1, CompressionMode.Compress, false);
+            Stream compressor= new DeflateStream(ms1, CompressionMode.Compress, false);
 
-                _output.WriteLine("Text to compress is {0} bytes: '{1}'",
-                                      TextToCompress.Length, TextToCompress);
-                _output.WriteLine("using compressor: {0}", compressor.GetType().FullName);
+            _output.WriteLine("Text to compress is {0} bytes: '{1}'",
+                TextToCompress.Length, TextToCompress);
+            _output.WriteLine("using compressor: {0}", compressor.GetType().FullName);
 
-                StreamWriter sw = new StreamWriter(compressor, Encoding.ASCII);
-                sw.Write(TextToCompress);
-                sw.Close(); // implicitly closes compressor
-                sw.Close(); // implicitly closes compressor, again
+            StreamWriter sw = new StreamWriter(compressor, Encoding.ASCII);
+            sw.Write(TextToCompress);
+            sw.Close(); // implicitly closes compressor
+            sw.Close(); // implicitly closes compressor, again
 
-                compressor.Close(); // explicitly closes compressor
-                var a = ms1.ToArray();
-                _output.WriteLine("Compressed stream is {0} bytes long", a.Length);
+            compressor.Close(); // explicitly closes compressor
+            var a = ms1.ToArray();
+            _output.WriteLine("Compressed stream is {0} bytes long", a.Length);
 
-                var ms2 = new MemoryStream(a);
-                Stream decompressor  = new DeflateStream(ms2, CompressionMode.Decompress, false);
+            var ms2 = new MemoryStream(a);
+            Stream decompressor  = new DeflateStream(ms2, CompressionMode.Decompress, false);
 
-                _output.WriteLine("using decompressor: {0}", decompressor.GetType().FullName);
+            _output.WriteLine("using decompressor: {0}", decompressor.GetType().FullName);
 
-                var sr = new StreamReader(decompressor, Encoding.ASCII);
-                string DecompressedText = sr.ReadToEnd();
-                sr.Close();
+            var sr = new StreamReader(decompressor, Encoding.ASCII);
+            string DecompressedText = sr.ReadToEnd();
+            sr.Close();
 
+            Assert.Throws<ObjectDisposedException>(() => {
                 _output.WriteLine("decompressor.CanRead = {0}",decompressor.CanRead);
+            });
 
-                _output.WriteLine("Read {0} characters: '{1}'", DecompressedText.Length, DecompressedText);
-                _output.WriteLine("\n");
-                Assert.Equal<String>(TextToCompress, DecompressedText);
-
+            _output.WriteLine("Read {0} characters: '{1}'", DecompressedText.Length, DecompressedText);
+            _output.WriteLine("\n");
+            Assert.Equal<String>(TextToCompress, DecompressedText);
         }
 
 
         [Fact]
-//        [ExpectedException(typeof(System.ObjectDisposedException))]
         public void Zlib_DisposedException_GZipStream()
         {
             string TextToCompress =  IhaveaDream;
@@ -1390,7 +1380,9 @@ namespace Ionic.Zlib.Tests
             string DecompressedText = sr.ReadToEnd();
             sr.Close();
 
-            _output.WriteLine("decompressor.CanRead = {0}",decompressor.CanRead);
+            Assert.Throws<ObjectDisposedException>(() => {
+              _output.WriteLine("decompressor.CanRead = {0}",decompressor.CanRead);
+            });
 
             _output.WriteLine("Read {0} characters: '{1}'", DecompressedText.Length, DecompressedText);
             _output.WriteLine("\n");
@@ -1399,7 +1391,6 @@ namespace Ionic.Zlib.Tests
 
 
         [Fact]
-//        [ExpectedException(typeof(System.ObjectDisposedException))]
         public void Zlib_DisposedException_ZlibStream()
         {
             string TextToCompress =  IhaveaDream;
@@ -1430,13 +1421,14 @@ namespace Ionic.Zlib.Tests
             string DecompressedText = sr.ReadToEnd();
             sr.Close();
 
-            _output.WriteLine("decompressor.CanRead = {0}",decompressor.CanRead);
+            Assert.Throws<ObjectDisposedException>(() => {
+              _output.WriteLine("decompressor.CanRead = {0}",decompressor.CanRead);
+            });
 
             _output.WriteLine("Read {0} characters: '{1}'", DecompressedText.Length, DecompressedText);
             _output.WriteLine("\n");
             Assert.Equal<String>(TextToCompress, DecompressedText);
         }
-
 
 
 
