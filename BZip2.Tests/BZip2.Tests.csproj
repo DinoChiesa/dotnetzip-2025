@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -13,6 +13,15 @@
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="Xunit.AssertMessages" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonTestSrc\TestUtilities.cs">
+      <Link>TestUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonTestSrc\RandomTextGenerator.cs">
+      <Link>RandomTextGenerator.cs</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -19,7 +19,6 @@
 using System.Text.RegularExpressions;
 using System.Text;
 using Xunit.Abstractions;
-//using Assert = XunitAssertMessages.AssertM;
 
 namespace Ionic.Zip.Tests.Utilities
 {
@@ -42,10 +41,67 @@ namespace Ionic.Zip.Tests.Utilities
 
             TopLevelDir = GenerateUniquePathname("tmp");
             Directory.CreateDirectory(TopLevelDir);
-            
+
             // probably this is harmful - tests run concurrently, so this is not stable
             //Directory.SetCurrentDirectory(Path.GetDirectoryName(TopLevelDir));
         }
+
+        internal static void CleanUp(string restoreDir, List<String> dirsToRemove)
+        {
+            System.IO.Directory.SetCurrentDirectory(restoreDir); //  to allow the TopLevelDir to be deleted
+            dirsToRemove.ForEach(dirPath =>
+            {
+                try {
+                    if (Directory.Exists(dirPath))
+                    {
+                        // Some of the files to be deleted will be ReadOnly, which means they
+                        // will be undelete-able via Directory.Delete(dirPath, true).  To handle
+                        // that, we need to recursively check each file. "
+                        DeleteDirectoryRecursive(new DirectoryInfo(dirPath));
+                        Console.WriteLine("Deleted directory {0}.", dirPath);
+                    }
+                }
+                catch (IOException ex) {
+                    Console.WriteLine($"Error deleting directory {dirPath}: {ex.Message}");
+                }
+            });
+        }
+
+        private static void DeleteDirectoryRecursive(DirectoryInfo dir)
+        {
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                var a = file.Attributes;
+                if (((a & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) ||
+                    ((a & FileAttributes.System) == FileAttributes.System))
+                {
+                    file.Attributes = FileAttributes.Normal;
+                }
+                // if ((a & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                // {
+                //     a ^= FileAttributes.ReadOnly;
+                //     File.SetAttributes(file.FullPath, a);
+                // }
+                // if ((a & FileAttributes.System) == FileAttributes.System)
+                // {
+                //     a ^= FileAttributes.System;
+                //     File.SetAttributes(file.FullPath, a);
+                // }
+                // if (file.IsReadOnly)
+                // {
+                //     file.Attributes = FileAttributes.Normal;
+                // }
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdir in dir.GetDirectories())
+            {
+                DeleteDirectoryRecursive(subdir);
+            }
+            dir.Delete(true);
+        }
+
+
 
         // internal static void Cleanup(string CurrentDir, List<String> FilesToRemove)
         // {
@@ -422,7 +478,7 @@ namespace Ionic.Zip.Tests.Utilities
         {
             return Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
         }
-        
+
         internal static string UniqueDir(string baseName)
         {
             int c = 0;
@@ -619,7 +675,7 @@ namespace Ionic.Zip.Tests.Utilities
             }
             if (update != null)
                 update(4, entriesAdded);
-            
+
             return entriesAdded;
         }
 
@@ -694,8 +750,8 @@ namespace Ionic.Zip.Tests.Utilities
             //return GetTestDependentDir(startingPoint, "Zip Tests\\bin\\Debug");
             var loc = System.Reflection.Assembly.GetExecutingAssembly().Location;
             return Path.GetDirectoryName(loc);
-            // This will be something like  C:\Users\someone\dev\DotNetZip\Zip.Tests\bin\Debug\net9.0 
-            // depending on which test is being run. 
+            // This will be something like  C:\Users\someone\dev\DotNetZip\Zip.Tests\bin\Debug\net9.0
+            // depending on which test is being run.
         }
 
         internal static string GetTestSrcDir(/* string startingPoint */)
@@ -708,7 +764,7 @@ namespace Ionic.Zip.Tests.Utilities
             path =  Path.GetDirectoryName(path);
             return path;
             // will be something like  C:\Users\someone\dev\DotNetZip\Zip.Tests
-            
+
         }
 
         private static string GetTestDependentDir(string startingPoint, string subdir)
@@ -730,12 +786,12 @@ namespace Ionic.Zip.Tests.Utilities
         //     string requiredDll = Path.Combine(testBin, "Resources\\Ionic.CopyData.dll");
         //     Assert.IsTrue(File.Exists(progressMonitorTool), "progress monitor tool does not exist ({0})",  progressMonitorTool);
         //     Assert.IsTrue(File.Exists(requiredDll), "required DLL does not exist ({0})",  requiredDll);
-        // 
+        //
         //     // start the progress monitor
         //     string ignored;
         //     //this.Exec(progressMonitorTool, String.Format("-channel {0}", progressChannel), false);
         //     TestUtilities.Exec_NoContext(progressMonitorTool, String.Format("-channel {0}", progressChannel), false, out ignored);
-        // 
+        //
         //     var txrx = new Ionic.CopyData.Transceiver();
         //     System.Threading.Thread.Sleep(1000);
         //     txrx.Channel = progressChannel;

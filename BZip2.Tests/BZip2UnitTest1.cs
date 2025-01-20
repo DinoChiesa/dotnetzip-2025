@@ -1,26 +1,22 @@
-﻿using System.Text;
+﻿using Ionic.Zip.Tests.Utilities;
+using System.Text;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
 
 namespace Ionic.BZip2.Tests
 {
-    /// <summary>
-    /// Summary description for UnitTest1
-    /// </summary>
-
     public class UnitTest1 : IDisposable
     {
-        private System.Random rnd;
+        System.Random rnd;
+        protected System.Collections.Generic.List<string> _DirsToRemove;
+        private string CurrentDir = null;
+        private string TopLevelDir = null;
+
         private ITestOutputHelper _output;
 
-        public UnitTest1(ITestOutputHelper output) 
-        {
-            this.rnd = new System.Random();
-            FilesToRemove = new System.Collections.Generic.List<string>();
-            _output = output;
-            output.WriteLine("\n\n**\nUnitTest1.cs **");
-            _Initialize();
-        }
+        static string[] LoremIpsumWords;
+
+        private const int WORKING_BUFFER_SIZE = 0x4000;
 
         static UnitTest1()
         {
@@ -29,95 +25,88 @@ namespace Ionic.BZip2.Tests
                                           System.StringSplitOptions.RemoveEmptyEntries);
         }
 
-        #region Additional test attributes
-
-        private string CurrentDir = null;
-        private string TopLevelDir = null;
-        protected System.Collections.Generic.List<string> FilesToRemove;
-
-private void _Initialize()
+        public UnitTest1(ITestOutputHelper output)
         {
+            _output = output;
+
+            this.rnd = new System.Random();
+            _DirsToRemove = new System.Collections.Generic.List<string>();
             CurrentDir = System.IO.Directory.GetCurrentDirectory();
-            Assert.AreNotEqual<string>(System.IO.Path.GetFileName(CurrentDir), "Temp", "at start");
-
-            string parentDir = System.Environment.GetEnvironmentVariable("TEMP");
-
-            TopLevelDir = System.IO.Path.Combine(parentDir, String.Format("Ionic.ZlibTest-{0}.tmp", System.DateTime.Now.ToString("yyyyMMMdd-HHmmss")));
-            System.IO.Directory.CreateDirectory(TopLevelDir);
-            System.IO.Directory.SetCurrentDirectory(TopLevelDir);
-
-            FilesToRemove.Add(TopLevelDir);
+            TestUtilities.Initialize(out TopLevelDir);
+            _DirsToRemove.Add(TopLevelDir);
         }
-
 
         public void Dispose()
         {
-            Assert.AreNotEqual<string>(Path.GetFileName(CurrentDir), "Temp", "at finish");
-            Directory.SetCurrentDirectory(CurrentDir);
-            IOException GotException = null;
-            int Tries = 0;
-            do
-            {
-                try
-                {
-                    GotException = null;
-                    foreach (string filename in FilesToRemove)
-                    {
-                        if (Directory.Exists(filename))
-                        {
-                            // turn off any ReadOnly attributes
-                            ClearReadOnly(filename);
-                            Directory.Delete(filename, true);
-                        }
-                        if (File.Exists(filename))
-                        {
-                            File.Delete(filename);
-                        }
-                    }
-                    Tries++;
-                }
-                catch (IOException ioexc)
-                {
-                    GotException = ioexc;
-                    // use an backoff interval before retry
-                    System.Threading.Thread.Sleep(200 * Tries);
-                }
-            } while ((GotException != null) && (Tries < 4));
-            if (GotException != null) throw GotException;
-            FilesToRemove.Clear();
+            TestUtilities.CleanUp(CurrentDir, _DirsToRemove);
         }
 
 
-        public static void ClearReadOnly(string dirname)
-        {
-            // don't traverse reparse points
-            if ((File.GetAttributes(dirname) & FileAttributes.ReparsePoint) != 0)
-                return;
-
-            foreach (var d in Directory.GetDirectories(dirname))
-            {
-                ClearReadOnly(d); // recurse
-            }
-
-            foreach (var f in Directory.GetFiles(dirname))
-            {
-                // clear ReadOnly and System attributes
-                var a = File.GetAttributes(f);
-                if ((a & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    a ^= FileAttributes.ReadOnly;
-                    File.SetAttributes(f, a);
-                }
-                if ((a & FileAttributes.System) == FileAttributes.System)
-                {
-                    a ^= FileAttributes.System;
-                    File.SetAttributes(f, a);
-                }
-            }
-        }
-
-
-        #endregion
+        // public void Dispose()
+        // {
+        //     Assert.AreNotEqual<string>(Path.GetFileName(CurrentDir), "Temp", "at finish");
+        //     Directory.SetCurrentDirectory(CurrentDir);
+        //     IOException GotException = null;
+        //     int Tries = 0;
+        //     do
+        //     {
+        //         try
+        //         {
+        //             GotException = null;
+        //             foreach (string filename in FilesToRemove)
+        //             {
+        //                 if (Directory.Exists(filename))
+        //                 {
+        //                     // turn off any ReadOnly attributes
+        //                     ClearReadOnly(filename);
+        //                     Directory.Delete(filename, true);
+        //                 }
+        //                 if (File.Exists(filename))
+        //                 {
+        //                     File.Delete(filename);
+        //                 }
+        //             }
+        //             Tries++;
+        //         }
+        //         catch (IOException ioexc)
+        //         {
+        //             GotException = ioexc;
+        //             // use an backoff interval before retry
+        //             System.Threading.Thread.Sleep(200 * Tries);
+        //         }
+        //     } while ((GotException != null) && (Tries < 4));
+        //     if (GotException != null) throw GotException;
+        //     FilesToRemove.Clear();
+        // }
+        //
+        //
+        // public static void ClearReadOnly(string dirname)
+        // {
+        //     // don't traverse reparse points
+        //     if ((File.GetAttributes(dirname) & FileAttributes.ReparsePoint) != 0)
+        //         return;
+        //
+        //     foreach (var d in Directory.GetDirectories(dirname))
+        //     {
+        //         ClearReadOnly(d); // recurse
+        //     }
+        //
+        //     foreach (var f in Directory.GetFiles(dirname))
+        //     {
+        //         // clear ReadOnly and System attributes
+        //         var a = File.GetAttributes(f);
+        //         if ((a & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+        //         {
+        //             a ^= FileAttributes.ReadOnly;
+        //             File.SetAttributes(f, a);
+        //         }
+        //         if ((a & FileAttributes.System) == FileAttributes.System)
+        //         {
+        //             a ^= FileAttributes.System;
+        //             File.SetAttributes(f, a);
+        //         }
+        //     }
+        // }
 
         #region Helpers
         private static void CopyStream(System.IO.Stream src, System.IO.Stream dest)
@@ -148,8 +137,8 @@ private void _Initialize()
         private string GetContentFile(string fileName)
         {
             string testBin = GetTestBinDir(CurrentDir);
-            string path = Path.Combine(testBin, String.Format("Resources\\{0}", fileName));
-            Assert.IsTrue(File.Exists(path), "file ({0}) does not exist", path);
+            string path = Path.Combine(testBin, $"Resources\\{fileName}");
+            Assert.True(File.Exists(path), $"file ({path}) does not exist");
             return path;
         }
 
@@ -278,7 +267,7 @@ private void _Initialize()
         {
             string filename = "LargeFile.txt";
             int minSize = 0x6000000 + this.rnd.Next(0x6000000);
-            TestContext.WriteLine("Creating large file, minimum {0} bytes", minSize);
+            _output.WriteLine("Creating large file, minimum {0} bytes", minSize);
 
             CreateAndFillTextFile(filename, minSize);
 
@@ -295,7 +284,7 @@ private void _Initialize()
             for (int k=0; k < 2; k++)
             {
                 var stopwatch = new System.Diagnostics.Stopwatch();
-                TestContext.WriteLine("Trial {0}", k);
+                _output.WriteLine("Trial {0}", k);
                 stopwatch.Start();
                 string bzFname = Path.GetFileNameWithoutExtension(filename) +
                     "." + k + Path.GetExtension(filename) + ".bz2";
@@ -307,10 +296,10 @@ private void _Initialize()
                 }
                 stopwatch.Stop();
                 ts[k] = stopwatch.Elapsed;
-                TestContext.WriteLine("Trial complete {0} : {1}", k, ts[k]);
+                _output.WriteLine("Trial complete {0} : {1}", k, ts[k]);
             }
 
-            Assert.IsTrue(ts[1]<ts[0],
+            Assert.True(ts[1]<ts[0],
                           "Parallel compression took MORE time.");
         }
 
@@ -321,7 +310,7 @@ private void _Initialize()
         //[Timeout(15 * 60*1000)] // 60*1000 = 1min
         public void BZ_Basic()
         {
-            TestContext.WriteLine("Creating fodder file.");
+            _output.WriteLine("Creating fodder file.");
             // select a random text string
             var line = TestStrings.ElementAt(this.rnd.Next(0, TestStrings.Count)).Value;
             int n = 4000 + this.rnd.Next(1000); // number of iters
@@ -364,8 +353,8 @@ private void _Initialize()
                                                 (k==0)?"SingleThread":"MultiThread",
                                                 blockSize, ext);
 
-                    TestContext.WriteLine("Compress cycle ({0},{1})", k,m);
-                    TestContext.WriteLine("file {0}", bzFname);
+                    _output.WriteLine("Compress cycle ({0},{1})", k,m);
+                    _output.WriteLine("file {0}", bzFname);
                     using (var fs = File.OpenRead(fname))
                     {
                         using (var output = File.Create(bzFname))
@@ -377,7 +366,7 @@ private void _Initialize()
                         }
                     }
 
-                    TestContext.WriteLine("Decompress");
+                    _output.WriteLine("Decompress");
                     var decompressedFname = Path.GetFileNameWithoutExtension(bzFname);
                     using (Stream fs = File.OpenRead(bzFname),
                            output = File.Create(decompressedFname),
@@ -386,12 +375,11 @@ private void _Initialize()
                         CopyStream(decompressor, output);
                     }
 
-                    TestContext.WriteLine("Check CRC");
+                    _output.WriteLine("Check CRC");
                     int crcDecompressed = GetCrc(decompressedFname);
-                    Assert.AreEqual<int>(crcOriginal, crcDecompressed,
-                                         "CRC mismatch {0:X8} != {1:X8}",
-                                         crcOriginal, crcDecompressed);
-                    TestContext.WriteLine("");
+                    Assert.Equal<int>(crcOriginal, crcDecompressed,
+                        String.Format("CRC mismatch {0:X8} != {1:X8}", crcOriginal, crcDecompressed));
+                    _output.WriteLine("");
 
                     // just for the sake of disk space economy:
                     File.Delete(decompressedFname);
@@ -402,27 +390,30 @@ private void _Initialize()
 
 
         [Fact]
-        [ExpectedException(typeof(IOException))]
         public void BZ_Error_1()
         {
             var bzbin = GetTestDependentDir(CurrentDir, "Tools\\BZip2\\bin\\Debug");
             var dnzBzip2exe = Path.Combine(bzbin, "bzip2.exe");
             string decompressedFname = "ThisWillNotWork.txt";
+
+            Assert.Throws<IOException>(() => {
             using (Stream input = File.OpenRead(dnzBzip2exe),
                    decompressor = new Ionic.BZip2.BZip2InputStream(input),
                    output = File.Create(decompressedFname))
                 CopyStream(decompressor, output);
+            });
         }
 
         [Fact]
-        [ExpectedException(typeof(IOException))]
         public void BZ_Error_2()
         {
             string decompressedFname = "ThisWillNotWork.txt";
+            Assert.Throws<IOException>(() => {
             using (Stream input = new MemoryStream(), // empty stream
                    decompressor = new Ionic.BZip2.BZip2InputStream(input),
                    output = File.Create(decompressedFname))
                 CopyStream(decompressor, output);
+            });
         }
 
 
@@ -431,18 +422,16 @@ private void _Initialize()
         {
             var bzbin = GetTestDependentDir(CurrentDir, "Tools\\BZip2\\bin\\Debug");
             var dnzBzip2exe = Path.Combine(bzbin, "bzip2.exe");
-            Assert.IsTrue(File.Exists(dnzBzip2exe), "Bzip2.exe is missing {0}",
-                          dnzBzip2exe);
+            Assert.True(File.Exists(dnzBzip2exe), $"Bzip2.exe is missing {dnzBzip2exe}" );
             var unxBzip2exe = "\\bin\\bzip2.exe";
-            Assert.IsTrue(File.Exists(unxBzip2exe), "Bzip2.exe is missing {0}",
-                          unxBzip2exe);
+            Assert.True(File.Exists(unxBzip2exe), $"Bzip2.exe is missing {unxBzip2exe}" );
 
             foreach (var key in TestStrings.Keys)
             {
                 int count = this.rnd.Next(18) + 4;
-                TestContext.WriteLine("Doing string {0}", key);
+                _output.WriteLine("Doing string {0}", key);
                 var s =  TestStrings[key];
-                var fname = String.Format("Pippo-{0}.txt", key);
+                var fname = $"Pippo-{key}.txt";
                 using (var sw = new StreamWriter(File.Create(fname)))
                 {
                     for (int k=0; k < count; k++)
@@ -454,29 +443,25 @@ private void _Initialize()
                 int crcOriginal = GetCrc(fname);
 
                 string args = fname + " -keep -v";
-                TestContext.WriteLine("Exec: bzip2 {0}", args);
+                _output.WriteLine("Exec: bzip2 {0}", args);
                 string bzout = this.Exec(dnzBzip2exe, args);
 
                 var bzfile = fname + ".bz2";
-                Assert.IsTrue(File.Exists(bzfile), "File is missing. {0}",
-                              bzfile);
+                Assert.True(File.Exists(bzfile), $"File is missing. {bzfile}" );
 
                 File.Delete(fname);
-                Assert.IsTrue(!File.Exists(fname), "The delete failed. {0}",
-                              fname);
+                Assert.False(File.Exists(fname), $"The delete failed. {fname}" );
 
                 System.Threading.Thread.Sleep(1200);
 
                 args = "-dfk "+ bzfile;
-                TestContext.WriteLine("Exec: bzip2 {0}", args);
+                _output.WriteLine("Exec: bzip2 {0}", args);
                 bzout = this.Exec(unxBzip2exe, args);
-                Assert.IsTrue(File.Exists(fname), "File is missing. {0}",
-                              fname);
+                Assert.True(File.Exists(fname), $"File is missing. {fname}" );
 
                 int crcDecompressed = GetCrc(fname);
-                Assert.AreEqual<int>(crcOriginal, crcDecompressed,
-                                     "CRC mismatch {0:X8}!={1:X8}",
-                                     crcOriginal, crcDecompressed);
+                Assert.Equal<int>(crcOriginal, crcDecompressed,
+                    String.Format("CRC mismatch {0:X8}!={1:X8}", crcOriginal, crcDecompressed));
             }
         }
 
@@ -488,14 +473,14 @@ private void _Initialize()
             string resourceDir = Path.Combine(testBin, "Resources");
             var filesToDecompress = Directory.GetFiles(resourceDir, "*.bz2");
 
-            Assert.IsTrue(filesToDecompress.Length > 2,
+            Assert.True(filesToDecompress.Length > 2,
                           "There are not enough sample files");
 
             foreach (var filename in filesToDecompress)
             {
-                TestContext.WriteLine("Decompressing {0}", filename);
+                _output.WriteLine("Decompressing {0}", filename);
                 var outFname = filename + ".decompressed";
-                TestContext.WriteLine("Decompressing to {0}", outFname);
+                _output.WriteLine("Decompressing to {0}", outFname);
 
                 using (var fs = File.OpenRead(filename))
                 {
@@ -507,10 +492,9 @@ private void _Initialize()
                         }
                     }
                 }
-                TestContext.WriteLine("");
+                _output.WriteLine("");
             }
         }
-
 
 
 
@@ -626,9 +610,6 @@ I have a dream that one day every valley shall be exalted, and every hill and mo
                          "\n"}
         };
 
-        static string[] LoremIpsumWords;
-
-        private const int WORKING_BUFFER_SIZE = 0x4000;
 
     }
 

@@ -44,23 +44,7 @@ namespace Ionic.Zlib.Tests
 
         public void Dispose()
         {
-            //System.IO.Directory.SetCurrentDirectory(System.Environment.GetEnvironmentVariable("TEMP"));
-            //System.IO.Directory.Delete(TopLevelDir, true);
-            System.IO.Directory.SetCurrentDirectory(CurrentDir); //  to allow the TopLEvelDir to be deleted
-
-            _DirsToRemove.ForEach(dirPath =>
-            {
-                try {
-                    if (Directory.Exists(dirPath))
-                    {
-                        Directory.Delete(dirPath, true);
-                        Console.WriteLine("Deleted directory {0}.", dirPath);
-                    }
-                }
-                catch (IOException ex) {
-                    Console.WriteLine($"Error deleting directory {dirPath}: {ex.Message}");
-                }
-            });
+            TestUtilities.CleanUp(CurrentDir, _DirsToRemove);
         }
 
 

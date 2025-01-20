@@ -51,52 +51,8 @@ namespace Ionic.Zip.Tests.Utilities
 
         public void Dispose()
         {
-            //System.IO.Directory.SetCurrentDirectory(System.Environment.GetEnvironmentVariable("TEMP"));
-            //System.IO.Directory.Delete(TopLevelDir, true);
-            System.IO.Directory.SetCurrentDirectory(CurrentDir); //  to allow the TopLevelDir to be deleted
-
-            // There is a strange race condition... dirs get removed before all
-            // the tests are complete, And then some of the tests fail, because the files are gone.
-            //
-            // Not sure how that happens.  xunit is a pain to use.
-
-            _DirsToRemove.ForEach(dirPath =>
-            {
-                try {
-                    if (Directory.Exists(dirPath))
-                    {
-                        // Some of the files to be deleted will be ReadOnly, which means they
-                        // will be undelete-able via Directory.Delete(dirPath, true).  To handle
-                        // that, we need to recursively check each file. "
-                        DeleteDirectoryRecursive(new DirectoryInfo(dirPath));
-                        Console.WriteLine("Deleted directory {0}.", dirPath);
-                    }
-                }
-                catch (IOException ex) {
-                    Console.WriteLine($"Error deleting directory {dirPath}: {ex.Message}");
-                }
-            });
+            TestUtilities.CleanUp(CurrentDir, _DirsToRemove);
         }
-
-
-        private static void DeleteDirectoryRecursive(DirectoryInfo dir)
-        {
-            foreach (FileInfo file in dir.GetFiles())
-            {
-                if (file.IsReadOnly)
-                {
-                    file.Attributes = FileAttributes.Normal;
-                }
-                file.Delete();
-            }
-
-            foreach (DirectoryInfo subdir in dir.GetDirectories())
-            {
-                DeleteDirectoryRecursive(subdir);
-            }
-            dir.Delete(true);
-        }
-
 
         internal string Exec(string program, string args)
         {
