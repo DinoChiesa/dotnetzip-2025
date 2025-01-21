@@ -747,16 +747,14 @@ namespace Ionic.Zip.Tests.Utilities
 
         internal static string GetTestBinDir(string startingPoint)
         {
-            //return GetTestDependentDir(startingPoint, "Zip Tests\\bin\\Debug");
             var loc = System.Reflection.Assembly.GetExecutingAssembly().Location;
             return Path.GetDirectoryName(loc);
             // This will be something like  C:\Users\someone\dev\DotNetZip\Zip.Tests\bin\Debug\net9.0
-            // depending on which test is being run.
+            // ...depending on which test is being run.
         }
 
-        internal static string GetTestSrcDir(/* string startingPoint */)
+        internal static string GetTestSrcDir()
         {
-            //return GetTestDependentDir(startingPoint, "Zip Tests");
             var loc = System.Reflection.Assembly.GetExecutingAssembly().Location;
             var path = Path.GetDirectoryName(loc);
             path =  Path.GetDirectoryName(path);
@@ -767,15 +765,15 @@ namespace Ionic.Zip.Tests.Utilities
 
         }
 
-        private static string GetTestDependentDir(string startingPoint, string subdir)
-        {
-            var location = startingPoint;
-            for (int i = 0; i < 3; i++)
-                location = Path.GetDirectoryName(location);
-
-            location = Path.Combine(location, subdir);
-            return location;
-        }
+        // private static string GetTestDependentDir(string startingPoint, string subdir)
+        // {
+        //     var location = startingPoint;
+        //     for (int i = 0; i < 3; i++)
+        //         location = Path.GetDirectoryName(location);
+        // 
+        //     location = Path.Combine(location, subdir);
+        //     return location;
+        // }
 
 
         // internal static Ionic.CopyData.Transceiver

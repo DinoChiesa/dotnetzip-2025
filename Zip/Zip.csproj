@@ -11,8 +11,8 @@
     <Compile Include="..\CommonSrc\CRC32.cs">
       <Link>CRC32.cs</Link>
     </Compile>
-    <Compile Include="..\BZip2\*.cs">
-      <Link>BZip2\%(FileName)</Link>
+    <Compile Include="..\BZip2-lib\*.cs">
+      <Link>BZip2-lib\%(FileName)</Link>
     </Compile>
     <Compile Include="..\Zlib\*.cs">
       <Link>Zlib\%(FileName)</Link>

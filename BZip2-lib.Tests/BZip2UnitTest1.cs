@@ -119,29 +119,6 @@ namespace Ionic.BZip2.Tests
             }
         }
 
-        private static string GetTestDependentDir(string startingPoint, string subdir)
-        {
-            var location = startingPoint;
-            for (int i = 0; i < 3; i++)
-                location = Path.GetDirectoryName(location);
-
-            location = Path.Combine(location, subdir);
-            return location;
-        }
-
-        private static string GetTestBinDir(string startingPoint)
-        {
-            return GetTestDependentDir(startingPoint, "BZip2 Tests\\bin\\Debug");
-        }
-
-        private string GetContentFile(string fileName)
-        {
-            string testBin = GetTestBinDir(CurrentDir);
-            string path = Path.Combine(testBin, $"Resources\\{fileName}");
-            Assert.True(File.Exists(path), $"file ({path}) does not exist");
-            return path;
-        }
-
         private static Int32 GetCrc(string fname)
         {
             using (var fs1 = File.OpenRead(fname))
@@ -232,7 +209,6 @@ namespace Ionic.BZip2.Tests
             return 0;
         }
 
-
         void CreateAndFillTextFile(string filename, Int64 minimumSize)
         {
             // fill the file with text data, selecting one word at a time
@@ -265,7 +241,9 @@ namespace Ionic.BZip2.Tests
         //[Timeout(15 * 60*1000)] // 60*1000 = 1min
         public void BZ_LargeParallel()
         {
-            string filename = "LargeFile.txt";
+            _output.WriteLine("BZ_LargeParallel: start.");
+            string tld = new String(TopLevelDir); // copy to avoid changes
+            string filename = Path.Combine(tld, "LargeFile.txt");
             int minSize = 0x6000000 + this.rnd.Next(0x6000000);
             _output.WriteLine("Creating large file, minimum {0} bytes", minSize);
 
@@ -280,14 +258,15 @@ namespace Ionic.BZip2.Tests
                     })
             };
 
-            var ts = new TimeSpan[2];
-            for (int k=0; k < 2; k++)
+            int NUM_TRIALS = getBzStream.Length;
+            var ts = new TimeSpan[getBzStream.Length];
+            for (int k=0; k < NUM_TRIALS; k++)
             {
                 var stopwatch = new System.Diagnostics.Stopwatch();
-                _output.WriteLine("Trial {0}", k);
+                _output.WriteLine("Trial {0}/{1}", k+1, NUM_TRIALS);
                 stopwatch.Start();
-                string bzFname = Path.GetFileNameWithoutExtension(filename) +
-                    "." + k + Path.GetExtension(filename) + ".bz2";
+                string bzFname = Path.Combine(tld, String.Format("{0}.{1}{2}.bz2",
+                    Path.GetFileNameWithoutExtension(filename), k, Path.GetExtension(filename)));
                 using (Stream input = File.OpenRead(filename),
                        output = File.Create(bzFname),
                        compressor = getBzStream[k](output))
@@ -296,13 +275,11 @@ namespace Ionic.BZip2.Tests
                 }
                 stopwatch.Stop();
                 ts[k] = stopwatch.Elapsed;
-                _output.WriteLine("Trial complete {0} : {1}", k, ts[k]);
+                _output.WriteLine("Trial complete {0}. elapsed: {1}", k, ts[k]);
             }
 
-            Assert.True(ts[1]<ts[0],
-                          "Parallel compression took MORE time.");
+            Assert.True(ts[1]<ts[0], "Parallel compression took MORE time.");
         }
-
 
 
 
@@ -310,15 +287,19 @@ namespace Ionic.BZip2.Tests
         //[Timeout(15 * 60*1000)] // 60*1000 = 1min
         public void BZ_Basic()
         {
-            _output.WriteLine("Creating fodder file.");
+            _output.WriteLine("BZ_Basic: start");
+            string tld = new String(TopLevelDir); // copy to avoid changes
+            string marker = TestUtilities.GetMarker();
             // select a random text string
             var line = TestStrings.ElementAt(this.rnd.Next(0, TestStrings.Count)).Value;
-            int n = 4000 + this.rnd.Next(1000); // number of iters
-            var fname = "Pippo.txt";
-            // emit many many lines into a text file:
+            int numIterations = 4000 + this.rnd.Next(1000);
+            var fname = Path.Combine(tld, $"text-file-{marker}.txt");
+            _output.WriteLine($"Creating fodder file {fname}");
+
+            _output.WriteLine($"Emitting {numIterations} lines into that file");
             using (var sw = new StreamWriter(File.Create(fname)))
             {
-                for (int k=0; k < n; k++)
+                for (int k=0; k < numIterations; k++)
                 {
                     sw.WriteLine(line);
                 }
@@ -348,10 +329,11 @@ namespace Ionic.BZip2.Tests
                     var root = Path.GetFileNameWithoutExtension(fname);
                     var ext = Path.GetExtension(fname);
                     // compress into bz2
-                    var bzFname = String.Format("{0}.{1}.blocksize{2}{3}.bz2",
-                                                root,
-                                                (k==0)?"SingleThread":"MultiThread",
-                                                blockSize, ext);
+                    var bzFname = Path.Combine(tld,
+                        String.Format("{0}.{1}.blocksize{2}{3}.bz2",
+                            root,
+                            (k == 0) ? "SingleThread" : "MultiThread",
+                            blockSize, ext));
 
                     _output.WriteLine("Compress cycle ({0},{1})", k,m);
                     _output.WriteLine("file {0}", bzFname);
@@ -388,12 +370,12 @@ namespace Ionic.BZip2.Tests
             }
         }
 
-
         [Fact]
-        public void BZ_Error_1()
+        public void BZ_Reading_Not_A_bzipped_file()
         {
-            var bzbin = GetTestDependentDir(CurrentDir, "Tools\\BZip2\\bin\\Debug");
-            var dnzBzip2exe = Path.Combine(bzbin, "bzip2.exe");
+            string testSrc = TestUtilities.GetTestSrcDir();
+            var dnzBzip2exe = Path.Combine(testSrc, "..\\Tools\\BZip2\\bin\\Debug\\net9.0", "bzip2.exe");
+            Assert.True(File.Exists(dnzBzip2exe), $"bzip2.exe is missing {dnzBzip2exe}" );
             string decompressedFname = "ThisWillNotWork.txt";
 
             Assert.Throws<IOException>(() => {
@@ -405,7 +387,7 @@ namespace Ionic.BZip2.Tests
         }
 
         [Fact]
-        public void BZ_Error_2()
+        public void BZ_EmptyInputStream()
         {
             string decompressedFname = "ThisWillNotWork.txt";
             Assert.Throws<IOException>(() => {
@@ -416,25 +398,26 @@ namespace Ionic.BZip2.Tests
             });
         }
 
-
         [Fact]
         public void BZ_Utility()
         {
-            var bzbin = GetTestDependentDir(CurrentDir, "Tools\\BZip2\\bin\\Debug");
-            var dnzBzip2exe = Path.Combine(bzbin, "bzip2.exe");
-            Assert.True(File.Exists(dnzBzip2exe), $"Bzip2.exe is missing {dnzBzip2exe}" );
-            var unxBzip2exe = "\\bin\\bzip2.exe";
-            Assert.True(File.Exists(unxBzip2exe), $"Bzip2.exe is missing {unxBzip2exe}" );
+            string tld = new String(TopLevelDir); // copy to avoid changes
+            string testSrc = TestUtilities.GetTestSrcDir();
+            var dnzBzip2exe = Path.GetFullPath(Path.Combine(testSrc, "..\\Tools\\BZip2\\bin\\Debug\\net9.0", "bzip2.exe"));
+            Assert.True(File.Exists(dnzBzip2exe), $"bzip2.exe is missing {dnzBzip2exe}" );
+
+            var unxBzip2exe = Path.Combine(testSrc, "Resources\\bzip2.exe");
+            Assert.True(File.Exists(unxBzip2exe), $"unxUtils bzip2.exe is missing {unxBzip2exe}" );
 
             foreach (var key in TestStrings.Keys)
             {
-                int count = this.rnd.Next(18) + 4;
-                _output.WriteLine("Doing string {0}", key);
-                var s =  TestStrings[key];
-                var fname = $"Pippo-{key}.txt";
+                int numLinesToWrite = this.rnd.Next(2802) + 420;
+                _output.WriteLine("\n====\nWriting string from {0}, {1} times", key, numLinesToWrite);
+                var s = TestStrings[key];
+                var fname = Path.Combine(tld, $"Pippo-{key}-{numLinesToWrite}.txt");
                 using (var sw = new StreamWriter(File.Create(fname)))
                 {
-                    for (int k=0; k < count; k++)
+                    for (int k=0; k < numLinesToWrite; k++)
                     {
                         sw.WriteLine(s);
                     }
@@ -442,26 +425,28 @@ namespace Ionic.BZip2.Tests
 
                 int crcOriginal = GetCrc(fname);
 
+                _output.WriteLine("Compressing with DotNetZip bzip2.exe");
                 string args = fname + " -keep -v";
-                _output.WriteLine("Exec: bzip2 {0}", args);
                 string bzout = this.Exec(dnzBzip2exe, args);
 
                 var bzfile = fname + ".bz2";
-                Assert.True(File.Exists(bzfile), $"File is missing. {bzfile}" );
+                Assert.True(File.Exists(bzfile), $"Compressed output file is missing. {bzfile}" );
 
+                _output.WriteLine("Deleting the original content file...");
                 File.Delete(fname);
                 Assert.False(File.Exists(fname), $"The delete failed. {fname}" );
 
                 System.Threading.Thread.Sleep(1200);
 
+                _output.WriteLine("De-Compressing with unxUtils bzip2.exe");
                 args = "-dfk "+ bzfile;
-                _output.WriteLine("Exec: bzip2 {0}", args);
                 bzout = this.Exec(unxBzip2exe, args);
                 Assert.True(File.Exists(fname), $"File is missing. {fname}" );
 
                 int crcDecompressed = GetCrc(fname);
                 Assert.Equal<int>(crcOriginal, crcDecompressed,
                     String.Format("CRC mismatch {0:X8}!={1:X8}", crcOriginal, crcDecompressed));
+                _output.WriteLine("CRC matches");
             }
         }
 
@@ -469,12 +454,11 @@ namespace Ionic.BZip2.Tests
         [Fact]
         public void BZ_Samples()
         {
-            string testBin = GetTestBinDir(CurrentDir);
-            string resourceDir = Path.Combine(testBin, "Resources");
+            string testSrc = TestUtilities.GetTestSrcDir();
+            string resourceDir = Path.Combine(testSrc, "Resources");
             var filesToDecompress = Directory.GetFiles(resourceDir, "*.bz2");
 
-            Assert.True(filesToDecompress.Length > 2,
-                          "There are not enough sample files");
+            Assert.True(filesToDecompress.Length > 2, "There are not enough sample files");
 
             foreach (var filename in filesToDecompress)
             {
@@ -495,7 +479,6 @@ namespace Ionic.BZip2.Tests
                 _output.WriteLine("");
             }
         }
-
 
 
         internal static Dictionary<String,String> TestStrings = new Dictionary<String,String>() {
@@ -609,10 +592,6 @@ I have a dream that one day every valley shall be exalted, and every hill and mo
 "cursus ut, molestie ac, laoreet id, mauris. Suspendisse auctor nibh. " +
                          "\n"}
         };
-
-
     }
-
-
 
 }
