@@ -15,7 +15,6 @@
 //
 // ------------------------------------------------------------------
 
-using System.Text;
 using Ionic.Zip.Tests.Utilities;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
@@ -382,7 +381,7 @@ namespace Ionic.Zip.Tests.Password
             string[] filenames =
             {
                 Path.Combine(dnzSolutionDir, "Tools\\GZip\\GZip.cs"),
-                Path.Combine(dnzSolutionDir, "Zip\\bin\\Debug\\net9.0\\Zip.pdb"),
+                Path.Combine(dnzSolutionDir, "Zip\\bin\\Debug\\net9.0\\Ionic.Zip.pdb"),
             };
 
             foreach (string f in filenames) {

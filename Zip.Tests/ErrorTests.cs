@@ -413,7 +413,7 @@ namespace Ionic.Zip.Tests.Error
 
             string tempFileFolder = Path.Combine(tld, String.Format("Temp-{0}", marker));
             Directory.CreateDirectory(tempFileFolder);
-            _output.WriteLine("Using {0} as the temp file folder....", tempFileFolder);
+            _output.WriteLine("tempFileFolder {0}", tempFileFolder);
             String[] tfiles = Directory.GetFiles(tempFileFolder);
             int nTemp = tfiles.Length;
             _output.WriteLine("There are {0} files in the temp file folder.", nTemp);
@@ -436,7 +436,7 @@ namespace Ionic.Zip.Tests.Error
                     foreach (string fn in filenames)
                     {
                         count++;
-                        _output.WriteLine("  {0}", fn);
+                        _output.WriteLine("  {0}", fn.Replace(TopLevelDir,""));
 
                         string file = fn;
 
@@ -650,7 +650,7 @@ namespace Ionic.Zip.Tests.Error
             {
                 Path.Combine(sourceDir, "..\\Tools\\GZip\\bin\\Debug\\net9.0\\GZip.exe"),
                 Path.Combine(sourceDir, "data\\wi8647.tif"),
-                Path.Combine(sourceDir, "..\\Zip\\bin\\Debug\\net9.0\\Zip.dll"),
+                Path.Combine(sourceDir, "..\\Zip\\bin\\Debug\\net9.0\\Ionic.Zip.dll"),
                 Path.Combine(sourceDir, "..\\CommonTestSrc\\TestUtilities.cs"),
             };
 
@@ -770,13 +770,10 @@ namespace Ionic.Zip.Tests.Error
         [Fact]
         public void AddFile_Twice()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             int i;
-            // select the name of the zip file
-            string zipFileToCreate = Path.Combine(tld, "AddFile_Twice.zip");
-
+            string zipFileToCreate = Path.Combine(TopLevelDir, "AddFile_Twice.zip");
             string marker = TestUtilities.GetMarker();
-            string subdir = Path.Combine(tld, $"addfile-twice-{marker}");
+            string subdir = Path.Combine(TopLevelDir, $"addfile-twice-{marker}");
             Directory.CreateDirectory(subdir);
 
             // create a bunch of files
@@ -787,7 +784,7 @@ namespace Ionic.Zip.Tests.Error
             // Create the zip archive
             using (ZipFile zip1 = new ZipFile(zipFileToCreate))
             {
-                zip1.StatusMessageTextWriter = System.Console.Out;
+                //zip1.StatusMessageTextWriter = System.Console.Out;
                 string[] files = Directory.GetFiles(subdir);
                 zip1.AddFiles(files, "files");
                 zip1.Save();
@@ -797,7 +794,7 @@ namespace Ionic.Zip.Tests.Error
             // this should fail - adding the same file twice
             using (ZipFile zip2 = new ZipFile(zipFileToCreate))
             {
-                zip2.StatusMessageTextWriter = System.Console.Out;
+                //zip2.StatusMessageTextWriter = System.Console.Out;
                 string[] files = Directory.GetFiles(subdir);
                 for (i = 0; i < files.Length; i++)
                     zip2.AddFile(files[i], "files");

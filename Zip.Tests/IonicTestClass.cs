@@ -52,7 +52,7 @@ namespace Ionic.Zip.Tests.Utilities
 
         public void Dispose()
         {
-            //TestUtilities.CleanUp(CurrentDir, _DirsToRemove, _output);
+            TestUtilities.CleanUp(CurrentDir, _DirsToRemove, _output);
         }
 
         internal string Exec(string program, string args)

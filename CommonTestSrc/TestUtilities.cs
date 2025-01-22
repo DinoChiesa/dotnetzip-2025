@@ -399,9 +399,7 @@ namespace Ionic.Zip.Tests.Utilities
             Text = 0, Binary = 1,
         }
 
-        internal static void CreateAndFillFile(string filename,
-                                               Int64 size,
-                                               FileFlavor flavor)
+        internal static void CreateAndFillFile(string filename, Int64 size, FileFlavor flavor)
         {
             if (size == 0)
                 File.Create(filename);

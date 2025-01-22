@@ -19,3 +19,19 @@ with "live output"
   dotnet test --logger "console;verbosity=detailed"  --filter StreamsTests  -- xUnit.ShowLiveOutput=true
 
   dotnet test --logger "console;verbosity=detailed"  --filter ZipOutputStream_Parallel  -- xUnit.ShowLiveOutput=true
+
+
+selecting subsets of tests
+
+  dotnet test --logger "console;verbosity=detailed"  --filter subset=create  -- xUnit.ShowLiveOutput=true
+
+
+stop on first fail
+
+  dotnet test --logger "console;verbosity=detailed"  -- xUnit.StopOnFail=true  
+
+  dotnet test --logger "console;verbosity=detailed"  -- xUnit.StopOnFail=true  xUnit.ShowLiveOutput=true
+
+
+
+
