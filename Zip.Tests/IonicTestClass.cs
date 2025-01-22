@@ -1,7 +1,7 @@
 // IonicTestClass.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009,2025 Dino Chiesa.
+// Copyright (c) 2009, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
@@ -35,6 +35,7 @@ namespace Ionic.Zip.Tests.Utilities
         private bool? _WinZipIsPresent;
         private bool? _SevenZipIsPresent;
         private bool? _InfoZipIsPresent;
+        protected static string TEMP = System.Environment.GetEnvironmentVariable("TEMP");
 
         //protected Ionic.CopyData.Transceiver _txrx;
 
@@ -51,7 +52,7 @@ namespace Ionic.Zip.Tests.Utilities
 
         public void Dispose()
         {
-            TestUtilities.CleanUp(CurrentDir, _DirsToRemove);
+            //TestUtilities.CleanUp(CurrentDir, _DirsToRemove, _output);
         }
 
         internal string Exec(string program, string args)
@@ -307,8 +308,8 @@ namespace Ionic.Zip.Tests.Utilities
             {
                 string tld = Path.GetDirectoryName(zipfile);
 
-                _output.WriteLine("Verifying zip file...");
-                _output.WriteLine("Verifying zip file {0} with DotNetZip", zipfile??"--null--");
+                _output.WriteLine("Verifying zip file with DotNetZip...");
+                _output.WriteLine("   file {0} ", (zipfile!=null)? zipfile.Replace(TEMP,"") : "--null--");
 
                 ReadOptions options = new ReadOptions();
                 if (emitOutput)

@@ -46,7 +46,7 @@ namespace Ionic.Zip.Tests.Utilities
             //Directory.SetCurrentDirectory(Path.GetDirectoryName(TopLevelDir));
         }
 
-        internal static void CleanUp(string restoreDir, List<String> dirsToRemove)
+        internal static void CleanUp(string restoreDir, List<String> dirsToRemove, ITestOutputHelper _output)
         {
             System.IO.Directory.SetCurrentDirectory(restoreDir); //  to allow the TopLevelDir to be deleted
             dirsToRemove.ForEach(dirPath =>
@@ -57,7 +57,8 @@ namespace Ionic.Zip.Tests.Utilities
                         // Some of the files to be deleted will be ReadOnly, which means they
                         // will be undelete-able via Directory.Delete(dirPath, true).  To handle
                         // that, we need to recursively check each file. "
-                        DeleteDirectoryRecursive(new DirectoryInfo(dirPath));
+                        int c = 0;
+                        DeleteDirectoryRecursive(c, _output, new DirectoryInfo(dirPath));
                         Console.WriteLine("Deleted directory {0}.", dirPath);
                     }
                 }
@@ -67,7 +68,7 @@ namespace Ionic.Zip.Tests.Utilities
             });
         }
 
-        private static void DeleteDirectoryRecursive(DirectoryInfo dir)
+        private static void DeleteDirectoryRecursive(int count, ITestOutputHelper _output, DirectoryInfo dir)
         {
             foreach (FileInfo file in dir.GetFiles())
             {
@@ -92,11 +93,16 @@ namespace Ionic.Zip.Tests.Utilities
                 //     file.Attributes = FileAttributes.Normal;
                 // }
                 file.Delete();
+                count++;
+                if ((count % 512) == 0)
+                {
+                    _output.WriteLine("deleted {0}", count);
+                }
             }
 
             foreach (DirectoryInfo subdir in dir.GetDirectories())
             {
-                DeleteDirectoryRecursive(subdir);
+                DeleteDirectoryRecursive(count, _output, subdir);
             }
             dir.Delete(true);
         }
@@ -745,7 +751,7 @@ namespace Ionic.Zip.Tests.Utilities
         }
 
 
-        internal static string GetTestBinDir(string startingPoint)
+        internal static string GetTestBinDir()
         {
             var loc = System.Reflection.Assembly.GetExecutingAssembly().Location;
             return Path.GetDirectoryName(loc);
@@ -770,7 +776,7 @@ namespace Ionic.Zip.Tests.Utilities
         //     var location = startingPoint;
         //     for (int i = 0; i < 3; i++)
         //         location = Path.GetDirectoryName(location);
-        // 
+        //
         //     location = Path.Combine(location, subdir);
         //     return location;
         // }
@@ -779,11 +785,11 @@ namespace Ionic.Zip.Tests.Utilities
         // internal static Ionic.CopyData.Transceiver
         //     StartProgressMonitor(string progressChannel, string title, string initialStatus)
         // {
-        //     string testBin = TestUtilities.GetTestBinDir(cdir);
-        //     string progressMonitorTool = Path.Combine(testBin, "Resources\\UnitTestProgressMonitor.exe");
-        //     string requiredDll = Path.Combine(testBin, "Resources\\Ionic.CopyData.dll");
-        //     Assert.IsTrue(File.Exists(progressMonitorTool), "progress monitor tool does not exist ({0})",  progressMonitorTool);
-        //     Assert.IsTrue(File.Exists(requiredDll), "required DLL does not exist ({0})",  requiredDll);
+        //     string testSrc = GetTestSrcDir();
+        //     string progressMonitorTool = Path.Combine(testSrc, "Resources\\UnitTestProgressMonitor.exe");
+        //     string requiredDll = Path.Combine(testSrc, "Resources\\Ionic.CopyData.dll");
+        //     Assert.True(File.Exists(progressMonitorTool), $"progress monitor tool does not exist ({progressMonitorTool})");
+        //     Assert.True(File.Exists(requiredDll), $"required DLL does not exist ({requiredDll})");
         //
         //     // start the progress monitor
         //     string ignored;

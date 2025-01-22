@@ -6,21 +6,13 @@
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
-// ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-19 16:11:09>
-//
-// ------------------------------------------------------------------
-//
 // This module defines a class that generates random text sequences
 // using a Markov chain.
+//
+// ------------------------------------------------------------------
+//
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 
@@ -30,31 +22,29 @@ namespace Ionic.Zip.Tests.Utilities
 {
     public class RandomTextGenerator
     {
-        static string[] uris = new string[]
+        /* marked public for testing */
+        public static string[] URIS = new string[]
             {
-                // "Through the Looking Glass", by Lewis Carroll (~181k)
-                "http://www.gutenberg.org/files/12/12.txt",
+                // "Through the Looking Glass", by Lewis Carroll (~560k)
+                "https://www.gutenberg.org/cache/epub/12/pg12.txt",
 
                 // Decl of Independence (~16k)
-                "http://www.gutenberg.org/files/16780/16780.txt",
+                "https://www.gutenberg.org/cache/epub/1/pg1.txt",
 
                 // Decl of Independence, alternative source
-                "http://www.constitution.org/usdeclar.txt",
-
-                // Section 552a of the US code - on privacy for individuals
-                "http://www.opm.gov/feddata/usc552a.txt",
+                "https://constitution.org/1-Constitution/usdeclar.txt",
 
                 // The Naval War of 1812, by Theodore Roosevelt (968k)
-                "http://www.gutenberg.org/dirs/etext05/7trnv10.txt",
+                "https://www.gutenberg.org/cache/epub/9104/pg9104.txt",
 
                 // On Prayer and the Contemplative Life, by Thomas Aquinas (440k)
-                "http://www.gutenberg.org/files/22295/22295.txt",
+                "https://www.gutenberg.org/cache/epub/22295/pg22295.txt",
 
                 // IETF RFC 1951 - the DEFLATE format
-                "http://www.ietf.org/rfc/rfc1951.txt",
+                "https://www.rfc-editor.org/rfc/rfc1951.txt",
 
                 // pkware's appnote
-                "http://www.pkware.com/documents/casestudies/APPNOTE.TXT",
+                "https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT",
             };
 
         SimpleMarkovChain markov;
@@ -67,7 +57,7 @@ namespace Ionic.Zip.Tests.Utilities
             do {
                 try
                 {
-                    string uri= uris[rnd.Next(uris.Length)];
+                    string uri= URIS[rnd.Next(URIS.Length)];
                     seedText = GetPageMarkup(uri);
                 }
                 catch (System.Net.WebException)
@@ -87,16 +77,15 @@ namespace Ionic.Zip.Tests.Utilities
             return markov.GenerateText(length);
         }
 
-
-        private static string GetPageMarkup(string uri)
+        /* marked public for testing */
+        public static string GetPageMarkup(string uri)
         {
             HttpClient client = new();
             var webRequest = new HttpRequestMessage(HttpMethod.Get, uri);
-             
             using HttpResponseMessage response = client.Send(webRequest);
             response.EnsureSuccessStatusCode();
             using var reader = new StreamReader(response.Content.ReadAsStream());
-            return reader.ReadToEnd();            
+            return reader.ReadToEnd();
         }
     }
 

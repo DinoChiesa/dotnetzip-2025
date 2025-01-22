@@ -5,7 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <AssemblyTitle>Ionic's Zip Library</AssemblyTitle>
+    <AssemblyName>Ionic.Zip</AssemblyName>
   </PropertyGroup>
+
 
   <ItemGroup>
     <Compile Include="..\CommonSrc\CRC32.cs">

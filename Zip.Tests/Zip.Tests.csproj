@@ -1,4 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+<!--
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+-->
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -17,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="NOT-USED\**" />
+
+    <Compile Remove="data\**" />
+
     <Compile Include="..\CommonTestSrc\TestUtilities.cs">
       <Link>TestUtilities.cs</Link>
     </Compile>
@@ -35,5 +49,16 @@
   <ItemGroup>
     <ProjectReference Include="..\Zip\Zip.csproj" />
   </ItemGroup>
+
+  <!-- works only on .NET Framework - requires Windows libraries -->
+<!--
+
+  <ItemGroup>
+    <Reference Include="Ionic.CopyData.dll">
+      <HintPath>Resources\Ionic.CopyData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+-->
+
 
 </Project>

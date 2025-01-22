@@ -12,3 +12,10 @@ with detailed logs
 just one specific test
 
   dotnet test  --logger "console;verbosity=detailed"  --filter CreateZip_AddItem_WithDirectory
+
+
+with "live output"
+
+  dotnet test --logger "console;verbosity=detailed"  --filter StreamsTests  -- xUnit.ShowLiveOutput=true
+
+  dotnet test --logger "console;verbosity=detailed"  --filter ZipOutputStream_Parallel  -- xUnit.ShowLiveOutput=true

@@ -123,9 +123,9 @@ namespace Ionic.Zip
 
         static ZipFile() {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            _defaultEncoding = System.Text.Encoding.GetEncoding("IBM437");            
+            _defaultEncoding = System.Text.Encoding.GetEncoding("IBM437");
         }
-        
+
         #region public properties
 
         /// <summary>
@@ -3882,4 +3882,3 @@ namespace Ionic.Zip
 //            9-15 year (since 1980)
 //
 // see http://msdn.microsoft.com/en-us/library/ms724274(VS.85).aspx
-

@@ -2,21 +2,15 @@
 //
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009 Dino Chiesa.
+// Copyright (c) 2009, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
 //
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-18 19:20:54>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
@@ -41,12 +35,6 @@
 //
 // ------------------------------------------------------------------
 //
-
-using System;
-using System.Threading;
-using System.Collections.Generic;
-using System.IO;
-using Ionic.Zip;
 
 namespace Ionic.Zip
 {
@@ -140,6 +128,12 @@ namespace Ionic.Zip
     /// </remarks>
     public class ZipOutputStream : Stream
     {
+        static ZipOutputStream()
+        {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            //_defaultEncoding = System.Text.Encoding.GetEncoding("IBM437");
+        }
+
         /// <summary>
         ///   Create a ZipOutputStream, wrapping an existing stream.
         /// </summary>
@@ -1601,8 +1595,7 @@ namespace Ionic.Zip
         private Dictionary<String, ZipEntry> _entriesWritten;
         private int _entryCount;
         private ZipOption _alternateEncodingUsage = ZipOption.Never;
-        private System.Text.Encoding _alternateEncoding
-            = System.Text.Encoding.GetEncoding("IBM437"); // default = IBM437
+        private System.Text.Encoding _alternateEncoding = System.Text.Encoding.GetEncoding("IBM437");
 
         private bool _leaveUnderlyingStreamOpen;
         private bool _disposed;

@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2025-January-19 21:39:01>
+// Time-stamp: <2025-January-20 18:28:23>
 //
 // ------------------------------------------------------------------
 //
@@ -40,19 +40,19 @@ namespace Ionic.Zip.Tests
             EncryptionAlgorithm.WinZipAes256,
         };
 
-        public BasicTests(ITestOutputHelper output) 
+        public BasicTests(ITestOutputHelper output)
         {
             // I could not get this to work with a BaseClass ctor
-            // see https://stackoverflow.com/questions/73685218/get-at-itestoutputhelper-in-xunit-without-injecting-it            
+            // see https://stackoverflow.com/questions/73685218/get-at-itestoutputhelper-in-xunit-without-injecting-it
             _output = output;
         }
-        
+
         [Fact]
         public void CheckOutput() {
             Assert.NotNull(_output);
         }
 
-        
+
         [Fact]
         public void CreateZip_AddItem_WithDirectory()
         {
@@ -138,7 +138,7 @@ namespace Ionic.Zip.Tests
             Array.ForEach(filesToZip, x => {
                 File.Move(x, Path.Combine(subdir, Path.GetFileName(x).ToUpper()));
             });
-            
+
             filesToZip = Directory.GetFiles(subdir);
 
             using (ZipFile zip1 = new ZipFile())
@@ -213,7 +213,7 @@ namespace Ionic.Zip.Tests
                     }
 
                     // Verify the number of files in the zip
-                    Assert.Equal<int>(n, CountEntries(zipFileToCreate), 
+                    Assert.Equal<int>(n, CountEntries(zipFileToCreate),
                         String.Format("Wrong number of entries in the zip file {0}",
                             zipFileToCreate));
 
@@ -570,7 +570,7 @@ namespace Ionic.Zip.Tests
 
             _output.WriteLine("\n");
 
-            Assert.Equal<int>(entries, CountEntries(zipFileToCreate), 
+            Assert.Equal<int>(entries, CountEntries(zipFileToCreate),
                                  "The Zip file has an unexpected number of entries.");
 
             _output.WriteLine("\n------------\nExtracting and validating checksums...");
@@ -659,7 +659,7 @@ namespace Ionic.Zip.Tests
             _output.WriteLine("\n------------\nValidating the checksums for all of the files ...");
 
             // validate all the checksums again
-            unpackDir = TestUtilities.UniqueDir("unpack2");            
+            unpackDir = TestUtilities.UniqueDir("unpack2");
             using (ZipFile zip4 = ZipFile.Read(zipFileToCreate))
             {
                 foreach (ZipEntry e in zip4)
@@ -1277,7 +1277,7 @@ namespace Ionic.Zip.Tests
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate), 
+            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
                                  "The Zip file has the wrong number of entries.");
 
             // now extract the files into memory streams, checking only the length of the file.
@@ -2160,7 +2160,7 @@ namespace Ionic.Zip.Tests
         //
         // This is a reasonable test but xUnit runs multiple tests in parallel, so
         // SetCurrentDirectory is not reliable. This needs to run standalone.
-        // 
+        //
         // [Fact]
         // public void Create_WithChangeDirectory()
         // {
@@ -2168,7 +2168,7 @@ namespace Ionic.Zip.Tests
         //     string marker = TestUtilities.GetMarker();
         //     String filename = String.Format("Testfile-{0}.txt", marker);
         //     TestUtilities.CreateAndFillFileText(filename, _rnd.Next(34000) + 5000);
-        // 
+        //
         //     //string cwd = Directory.GetCurrentDirectory();
         //     //_output.WriteLine("cwd: {0}", cwd);
         //     string nameOfFileToAdd = Path.Combine(TestUtilities.GetTestSrcDir(), "BasicTests.cs");
@@ -2246,7 +2246,7 @@ namespace Ionic.Zip.Tests
                                                 out Dictionary<string, byte[]> checksums
                                                 )
         {
-            // zip up the source files for this test library 
+            // zip up the source files for this test library
             files = Directory.GetFiles(TestUtilities.GetTestSrcDir(),
                 "*.cs", SearchOption.TopDirectoryOnly);
             checksums = new Dictionary<string, byte[]>();
