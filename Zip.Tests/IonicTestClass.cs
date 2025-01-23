@@ -53,6 +53,19 @@ namespace Ionic.Zip.Tests.Utilities
         public void Dispose()
         {
             TestUtilities.CleanUp(CurrentDir, _DirsToRemove, _output);
+
+            // check that the test did not leave rubbish in the wrong dir
+            string testSrc = TestUtilities.GetTestSrcDir();
+            string binDir = Path.Combine(testSrc, "bin\\Debug\\net9.0");
+            string[] entries = Directory.GetFileSystemEntries(binDir);
+            // foreach (var fn in entries) {
+            //     _output.WriteLine("  fn: {0}", fn);
+            // }
+            Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("verify")), "rubbish in the bin directory");
+            Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("unpack")), "rubbish in the bin directory");
+            Assert.False(entries.Any(f => f.EndsWith(".zip")), "rubbish in the bin directory");
+            Assert.False(entries.Any(f => f.EndsWith(".txt")), "rubbish in the bin directory");
+            Assert.False(entries.Length > 46, "rubbish in the bin directory");
         }
 
         internal string Exec(string program, string args)

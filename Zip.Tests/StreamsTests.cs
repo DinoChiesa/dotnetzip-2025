@@ -70,9 +70,7 @@ namespace Ionic.Zip.Tests.Streams
         [Trait("subset", "create")]
         public void Create_Encrypt_wi12815()
         {
-            string zipFileToCreate =
-                "Create_Encrypt_wi12815.zip";
-
+            string zipFileToCreate = Path.Combine(TopLevelDir, "Create_Encrypt_wi12815.zip");
             var content = new byte[1789];
             unchecked
             {
@@ -167,7 +165,8 @@ namespace Ionic.Zip.Tests.Streams
 
                                 using (var s = opener())
                                 {
-                                    string outFile = String.Format("{0}.{1}.out", eName, i);
+                                    // extract to same directory that was zippedup, but with a different name.
+                                    string outFile = Path.Combine(TopLevelDir, $"{eName}.extracted.{i}");
                                     int totalBytesRead = 0;
                                     using (var output = File.Create(outFile))
                                     {
@@ -197,7 +196,7 @@ namespace Ionic.Zip.Tests.Streams
         [Fact]
         public void Create_WithComment_wi10339()
         {
-            string zipFileToCreate = "Create_WithComment_wi10339.zip";
+            string zipFileToCreate = Path.Combine(TopLevelDir, "Create_WithComment_wi10339.zip");
             using (var fs = File.Create(zipFileToCreate))
             {
                 using (var output = new ZipOutputStream(fs))
@@ -597,7 +596,7 @@ namespace Ionic.Zip.Tests.Streams
             // _txrx.Send("pb 1 value 1");
             // _txrx.Send("pb 0 step");
 
-            System.Threading.Thread.Sleep(400);
+            System.Threading.Thread.Sleep(100);
             _output.WriteLine("status stage 2:Count Encryption:{0} Compression:{1}",
                 encryption.ToString(), compression.ToString());
 
@@ -608,7 +607,7 @@ namespace Ionic.Zip.Tests.Streams
                  CountEntries(zipFileToCreate),
                     $"{zipFileToCreate}: The zip file created has the wrong number of entries.");
             // _txrx.Send("pb 0 step");
-            System.Threading.Thread.Sleep(140);
+            System.Threading.Thread.Sleep(40);
 
             // basic verify. The output is really large, so we pass emitOutput=false .
             // _txrx.Send("status Verifying...");
@@ -618,11 +617,11 @@ namespace Ionic.Zip.Tests.Streams
             _output.WriteLine("Verifying ... " + DateTime.Now.ToString("G"));
 
             // _txrx.Send("pb 1 max " + fileCount);
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(100);
             // _txrx.Send("pb 1 value 0");
             BasicVerifyZip(zipFileToCreate, password, false, ExtractProgress(label, fileCount));
             // _txrx.Send("pb 0 step");
-            System.Threading.Thread.Sleep(800);
+            System.Threading.Thread.Sleep(200);
             _output.WriteLine("Done ... " + DateTime.Now.ToString("G"));
         }
 
@@ -734,7 +733,7 @@ namespace Ionic.Zip.Tests.Streams
         {
             for (int k = 0; k < 2; k++)
             {
-                string zipFileToCreate = String.Format("Create_Directories.{0}.zip", k);
+                string zipFileToCreate = Path.Combine(TopLevelDir, $"Create_Directories.{k}.zip");
                 using (var fs = File.Create(zipFileToCreate))
                 {
                     using (var output = new ZipOutputStream(fs))
@@ -746,10 +745,9 @@ namespace Ionic.Zip.Tests.Streams
                         if (k == 0)
                         {
                             buffer = Encoding.ASCII.GetBytes("This is the content for entry #1.");
-            Assert.Throws<InvalidOperationException>(() => {
-                            // this should fail
-                            output.Write(buffer, 0, buffer.Length);
-            });
+                            Assert.Throws<InvalidOperationException>(() => {
+                                output.Write(buffer, 0, buffer.Length);
+                            });
                         }
 
                         output.PutNextEntry("entry2/");  // this will be a directory
@@ -779,8 +777,10 @@ namespace Ionic.Zip.Tests.Streams
 
                     for (int k = 0; k < 2; k++)
                     {
-                        string zipFileToCreate = String.Format("Create_EmptyEntries.Encryption.{0}.{1}.{2}.zip",
-                                                               crypto[i].ToString(), compLevels[j].ToString(), k);
+                        string zipFileToCreate =
+                            Path.Combine(TopLevelDir,
+                            String.Format("Create_EmptyEntries.Encryption.{0}.{1}.{2}.zip",
+                                crypto[i].ToString(), compLevels[j].ToString(), k));
 
                         using (var fs = File.Create(zipFileToCreate))
                         {
@@ -823,7 +823,7 @@ namespace Ionic.Zip.Tests.Streams
         [Trait("subset", "create")]
         public void Create_DuplicateEntry()
         {
-            string zipFileToCreate = "Create_DuplicateEntry.zip";
+            string zipFileToCreate = Path.Combine(TopLevelDir, "Create_DuplicateEntry.zip");
             string entryName = Path.GetRandomFileName();
             using (var fs = File.Create(zipFileToCreate))
             {
@@ -831,7 +831,7 @@ namespace Ionic.Zip.Tests.Streams
                 {
                     output.PutNextEntry(entryName);
                     Assert.Throws<ArgumentException>(() => {
-                    output.PutNextEntry(entryName);
+                        output.PutNextEntry(entryName);
                     });
                 }
             }
@@ -1293,12 +1293,13 @@ namespace Ionic.Zip.Tests.Streams
                         for (int t = 0; t < tCycles; t++)
                         {
                             _output.WriteLine(new String('-', 72));
-                            string zipFileToCreate = String.Format("ZipOutputStream_Parallel.E-{0}.C-{1}.{2}.{3}timed.zip",
+                            string zipFileToCreate = Path.Combine(TopLevelDir,
+                                String.Format("ZipOutputStream_Parallel.E-{0}.C-{1}.{2}.{3}timed.zip",
                                                                    crypto[c].ToString(), compLevels[j].ToString(),
                                                                    (compLevels[j] == Ionic.Zlib.CompressionLevel.None)
                                                                    ? "NA"
                                                                    : (k == 0) ? "1T" : "MT",
-                                                                   (t == 0) ? "not-" : "");
+                                    (t == 0) ? "not-" : ""));
 
                             _output.WriteLine("Trial {0}.{1}.{2}.{3}", i, j, k, t);
                             _output.WriteLine("Create zip file {0}", zipFileToCreate);
@@ -1468,7 +1469,7 @@ namespace Ionic.Zip.Tests.Streams
                                      "Incorrect number of entries in the zip file.");
 
                 // extract the files
-                string extractDir = String.Format("extract{0:D2}", m);
+                string extractDir = Path.Combine(TopLevelDir, String.Format("extract{0:D2}", m));
                 byte[] buffer = new byte[2048];
                 int n;
                 using (var raw = File.OpenRead(zipFileToCreate))
@@ -1569,7 +1570,7 @@ namespace Ionic.Zip.Tests.Streams
                                      "Incorrect number of entries in the zip file.");
 
                 // extract the files
-                string extractDir = String.Format("extract{0:D2}", m);
+                string extractDir = Path.Combine(TopLevelDir, String.Format("extract{0:D2}", m));
                 Directory.CreateDirectory(extractDir);
                 byte[] buffer = new byte[2048];
                 int n;
@@ -1942,7 +1943,7 @@ namespace Ionic.Zip.Tests.Streams
             // Three cycles - three different ways to vary compression
             for (int k=0; k < 3; k++)
             {
-                string zipFileToCreate = String.Format("VaryCompression-{0}.zip", k);
+                string zipFileToCreate = Path.Combine(TopLevelDir, $"VaryCompression-{k}.zip");
 
                 _output.WriteLine("");
                 _output.WriteLine("Creating zip, cycle {0}", k);
@@ -1972,7 +1973,7 @@ namespace Ionic.Zip.Tests.Streams
 
                 _output.WriteLine("");
                 _output.WriteLine("Extracting cycle {0}", k);
-                string extractDir = "extract-" + k;
+                string extractDir = Path.Combine(TopLevelDir, $"extract-{k}");
                 Directory.CreateDirectory(extractDir);
                 using (var raw = File.OpenRead(zipFileToCreate))
                 {

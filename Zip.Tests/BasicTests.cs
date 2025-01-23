@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------
 //
 // last saved (in emacs):
-// Time-stamp: <2025-January-21 22:40:53>
+// Time-stamp: <2025-January-22 17:21:37>
 //
 // ------------------------------------------------------------------
 //
@@ -173,14 +173,12 @@ namespace Ionic.Zip.Tests
                 for (int k = 0; k < 4; k++)
                 {
                     // select the name of the zip file
-                    string zipFileToCreate = Path.Combine(TopLevelDir,
-                        String.Format("CreateZip_AddFileInDirectory-trial{0}.{1}.zip", m, k));
+                    string zipFileToCreate = Path.Combine(TopLevelDir, $"CreateZip_AddFileInDirectory-trial{m}.{k}.zip");
                     _output.WriteLine("=====================");
                     _output.WriteLine("Trial {0}", k);
                     _output.WriteLine("Zipfile: {0}", zipFileToCreate);
 
-                    directoryName = Path.Combine(directoryName,
-                                                 String.Format("{0:D2}", k));
+                    directoryName = Path.Combine(directoryName, String.Format("{0:D2}", k));
 
                     string[] filesToSelectFrom =
                         Directory.GetFiles(subdir, "*.*", SearchOption.AllDirectories);
@@ -1158,6 +1156,7 @@ namespace Ionic.Zip.Tests
         [Fact]
         public void CreateZip_AddFile_VerifyCrcAndContents()
         {
+            string marker = TestUtilities.GetMarker();
             string filename = null;
             int entriesAdded = 0;
             string repeatedLine = null;
@@ -1165,8 +1164,7 @@ namespace Ionic.Zip.Tests
 
             string zipFileToCreate = Path.Combine(TopLevelDir, "CreateZip_AddFile_VerifyCrcAndContents.zip");
 
-            string subdir = Path.Combine(TopLevelDir,
-                String.Format("addfile-verifycrc-{0}", Path.GetFileNameWithoutExtension(Path.GetRandomFileName())));
+            string subdir = Path.Combine(TopLevelDir, $"addfile-verifycrc-{marker}");
             Directory.CreateDirectory(subdir);
 
             // create the files
@@ -1191,8 +1189,7 @@ namespace Ionic.Zip.Tests
 
             Assert.Equal<int>(CountEntries(zipFileToCreate),entriesAdded);
 
-            string extractDir =
-                String.Format("ex-{0}", Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
+            string extractDir = Path.Combine(TopLevelDir, $"ex-{marker}");
 
             // now extract the files and verify their contents
             using (ZipFile zip2 = ZipFile.Read(zipFileToCreate))
@@ -1224,7 +1221,7 @@ namespace Ionic.Zip.Tests
 
             string zipFileToCreate = Path.Combine(TopLevelDir, "Extract_IntoMemoryStream.zip");
             string marker = TestUtilities.GetMarker();
-            string subdir = Path.Combine(TopLevelDir, String.Format("into-memstream-{0}",marker));
+            string subdir = Path.Combine(TopLevelDir, String.Format("into-memstream-{0}", marker));
             Directory.CreateDirectory(subdir);
 
             // create the files

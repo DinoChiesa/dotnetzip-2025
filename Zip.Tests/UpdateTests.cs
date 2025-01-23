@@ -15,7 +15,6 @@
 //
 // ------------------------------------------------------------------
 
-using System.Text;
 using Ionic.Zip.Tests.Utilities;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
@@ -52,12 +51,11 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void AddNewDirectory()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
-            string zipFileToCreate = Path.Combine(tld, "AddNewDirectory.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "AddNewDirectory.zip");
             String CommentOnArchive = "UpdateTests::AddNewDirectory(): This archive will be overwritten.";
             string newComment = "This comment has been OVERWRITTEN." + DateTime.Now.ToString("G");
-            string dirToZip = Path.Combine(tld, $"zipup-{marker}");
+            string dirToZip = Path.Combine(TopLevelDir, $"zipup-{marker}");
 
             int i, j;
             int numEntries = 0;
@@ -121,10 +119,9 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void ChangeMetadata_AES()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
-            string zipFileToCreate = Path.Combine(tld, "ChangeMetadata_AES.zip");
-            string subdir = Path.Combine(tld, $"A-{marker}");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "ChangeMetadata_AES.zip");
+            string subdir = Path.Combine(TopLevelDir, $"A-{marker}");
             Directory.CreateDirectory(subdir);
 
             // create the files
@@ -197,10 +194,9 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void RemoveEntry_ByLastModTime()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
-            string zipFileToCreate = Path.Combine(tld, "RemoveEntry_ByLastModTime.zip");
-            string subdir = Path.Combine(tld, $"A-{marker}");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "RemoveEntry_ByLastModTime.zip");
+            string subdir = Path.Combine(TopLevelDir, $"A-{marker}");
             Directory.CreateDirectory(subdir);
 
             // create the files
@@ -278,14 +274,13 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void RemoveEntry_ByFilename_WithPassword()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             string password = "*!ookahoo";
             string filename = null;
             string repeatedLine = null;
             int j;
 
-            string zipFileToCreate = Path.Combine(tld, "ByFilename_WithPassword.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "ByFilename_WithPassword.zip");
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -333,11 +328,11 @@ namespace Ionic.Zip.Tests.Update
                 {
                     Assert.False(filesToRemove.Contains(s1), $"File ({s1}) was not expected.");
 
-                    zip3[s1].ExtractWithPassword(Path.Combine(tld, extractDir), password);
+                    zip3[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password);
                     repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
                     // verify the content of the updated file.
-                    var sr = new StreamReader(Path.Combine(tld, extractDir, s1));
+                    var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
@@ -355,9 +350,8 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void RenameEntry()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
-            string dirToZip = Path.Combine(tld, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
+            string dirToZip = Path.Combine(TopLevelDir, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
             var files = TestUtilities.GenerateFilesFlat(dirToZip,
                                                         _rnd.Next(13) + 24,
                                                         42 * 1024 + _rnd.Next(20000));
@@ -367,7 +361,7 @@ namespace Ionic.Zip.Tests.Update
             // This shouldn't matter, but we test it anyway.
             for (int k = 0; k < 2; k++)
             {
-                string zipFileToCreate = Path.Combine(tld, $"RenameEntry-{k}.zip");
+                string zipFileToCreate = Path.Combine(TopLevelDir, $"RenameEntry-{k}.zip");
                 _output.WriteLine("-----------------------------");
                 _output.WriteLine("{0}: Trial {1}, adding {2} files into '{3}'...",
                                       DateTime.Now.ToString("HH:mm:ss"),
@@ -426,7 +420,7 @@ namespace Ionic.Zip.Tests.Update
                     string extractDir = $"ex-{marker}-{k}";
                     foreach (string s1 in zip3.EntryFileNames)
                     {
-                        zip3[s1].Extract(Path.Combine(tld, extractDir));
+                        zip3[s1].Extract(Path.Combine(TopLevelDir, extractDir));
                         string origFilename = Path.GetFileName((s1.Contains("renamed"))
                             ? s1.Replace("-renamed", "")
                             : s1);
@@ -447,7 +441,6 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void UpdateEntryComment()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             for (int k = 0; k < 4; k++)
             {
@@ -506,7 +499,7 @@ namespace Ionic.Zip.Tests.Update
                 {
                     foreach (string s1 in zip3.EntryFileNames)
                     {
-                        string dir = Path.Combine(tld, $"ex-{marker}-{k}");
+                        string dir = Path.Combine(TopLevelDir, $"ex-{marker}-{k}");
                         zip3[s1].Extract(dir);
                         String repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
@@ -537,14 +530,13 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void RemoveEntry_ByFilename()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             for (int k = 0; k < 2; k++)
             {
                 int j;
                 string filename = null;
                 string repeatedLine = null;
-                string zipFileToCreate = Path.Combine(tld, $"RemoveEntry_ByFilename-{k}.zip");
+                string zipFileToCreate = Path.Combine(TopLevelDir, $"RemoveEntry_ByFilename-{k}.zip");
                 String subdir = null;
                 int entriesAdded = CreateDirAndSomeFiles($"{marker}-{k}", out subdir);
 
@@ -606,11 +598,11 @@ namespace Ionic.Zip.Tests.Update
                             Assert.False(filesToRemove.Contains(s1),
                                            $"File ({s1}) was not expected.");
 
-                            zip3[s1].Extract(Path.Combine(tld, extractDir));
+                            zip3[s1].Extract(Path.Combine(TopLevelDir, extractDir));
                             repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
                             // verify the content of the updated file.
-                            var sr = new StreamReader(Path.Combine(tld, extractDir, s1));
+                            var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                             string sLine = sr.ReadLine();
                             sr.Close();
 
@@ -631,14 +623,13 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void RemoveEntry_ViaIndexer_WithPassword()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             string password = TestUtilities.GenerateRandomPassword();
             string filename = null;
             string repeatedLine = null;
             int j;
 
-            string zipFileToCreate = Path.Combine(tld, "RemoveEntry_ViaIndexer_WithPassword.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "RemoveEntry_ViaIndexer_WithPassword.zip");
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -689,11 +680,11 @@ namespace Ionic.Zip.Tests.Update
                 {
                     Assert.False(filesToRemove.Contains(s1), $"File ({s1}) was not expected.");
 
-                    zip3[s1].ExtractWithPassword(Path.Combine(tld, extractDir), password);
+                    zip3[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password);
                     repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
                     // verify the content of the updated file.
-                    var sr = new StreamReader(Path.Combine(tld, extractDir, s1));
+                    var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
@@ -712,10 +703,9 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void RemoveAllEntries()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             string password = "Wheeee!!" + TestUtilities.GenerateRandomLowerString(7);
-            string zipFileToCreate = Path.Combine(tld, "RemoveAllEntries.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "RemoveAllEntries.zip");
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -752,10 +742,9 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void AddFile_OldEntriesWithPassword()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             string password = "Secret!";
-            string zipFileToCreate = Path.Combine(tld, "AddFile_OldEntriesWithPassword.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "AddFile_OldEntriesWithPassword.zip");
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -809,10 +798,10 @@ namespace Ionic.Zip.Tests.Update
                 {
                     String repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
                         s, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                    zip3[s].Extract(Path.Combine(tld,extractDir));
+                    zip3[s].Extract(Path.Combine(TopLevelDir,extractDir));
 
                     // verify the content of the updated file.
-                    var sr = new StreamReader(Path.Combine(tld, extractDir, s));
+                    var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
@@ -834,12 +823,12 @@ namespace Ionic.Zip.Tests.Update
                     }
                     if (!addedLater)
                     {
-                        zip4[s1].ExtractWithPassword(Path.Combine(tld, extractDir), password);
+                        zip4[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password);
                         String repeatedLine = String.Format("This line is repeated over and over and over in file {0}",
                             s1);
 
                         // verify the content of the updated file.
-                        var sr = new StreamReader(Path.Combine(tld, extractDir, s1));
+                        var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
@@ -855,9 +844,8 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void UpdateItem()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
-            string zipFileToCreate = Path.Combine(tld, "UpdateItem.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateItem.zip");
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -876,7 +864,7 @@ namespace Ionic.Zip.Tests.Update
                 "The Zip file has the wrong number of entries.");
 
             // create another subdirectory
-            subdir = Path.Combine(tld, $"B-{marker}");
+            subdir = Path.Combine(TopLevelDir, $"B-{marker}");
             Directory.CreateDirectory(subdir);
 
             // create a bunch more files
@@ -914,10 +902,10 @@ namespace Ionic.Zip.Tests.Update
                     String repeatedLine = String.Format("Content for the updated file {0} {1}",
                         s,
                         System.DateTime.Now.ToString("yyyy-MM-dd"));
-                    zip3[s].Extract(Path.Combine(tld, extractDir));
+                    zip3[s].Extract(Path.Combine(TopLevelDir, extractDir));
 
                     // verify the content of the updated file.
-                    var sr = new StreamReader(Path.Combine(tld, extractDir, s));
+                    var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
@@ -931,7 +919,6 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void AddFile_NewEntriesWithPassword()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             string password = "V.Secret!";
             string filename = null;
@@ -939,7 +926,7 @@ namespace Ionic.Zip.Tests.Update
             int j;
 
             // select the name of the zip file
-            string zipFileToCreate = Path.Combine(tld, "AddFile_NewEntriesWithPassword.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "AddFile_NewEntriesWithPassword.zip");
 
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
@@ -992,10 +979,10 @@ namespace Ionic.Zip.Tests.Update
                 {
                     repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
                         s, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                    zip3[s].ExtractWithPassword(Path.Combine(tld, extractDir), password);
+                    zip3[s].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password);
 
                     // verify the content of the updated file.
-                    var sr = new StreamReader(Path.Combine(tld, extractDir, s));
+                    var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
@@ -1018,12 +1005,12 @@ namespace Ionic.Zip.Tests.Update
                     }
                     if (!addedLater)
                     {
-                        zip4[s1].Extract(Path.Combine(tld, extractDir));
+                        zip4[s1].Extract(Path.Combine(TopLevelDir, extractDir));
                         repeatedLine = String.Format("This line is repeated over and over and over in file {0}",
                             s1);
 
                         // verify the content of the updated file.
-                        var sr = new StreamReader(Path.Combine(tld, extractDir, s1));
+                        var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
@@ -1038,7 +1025,6 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void AddFile_DifferentPasswords()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             string password1 = Path.GetRandomFileName();
             string password2 = "Secret2" + Path.GetRandomFileName();
@@ -1047,7 +1033,7 @@ namespace Ionic.Zip.Tests.Update
             int j;
 
             // select the name of the zip file
-            string zipFileToCreate = Path.Combine(tld, "AddFile_DifferentPasswords.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "AddFile_DifferentPasswords.zip");
 
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
@@ -1104,10 +1090,10 @@ namespace Ionic.Zip.Tests.Update
                 {
                     repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
                         s, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                    zip3[s].ExtractWithPassword(Path.Combine(tld, extractDir), password2);
+                    zip3[s].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password2);
 
                     // verify the content of the updated file.
-                    var sr = new StreamReader(Path.Combine(tld, extractDir, s));
+                    var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
@@ -1130,11 +1116,11 @@ namespace Ionic.Zip.Tests.Update
                     }
                     if (!addedLater)
                     {
-                        zip4[s1].ExtractWithPassword(Path.Combine(tld, extractDir), password1);
+                        zip4[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password1);
                         repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
                         // verify the content of the updated file.
-                        var sr = new StreamReader(Path.Combine(tld, extractDir, s1));
+                        var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
@@ -1379,7 +1365,6 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void UpdateFile_OldEntriesWithPassword()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             string Password = "1234567";
             string filename = null;
@@ -1387,7 +1372,7 @@ namespace Ionic.Zip.Tests.Update
             string repeatedLine = null;
 
             // select the name of the zip file
-            string zipFileToCreate = Path.Combine(tld, "UpdateFile_OldEntriesWithPassword.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateFile_OldEntriesWithPassword.zip");
 
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
@@ -1408,7 +1393,7 @@ namespace Ionic.Zip.Tests.Update
                 "The Zip file has the wrong number of entries.");
 
             // create another subdirectory
-            subdir = Path.Combine(tld, $"updates-{marker}");
+            subdir = Path.Combine(TopLevelDir, $"updates-{marker}");
             Directory.CreateDirectory(subdir);
 
             // Create a bunch of new files, in that new subdirectory
@@ -1445,10 +1430,10 @@ namespace Ionic.Zip.Tests.Update
                 {
                     repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
                         s, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                    zip3[s].Extract(Path.Combine(tld, extractDir));
+                    zip3[s].Extract(Path.Combine(TopLevelDir, extractDir));
 
                     // verify the content of the updated file.
-                    var sr = new StreamReader(Path.Combine(tld, extractDir, s));
+                    var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
@@ -1470,11 +1455,11 @@ namespace Ionic.Zip.Tests.Update
                     }
                     if (NotUpdated)
                     {
-                        zip4[s1].ExtractWithPassword(Path.Combine(tld, extractDir), Password);
+                        zip4[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), Password);
                         repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
                         // verify the content of the updated file.
-                        var sr = new StreamReader(Path.Combine(tld, extractDir, s1));
+                        var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
@@ -1737,8 +1722,8 @@ namespace Ionic.Zip.Tests.Update
 
             // create and file a new file with text data
             int FileToUpdate = _rnd.Next(fileCount);
-            filename = String.Format("file{0:D3}.txt", FileToUpdate);
-            string repeatedLine = String.Format("**UPDATED** This file ({0}) was updated at {1}.",
+            filename = Path.Combine(TopLevelDir, String.Format("file{0:D3}.txt", FileToUpdate));
+            string repeatedLine = String.Format("**UPDATED** UpdateTests.AddFile_ExistingFile_Error() This file ({0}) was updated at {1}.",
                         filename,
                         System.DateTime.Now.ToString("G"));
             TestUtilities.CreateAndFillFileText(filename, repeatedLine, _rnd.Next(21567) + 23872);
@@ -1759,8 +1744,7 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void MultipleSaves_wi10319()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
-            string zipFileToCreate = Path.Combine(tld, "MultipleSaves_wi10319.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "MultipleSaves_wi10319.zip");
 
             using (ZipFile _zipFile = new ZipFile(zipFileToCreate))
             {
@@ -1809,11 +1793,10 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void MultipleSaves_wi10694()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
-            string zipFileToCreate = Path.Combine(tld, "MultipleSaves_wi10694.zip");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "MultipleSaves_wi10694.zip");
             var shortDir = $"fodder-{marker}";
-            string subdir = Path.Combine(tld, shortDir);
+            string subdir = Path.Combine(TopLevelDir, shortDir);
             string[] filesToZip = TestUtilities.GenerateFilesFlat(subdir);
 
             using (ZipFile zip1 = new ZipFile())
@@ -1905,8 +1888,7 @@ namespace Ionic.Zip.Tests.Update
                     }
                 }
                 File.Delete(originalZipLocation);
-                // This is why this test takes such a long time
-                System.Threading.Thread.Sleep(400); // 1400
+                System.Threading.Thread.Sleep(40); // 1400
                 File.Move(tempZipFile, originalZipLocation);
             }
         }
@@ -1915,10 +1897,9 @@ namespace Ionic.Zip.Tests.Update
         [Fact]
         public void FromRoot_wi11988()
         {
-            string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
-            string zipFileToCreate = Path.Combine(tld, "FromRoot.zip");
-            string dirToZip = Path.Combine(tld, $"Fodder-{marker}");
+            string zipFileToCreate = Path.Combine(TopLevelDir, "FromRoot.zip");
+            string dirToZip = Path.Combine(TopLevelDir, $"Fodder-{marker}");
             var files = TestUtilities.GenerateFilesFlat(dirToZip);
             string windir = System.Environment.GetEnvironmentVariable("Windir");
             string substExe = Path.Combine(windir, "system32", "subst.exe");
