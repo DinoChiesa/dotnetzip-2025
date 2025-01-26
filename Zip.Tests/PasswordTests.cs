@@ -19,7 +19,7 @@ using Ionic.Zip.Tests.Utilities;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
 
-namespace Ionic.Zip.Tests.Password
+namespace Ionic.Zip.Tests
 {
     public class PasswordTests : IonicTestClass
     {

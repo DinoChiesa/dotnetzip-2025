@@ -22,11 +22,11 @@ namespace Ionic.Zip.Tests
 {
     public class Progress : IonicTestClass
     {
-        public Progress(ITestOutputHelper output) 
+        public Progress(ITestOutputHelper output)
         {
             _output = output;
         }
-        
+
         private System.Reflection.Assembly _myself;
         private System.Reflection.Assembly myself
         {

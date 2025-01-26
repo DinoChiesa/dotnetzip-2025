@@ -1,7 +1,7 @@
 // UnicodeTests.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2008-2011, 2025 Dino Chiesa 
+// Copyright (c) 2008-2011, 2025 Dino Chiesa
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
@@ -20,11 +20,11 @@ using Ionic.Zip.Tests.Utilities;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
 
-namespace Ionic.Zip.Tests.Unicode
+namespace Ionic.Zip.Tests
 {
     public class UnicodeTests : IonicTestClass
     {
-        public UnicodeTests(ITestOutputHelper output) 
+        public UnicodeTests(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -87,7 +87,7 @@ namespace Ionic.Zip.Tests.Unicode
                     }
 
                     // Verify the number of files in the zip
-                    Assert.Equal<int>(filesToZip.Length, CountEntries(zipFileToCreate), 
+                    Assert.Equal<int>(filesToZip.Length, CountEntries(zipFileToCreate),
                             "Incorrect number of entries in the zip file.");
 
                     i = 0;
@@ -292,7 +292,7 @@ namespace Ionic.Zip.Tests.Unicode
             string zipFileToCreate = Path.Combine(tld, "UnicodeComment_wi10392.zip");
             const string cyrillicComment = "Hello, Привет";
 
-            _output.WriteLine("UnicodeComment_wi10392\n==== creating zip: {0}", zipFileToCreate); 
+            _output.WriteLine("UnicodeComment_wi10392\n==== creating zip: {0}", zipFileToCreate);
             using (ZipFile zip1 = new ZipFile(zipFileToCreate, Encoding.UTF8))
             {
                 zip1.Comment = cyrillicComment;

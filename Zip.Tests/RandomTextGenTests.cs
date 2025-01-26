@@ -21,7 +21,7 @@ using Ionic.Zip.Tests.Utilities;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
 
-namespace Ionic.Zip.Tests.Streams
+namespace Ionic.Zip.Tests
 {
     public class RandomTextGenTests : IonicTestClass
     {

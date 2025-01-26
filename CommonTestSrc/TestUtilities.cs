@@ -68,7 +68,7 @@ namespace Ionic.Zip.Tests.Utilities
             });
         }
 
-        private static void DeleteDirectoryRecursive(int count, ITestOutputHelper _output, DirectoryInfo dir)
+        internal static void DeleteDirectoryRecursive(int count, ITestOutputHelper _output, DirectoryInfo dir)
         {
             foreach (FileInfo file in dir.GetFiles())
             {

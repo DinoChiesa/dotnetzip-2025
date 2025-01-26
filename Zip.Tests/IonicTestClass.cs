@@ -61,6 +61,7 @@ namespace Ionic.Zip.Tests.Utilities
             // foreach (var fn in entries) {
             //     _output.WriteLine("  fn: {0}", fn);
             // }
+            Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("Users")), "rubbish in the bin directory");
             Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("verify")), "rubbish in the bin directory");
             Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("unpack")), "rubbish in the bin directory");
             Assert.False(entries.Any(f => f.EndsWith(".zip")), "rubbish in the bin directory");

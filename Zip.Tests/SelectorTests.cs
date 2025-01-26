@@ -16,7 +16,6 @@
 //
 // ------------------------------------------------------------------
 
-using System.Text;
 using Ionic.Zip.Tests.Utilities;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
