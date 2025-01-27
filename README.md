@@ -1,5 +1,3 @@
-# DotNetZip - migrated repo
-
 # DotNetZip - Zip and Unzip in .NET (C# or any .NET language)
 DotNetZip is a .NET class library and toolset for manipulating zip files. Use it to easily create, extract, or update zip files,
 within any .NET program.
@@ -19,6 +17,12 @@ built-into the .NET BCL, DotNetZip has that, too. DotNetZip's DeflateStream and
 GZipStream are available in a standalone assembly, based on a .NET port of Zlib. These
 streams support compression levels and deliver much better performance than the built-in
 classes. There is also a ZlibStream to complete the set (RFC 1950, 1951, 1952).
+
+### To use
+
+```
+dotnet add package DotNetZip.Original --version 2025.1.26
+```
 
 
 ### Example Usage
