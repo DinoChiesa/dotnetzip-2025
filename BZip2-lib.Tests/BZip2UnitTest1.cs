@@ -1,4 +1,17 @@
-﻿using Ionic.Zip.Tests.Utilities;
+﻿// Copyright (c) 2009, 2025 Dino Chiesa.
+// All rights reserved.
+//
+// This code module is part of DotNetZip, a zipfile class library.
+// This module defines the base class for DotNetZip test classes.
+//
+// ------------------------------------------------------------------
+//
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
+//
+// ------------------------------------------------------------------
+
+using Ionic.Zip.Tests.Utilities;
 using System.Text;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
@@ -38,7 +51,7 @@ namespace Ionic.BZip2.Tests
 
         public void Dispose()
         {
-            TestUtilities.CleanUp(CurrentDir, _DirsToRemove);
+            TestUtilities.CleanUp(CurrentDir, _DirsToRemove, _output);
         }
 
 

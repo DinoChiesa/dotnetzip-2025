@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zlib", "Zlib\Zlib.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zlib.Tests", "Zlib.Tests\Zlib.Tests.csproj", "{00859F36-F00B-4681-83E1-7AD60149A405}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zipit", "Tools\Zipit\Zipit.csproj", "{4DB0EC14-F027-453A-8F60-C067EFC92B9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,9 +64,14 @@ Global
 		{00859F36-F00B-4681-83E1-7AD60149A405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00859F36-F00B-4681-83E1-7AD60149A405}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00859F36-F00B-4681-83E1-7AD60149A405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DB0EC14-F027-453A-8F60-C067EFC92B9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB0EC14-F027-453A-8F60-C067EFC92B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB0EC14-F027-453A-8F60-C067EFC92B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB0EC14-F027-453A-8F60-C067EFC92B9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A420ACC4-F98F-4836-880F-06A3F55954ED} = {86FFE27B-E41D-41B4-9CD6-ABF71C99D3F8}
 		{40C19F08-9AF1-4E72-A899-D7141AC5E401} = {86FFE27B-E41D-41B4-9CD6-ABF71C99D3F8}
+		{4DB0EC14-F027-453A-8F60-C067EFC92B9D} = {86FFE27B-E41D-41B4-9CD6-ABF71C99D3F8}
 	EndGlobalSection
 EndGlobal
