@@ -88,6 +88,7 @@ Here is some VB code that unpacks a zip file (extracts all the entries):
 - Event handlers for monitoring progress of Save and Extract; handy for long-running operations
 - support for Unicode comments on zip entries and archives
 - interface allows you to programmatically specify what to do when extracting would overwrite an existing file
+- a set of command-line tools (Zipit, Unzip, etc)
 - lots more...
 
 
@@ -146,6 +147,94 @@ licensed. It is free of cost, though donations are always welcomed. It is small
 and simple, but it does what you need. It does not require J#. Unlike the
 System.Packaging classes, DotNetZip is designed specifically for .ZIP files and
 is easier to use because of that.
+
+## Command-line Utilities
+
+If you want to just create zip files from within Powershell scripts or batch files, there
+are command line tools here that let you do that.  For example, see the Zipit.exe tool:
+
+```
+Zipit.exe:  zip up a directory, file, or a set of them, into a zipfile.
+            Depends on Ionic's DotNetZip library. This is version 1.0.0.0 of the utility.
+usage:
+   ZipIt.exe <ZipFileToCreate> [arguments]
+
+arguments:
+  <directory> | <file>  - a directory or file to add to the archive.
+  -64                   - use ZIP64 extensions, for large files or large numbers of files.
+  -aes                  - use WinZip-compatible AES 256-bit encryption for entries
+                          subsequently added to the archive. Requires a password.
+  -cp <codepage>        - use the specified numeric codepage to encode entry filenames
+                          and comments, instead of the default IBM437 code page.
+                          (cannot be used with -utf8 option)
+  -C bzip|deflate|none  - use BZip2, Deflate, or No compression, for entries subsequently
+                          added to the zip. The default is DEFLATE.
+  -d <path>             - use the given directory path in the archive for
+                          succeeding items added to the archive.
+  -D <path>             - find files in the given directory on disk.
+  -e[s|r|q|a]           - when there is an error reading a file to be zipped, either skip
+                          the file, retry, quit, or ask the user what to do.
+  -E <selector>         - a file selection expression.  Examples:
+                            *.txt
+                            (name = *.txt) OR (name = *.xml)
+                            (attrs = H) OR (name != *.xml)
+                            (ctime < 2009/02/28-10:20:00)
+                            (size > 1g) AND (mtime < 2009-12-10)
+                            (ctime > 2009-04-29) AND (size < 10kb)
+                          Filenames can include full paths. You must surround a filename
+                          that includes spaces with single quotes.
+  -j-                   - do not traverse NTFS junctions
+  -j+                   - traverse NTFS junctions (default)
+  -L <level>            - compression level, 0..9 (Default is 6).
+                          This applies only if using DEFLATE compression, the default.
+  -p <password>         - apply the specified password for all succeeding files added.
+                          use "" to reset the password to nil.
+  -progress             - emit progress reports (good when creating large zips)
+  -r-                   - don't recurse directories (default).
+  -r+                   - recurse directories.
+  -s <entry> 'string'   - insert an entry of the given name into the
+                          archive, with the given string as its content.
+  -sfx [w|c]            - create a self-extracting archive, either a Windows or console app.
+                          (cannot be used with -split)
+  -split <maxsize>      - produce a split zip, with the specified maximum size. You can
+                          optionally use kb or mb as a suffix to the size.
+                          (-split cannot be used with -sfx).
+  -Tw+                  - store Windows-format extended times (default).
+  -Tw-                  - don't store Windows-format extended times.
+  -Tu+                  - store Unix-format extended times.
+  -Tu-                  - don't store Unix-format extended times (default).
+  -UTnow                - use the same date/time, NOW, for all entries.
+  -UTnewest             - use the same date/time, same as newest entry, for all entries.
+  -UToldest             - use the same date/time, equal to oldest entry, for all entries.
+  -UT <datetime>        - use the same date/time, as specified, for all entries.
+  -utf8                 - use UTF-8 encoding for entry filenames and comments,
+                          instead of the the default IBM437 code page.
+                          (cannot be used with -cp option)
+  -zc <comment>         - use the given comment for the archive.
+```
+
+
+
+Using the Zipit tool, this is how I package a release:
+
+```
+Zipit.exe  Release-2025.01.26.zip  -UTnow -zc "Release 2025.01.26" `
+    -d Zip `
+    .\Zip\bin\Debug\net9.0 `
+    -d Zlib `
+    .\Zlib\bin\Debug\net9.0 `
+    -d BZip2-lib `
+    .\BZip2-lib\bin\Debug\net9.0 `
+    -d Tools\GZip `
+    .\Tools\GZip\bin\Debug\net9.0 `
+    -d Tools\ZipIt `
+    .\Tools\ZipIt\bin\Debug\net9.0 `
+    -d Tools\Bzip2 `
+    .\Tools\Bzip2\bin\Debug\net9.0
+
+```
+
+
 
 
 ## Frequently Asked Questions
@@ -206,20 +295,20 @@ Yes. They are just zip files. Some people use DotNetZip to produce or edit .xlsx
 Yes. To do this you would specify the "big5" code page (cp 950) when reading the zip. In addition to Chinese, it can handle any code page.
 
 ### What about reading and writing zip files with other languages and code pages? Portugese? Hebrew? Arabic? Greek? Cyrillic? Norwegian? Finnish? etc?
-Yes. Just specify the appropriate code page when reading or writing the zip archive. 
+Yes. Just specify the appropriate code page when reading or writing the zip archive.
 
 ### Does the library support zipping to a stream? Or unzipping from a stream?
 Yes, you can zip up files and Save the zip archive to a stream. As well you can Read a zip archive from an open stream - I use this for embedded resources in apps: I call GetManifestResourceStream(), and then unzip that resource. Reading and writing streams complements the capability of being able to Save to a plain file or read from a plain file. The Save-to-a-stream capability allows you to write a zip archive out to, for example, the ASP.NET Response.Output stream, without creating an intermediate file. Very nice for ASP.NET applications.
 
 
 ### Ok, the library can write a zip archive to a stream, and read a zip from a stream, But... can the library add an entry to a zipfile, reading content from a stream? can the library unzip a single entry into a stream? Can an application read an entry as a stream?
-Yes. Yes. Yes. Unlike some other libraries, in most cases DotNetZip handles the streaming; your application does not need to implement a Read/Write data pump. The application needs only to open the streams. Using the stream support, you could, for example, open a zip archive, and then modify the files in the archive, and Save out to a Response.OutputStream in ASP.NET, without ever writing a file to the disk. All the zip file content can be manipulated in memory (using MemoryStream for example). 
+Yes. Yes. Yes. Unlike some other libraries, in most cases DotNetZip handles the streaming; your application does not need to implement a Read/Write data pump. The application needs only to open the streams. Using the stream support, you could, for example, open a zip archive, and then modify the files in the archive, and Save out to a Response.OutputStream in ASP.NET, without ever writing a file to the disk. All the zip file content can be manipulated in memory (using MemoryStream for example).
 
 ### Does this library allow removal of entries from zip files, or updating of entries in zip files?
 Yes.
 
 ### Can I embed the source for DotNetZip into my own project?
-Yes - that's allowed by the license. But you may want to think about just redistributing the binary DLL - it is a much easier option. 
+Yes - that's allowed by the license. But you may want to think about just redistributing the binary DLL - it is a much easier option.
 
 ### Can I distribute the binary DLL with my own project?
 Yes - that's allowed by the license.
