@@ -20,6 +20,10 @@ classes. There is also a ZlibStream to complete the set (RFC 1950, 1951, 1952).
 
 ### To use
 
+Find this on Nuget at
+[DotNetZip.Original](https://www.nuget.org/packages/DotNetZip.Original/), or add
+a reference to the package from the command line:
+
 ```
 dotnet add package DotNetZip.Original --version 2025.1.26
 ```
@@ -159,7 +163,7 @@ Saving, and Extracting.
 ### What do I need, in order to be able to create and read zip files from within my application using this library?
 
 To use the zip capability in your applications, you need to be using the .NET
-Core 9.0 or later. It is packaged on nuget as `DotNetZip.Original`.
+Core 9.0 or later. It is packaged on nuget as [`DotNetZip.Original`](https://www.nuget.org/packages/DotNetZip.Original/).
 
 ```
 dotnet add package DotNetZip.Original --version 2025.1.26
