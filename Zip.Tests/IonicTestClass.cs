@@ -61,12 +61,24 @@ namespace Ionic.Zip.Tests.Utilities
             // foreach (var fn in entries) {
             //     _output.WriteLine("  fn: {0}", fn);
             // }
-            Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("Users")), "rubbish in the bin directory");
-            Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("verify")), "rubbish in the bin directory");
-            Assert.False(entries.Any(f => f.Replace(binDir+"\\", "").StartsWith("unpack")), "rubbish in the bin directory");
+            Assert.False(
+                entries.Any(f => f.Replace(binDir + "\\", "").StartsWith("Users")),
+                "rubbish in the bin directory"
+            );
+            Assert.False(
+                entries.Any(f => f.Replace(binDir + "\\", "").StartsWith("verify")),
+                "rubbish in the bin directory"
+            );
+            Assert.False(
+                entries.Any(f => f.Replace(binDir + "\\", "").StartsWith("unpack")),
+                "rubbish in the bin directory"
+            );
             Assert.False(entries.Any(f => f.EndsWith(".zip")), "rubbish in the bin directory");
             Assert.False(entries.Any(f => f.EndsWith(".txt")), "rubbish in the bin directory");
-            Assert.False(entries.Length > 46, "rubbish in the bin directory");
+            Assert.False(
+                entries.Length > 60,
+                $"rubbish in the bin directory (entries= {entries.Length})"
+            );
         }
 
         internal string Exec(string program, string args)
@@ -104,13 +116,11 @@ namespace Ionic.Zip.Tests.Utilities
             return output;
         }
 
-
         public class AsyncReadState
         {
             public System.IO.Stream s;
-            public byte[] buf= new byte[1024];
+            public byte[] buf = new byte[1024];
         }
-
 
         internal int ExecRedirectStdOut(string program, string args, string outFile)
         {
@@ -136,7 +146,7 @@ namespace Ionic.Zip.Tests.Utilities
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
-                    }
+                    },
                 };
 
                 p.Start();
@@ -144,27 +154,28 @@ namespace Ionic.Zip.Tests.Utilities
                 var stdout = p.StandardOutput.BaseStream;
                 var rs = new AsyncReadState { s = stdout };
                 Action<System.IAsyncResult> readAsync1 = null;
-                var readAsync = new Action<System.IAsyncResult>( (ar) => {
-                        AsyncReadState state = (AsyncReadState) ar.AsyncState;
+                var readAsync = new Action<System.IAsyncResult>(
+                    (ar) =>
+                    {
+                        AsyncReadState state = (AsyncReadState)ar.AsyncState;
                         int n = state.s.EndRead(ar);
                         if (n > 0)
                         {
                             fs.Write(state.buf, 0, n);
-                            state.s.BeginRead(state.buf,
-                                              0,
-                                              state.buf.Length,
-                                              new System.AsyncCallback(readAsync1),
-                                              state);
+                            state.s.BeginRead(
+                                state.buf,
+                                0,
+                                state.buf.Length,
+                                new System.AsyncCallback(readAsync1),
+                                state
+                            );
                         }
-                    });
+                    }
+                );
                 readAsync1 = readAsync; // ??
 
                 // kickoff
-                stdout.BeginRead(rs.buf,
-                                 0,
-                                 rs.buf.Length,
-                                 new System.AsyncCallback(readAsync),
-                                 rs);
+                stdout.BeginRead(rs.buf, 0, rs.buf.Length, new System.AsyncCallback(readAsync), rs);
 
                 p.WaitForExit();
 
@@ -178,7 +189,6 @@ namespace Ionic.Zip.Tests.Utilities
                     fs.Dispose();
             }
         }
-
 
         protected string sevenZip
         {
@@ -216,10 +226,11 @@ namespace Ionic.Zip.Tests.Utilities
             {
                 if (_GZipIsPresent == null)
                 {
-
                     string sourceDir = TestUtilities.GetTestSrcDir();
-                    _gzip =
-                        Path.Combine(sourceDir, "..\\Tools\\GZip\\bin\\Debug\\net9.0\\GZip.exe");
+                    _gzip = Path.Combine(
+                        sourceDir,
+                        "..\\Tools\\dnzgzip\\bin\\Debug\\net9.0\\dnzgzip.exe"
+                    );
 
                     _GZipIsPresent = new Nullable<bool>(File.Exists(_gzip));
                 }
@@ -240,7 +251,9 @@ namespace Ionic.Zip.Tests.Utilities
                         _wzunzip = Path.Combine(progfiles, "winzip\\wzunzip.exe");
                         _wzzip = Path.Combine(progfiles, "winzip\\wzzip.exe");
                     }
-                    _WinZipIsPresent = new Nullable<bool>(File.Exists(_wzunzip) && File.Exists(_wzzip));
+                    _WinZipIsPresent = new Nullable<bool>(
+                        File.Exists(_wzunzip) && File.Exists(_wzzip)
+                    );
                 }
                 return _WinZipIsPresent.Value;
             }
@@ -264,7 +277,6 @@ namespace Ionic.Zip.Tests.Utilities
             }
         }
 
-
         protected bool InfoZipIsPresent
         {
             get
@@ -278,8 +290,9 @@ namespace Ionic.Zip.Tests.Utilities
                         _infozipzip = Path.Combine(progfiles, "infozip.org\\zip.exe");
                         _infozipunzip = Path.Combine(progfiles, "infozip.org\\unzip.exe");
                     }
-                    _InfoZipIsPresent = new Nullable<bool>(File.Exists(_infozipzip) &&
-                                                           File.Exists(_infozipunzip));
+                    _InfoZipIsPresent = new Nullable<bool>(
+                        File.Exists(_infozipzip) && File.Exists(_infozipunzip)
+                    );
                 }
                 return _InfoZipIsPresent.Value;
             }
@@ -289,7 +302,6 @@ namespace Ionic.Zip.Tests.Utilities
         {
             return BasicVerifyZip(zipfile, null);
         }
-
 
         internal string BasicVerifyZip(string zipfile, string password)
         {
@@ -301,9 +313,12 @@ namespace Ionic.Zip.Tests.Utilities
             return BasicVerifyZip(zipfile, password, emitOutput, null);
         }
 
-
-        internal string BasicVerifyZip(string zipfile, string password, bool emitOutput,
-                                       EventHandler<ExtractProgressEventArgs> extractProgress)
+        internal string BasicVerifyZip(
+            string zipfile,
+            string password,
+            bool emitOutput,
+            EventHandler<ExtractProgressEventArgs> extractProgress
+        )
         {
             // basic verification of the zip file - can it be extracted?
             // The extraction tool will verify checksums and passwords, as appropriate
@@ -311,9 +326,10 @@ namespace Ionic.Zip.Tests.Utilities
             if (WinZipIsPresent)
             {
                 TestContext.WriteLine("Verifying zip file {0} with WinZip", zipfile);
-                string args = (password == null)
-                    ? String.Format("-t {0}", zipfile)
-                    : String.Format("-s{0} -t {1}", password, zipfile);
+                string args =
+                    (password == null)
+                        ? String.Format("-t {0}", zipfile)
+                        : String.Format("-s{0} -t {1}", password, zipfile);
 
                 string wzunzipOut = this.Exec(wzunzip, args, true, emitOutput);
             }
@@ -323,7 +339,10 @@ namespace Ionic.Zip.Tests.Utilities
                 string tld = Path.GetDirectoryName(zipfile);
 
                 _output.WriteLine("Verifying zip file with DotNetZip...");
-                _output.WriteLine("   file {0} ", (zipfile!=null)? zipfile.Replace(TEMP,"") : "--null--");
+                _output.WriteLine(
+                    "   file {0} ",
+                    (zipfile != null) ? zipfile.Replace(TEMP, "") : "--null--"
+                );
 
                 ReadOptions options = new ReadOptions();
                 if (emitOutput)
@@ -340,31 +359,36 @@ namespace Ionic.Zip.Tests.Utilities
                 }
                 // emit output, as desired
                 if (emitOutput)
-                    _output.WriteLine("{0}",options.StatusMessageWriter.ToString());
+                    _output.WriteLine("{0}", options.StatusMessageWriter.ToString());
 
                 return extractDir;
             }
         }
 
-        internal static void CreateFilesAndChecksums(string subdir,
-                                                     out string[] filesToZip,
-                                                     out Dictionary<string, byte[]> checksums)
+        internal static void CreateFilesAndChecksums(
+            string subdir,
+            out string[] filesToZip,
+            out Dictionary<string, byte[]> checksums
+        )
         {
             CreateFilesAndChecksums(subdir, 0, 0, out filesToZip, out checksums);
         }
 
-
-        internal static void CreateFilesAndChecksums(string subdir,
-                                                     int numFiles,
-                                                     int baseSize,
-                                                     out string[] filesToZip,
-                                                     out Dictionary<string, byte[]> checksums)
+        internal static void CreateFilesAndChecksums(
+            string subdir,
+            int numFiles,
+            int baseSize,
+            out string[] filesToZip,
+            out Dictionary<string, byte[]> checksums
+        )
         {
             // create a bunch of files
             filesToZip = TestUtilities.GenerateFilesFlat(subdir, numFiles, baseSize);
-            DateTime atMidnight = new DateTime(DateTime.Now.Year,
-                                               DateTime.Now.Month,
-                                               DateTime.Now.Day);
+            DateTime atMidnight = new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day
+            );
             DateTime fortyFiveDaysAgo = atMidnight - new TimeSpan(45, 0, 0, 0);
 
             // get checksums for each one
@@ -384,34 +408,33 @@ namespace Ionic.Zip.Tests.Utilities
             }
         }
 
-        protected static void CreateLargeFilesWithChecksums
-            (string subdir,
-             int numFiles,
-             Action<int,int,Int64> update,
-             out string[] filesToZip,
-             out Dictionary<string,byte[]> checksums)
+        protected static void CreateLargeFilesWithChecksums(
+            string subdir,
+            int numFiles,
+            Action<int, int, Int64> update,
+            out string[] filesToZip,
+            out Dictionary<string, byte[]> checksums
+        )
         {
             var rnd = new System.Random();
             // create a bunch of files
-            filesToZip = TestUtilities.GenerateFilesFlat(subdir,
-                                                         numFiles,
-                                                         256 * 1024,
-                                                         3 * 1024 * 1024,
-                                                         update);
+            filesToZip = TestUtilities.GenerateFilesFlat(
+                subdir,
+                numFiles,
+                256 * 1024,
+                3 * 1024 * 1024,
+                update
+            );
 
             var dates = new DateTime[rnd.Next(6) + 7];
-             // midnight
-            dates[0] = new DateTime(DateTime.Now.Year,
-                                    DateTime.Now.Month,
-                                    DateTime.Now.Day);
+            // midnight
+            dates[0] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-            for (int i=1; i < dates.Length; i++)
+            for (int i = 1; i < dates.Length; i++)
             {
-                dates[i] = DateTime.Now -
-                    new TimeSpan(rnd.Next(300),
-                                 rnd.Next(23),
-                                 rnd.Next(60),
-                                 rnd.Next(60));
+                dates[i] =
+                    DateTime.Now
+                    - new TimeSpan(rnd.Next(300), rnd.Next(23), rnd.Next(60), rnd.Next(60));
             }
 
             // get checksums for each one
@@ -426,11 +449,11 @@ namespace Ionic.Zip.Tests.Utilities
             }
         }
 
-
-
-        protected void VerifyChecksums(string extractDir,
+        protected void VerifyChecksums(
+            string extractDir,
             System.Collections.Generic.IEnumerable<String> filesToCheck,
-            Dictionary<string, byte[]> checksums)
+            Dictionary<string, byte[]> checksums
+        )
         {
             _output.WriteLine("");
             _output.WriteLine("Verify checksums...");
@@ -439,17 +462,25 @@ namespace Ionic.Zip.Tests.Utilities
             {
                 var f = Path.GetFileName(fqPath);
                 var extractedFile = Path.Combine(extractDir, f);
-                Assert.True(File.Exists(extractedFile), String.Format("File does not exist ({0})", extractedFile));
+                Assert.True(
+                    File.Exists(extractedFile),
+                    String.Format("File does not exist ({0})", extractedFile)
+                );
                 var chk = TestUtilities.ComputeChecksum(extractedFile);
-                Assert.Equal<String>(TestUtilities.CheckSumToString(checksums[f]),
-                                        TestUtilities.CheckSumToString(chk),
-                                        String.Format("Checksums for file {0} do not match.", f));
+                Assert.Equal<String>(
+                    TestUtilities.CheckSumToString(checksums[f]),
+                    TestUtilities.CheckSumToString(chk),
+                    String.Format("Checksums for file {0} do not match.", f)
+                );
                 count++;
             }
 
             if (checksums.Count < count)
             {
-                _output.WriteLine("There are {0} more extracted files than checksums", count - checksums.Count);
+                _output.WriteLine(
+                    "There are {0} more extracted files than checksums",
+                    count - checksums.Count
+                );
                 foreach (var file in filesToCheck)
                 {
                     if (!checksums.ContainsKey(file))
@@ -459,18 +490,27 @@ namespace Ionic.Zip.Tests.Utilities
 
             if (checksums.Count > count)
             {
-                _output.WriteLine("There are {0} more checksums than extracted files", checksums.Count - count);
+                _output.WriteLine(
+                    "There are {0} more checksums than extracted files",
+                    checksums.Count - count
+                );
                 foreach (var file in checksums.Keys)
                 {
-                    var selection = from f in filesToCheck where Path.GetFileName(f).Equals(file) select f;
+                    var selection =
+                        from f in filesToCheck
+                        where Path.GetFileName(f).Equals(file)
+                        select f;
 
                     if (selection.Count() == 0)
                         _output.WriteLine("Missing: {0}", Path.GetFileName(file));
                 }
             }
 
-
-            Assert.Equal<Int32>(checksums.Count, count, "There's a mismatch between the checksums and the filesToCheck.");
+            Assert.Equal<Int32>(
+                checksums.Count,
+                count,
+                "There's a mismatch between the checksums and the filesToCheck."
+            );
         }
 
         internal static int CountEntries(string zipfile)
@@ -479,12 +519,10 @@ namespace Ionic.Zip.Tests.Utilities
             using (ZipFile zip = ZipFile.Read(zipfile))
             {
                 foreach (ZipEntry e in zip)
-                    if (!e.IsDirectory) entries++;
+                    if (!e.IsDirectory)
+                        entries++;
             }
             return entries;
         }
-
     }
-
-
 }

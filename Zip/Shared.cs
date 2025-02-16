@@ -7,21 +7,16 @@
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// Last Saved: <2025-January-18 19:23:16>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
 // This module defines some shared utility classes and methods.
 //
-// Created: Tue, 27 Mar 2007  15:30
-//
+
+using System;
+using System.IO;
 
 namespace Ionic.Zip
 {
@@ -570,7 +565,7 @@ namespace Ionic.Zip
 
 
         // Replaced with HResult
-        // 
+        //
         // // workitem 8009
         // //
         // // This method must remain separate.
@@ -589,7 +584,7 @@ namespace Ionic.Zip
         // // JIT-compiles this method when UnmanagedCode is disallowed, and thus never
         // // generates the JIT-compile time exception.
         // //
-        // 
+        //
         // private static uint _HRForException(System.Exception ex1)
         // {
         //     return unchecked((uint)System.Runtime.InteropServices.Marshal.GetHRForException(ex1));

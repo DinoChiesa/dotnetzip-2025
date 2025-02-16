@@ -5,10 +5,14 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <AssemblyName>dnzzip</AssemblyName>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <Version>2025.02.03</Version>
+    <Authors>Dino Chiesa</Authors>
+    <Company>Dino Chiesa</Company>
   </PropertyGroup>
 
 </Project>

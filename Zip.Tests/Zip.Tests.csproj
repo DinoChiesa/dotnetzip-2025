@@ -54,6 +54,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Zip\Zip.csproj" />
+    <ProjectReference Include="..\Tools\dnzzip\dnzzip.csproj" />
+    <ProjectReference Include="..\Tools\dnzunzip\dnzunzip.csproj" />
   </ItemGroup>
 
   <!-- works only on .NET Framework - requires Windows libraries -->

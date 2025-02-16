@@ -1,28 +1,18 @@
 // GZip.cs
 //
 // ----------------------------------------------------------------------
-// Copyright (c) 2011 Dino Chiesa.  All rights reserved.
-//
-// This example is released under the Microsoft Permissive License of
-// October 2006.  See the license.txt file accompanying this release for
-// full details.
-//
-// ----------------------------------------------------------------------
+// Copyright (c) 2011, 2025 Dino Chiesa.  All rights reserved.
 //
 // This utility creates a compresses the file specified on the command line,
 // using GZip, creating a new file, with the .gz suffix. Or, if the
 // file specified on the command-line has a .gz suffix, this utility
 // decompresses it, restoring the original file.
 //
-// compile with:
-//     csc /debug+ /target:exe /r:Ionic.Zip.dll /out:GZip.exe GZip.cs
+// ------------------------------------------------------------------
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
-// Sat, 23 Jul 2011  22:32
-//
-
-using System;
-using System.IO;
-using Ionic.Zlib;
+// ------------------------------------------------------------------
 
 namespace Ionic.Zip.Examples
 {

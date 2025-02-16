@@ -1,3 +1,9 @@
+// ------------------------------------------------------------------
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
+//
+// ------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Text;

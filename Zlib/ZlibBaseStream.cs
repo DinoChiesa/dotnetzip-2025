@@ -1,26 +1,19 @@
 // ZlibBaseStream.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009 Dino Chiesa and Microsoft Corporation.
+// Copyright (c) 2009, 2025 Dino Chiesa
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
 //
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-18 15:01:50>
-//
-// ------------------------------------------------------------------
-//
 // This module defines the ZlibBaseStream class, which is an intnernal
 // base class for DeflateStream, ZlibStream and GZipStream.
+//
+// ------------------------------------------------------------------
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 
@@ -29,7 +22,6 @@ using System.IO;
 
 namespace Ionic.Zlib
 {
-
     internal enum ZlibStreamFlavor { ZLIB = 1950, DEFLATE = 1951, GZIP = 1952 }
 
     internal class ZlibBaseStream : System.IO.Stream
@@ -407,12 +399,10 @@ namespace Ionic.Zlib
             if ((header[3] & 0x10) == 0x010)
                 _GzipComment = ReadZeroTerminatedString();
             if ((header[3] & 0x02) == 0x02)
-                ReadExactly(_buf1, 0, 1); // CRC16, ignore
+                this.ReadExactly(_buf1, 0, 1); // CRC16, ignore
 
             return totalBytesRead;
         }
-
-
 
         public override System.Int32 Read(System.Byte[] buffer, System.Int32 offset, System.Int32 count)
         {

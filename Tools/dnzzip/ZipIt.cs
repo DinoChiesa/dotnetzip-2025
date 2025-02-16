@@ -13,12 +13,6 @@
 // compile with:
 //     dotnet build
 //
-// Fri, 23 Feb 2007  11:51
-//
-
-using System;
-using System.IO;
-using Ionic.Zip;
 
 namespace Ionic.Zip.Examples
 {
@@ -27,9 +21,9 @@ namespace Ionic.Zip.Examples
         private static void Usage()
         {
             string UsageMessage =
-            "Zipit.exe:  zip up a directory, file, or a set of them, into a zipfile.\n" +
-            "            Depends on Ionic's DotNetZip library. This is version {0} of the utility.\n" +
-            "usage:\n   ZipIt.exe <ZipFileToCreate> [arguments]\n" +
+            "dnzzip.exe:  zip up a directory, file, or a set of them, into a zipfile.\n" +
+            "           Depends on Ionic's DotNetZip library. This is version {0} of the utility.\n" +
+            "usage:\n   dnzzip.exe <ZipFileToCreate> [arguments]\n" +
             "\narguments: \n" +
             "  <directory> | <file>  - a directory or file to add to the archive.\n" +
             "  -64                   - use ZIP64 extensions, for large files or large numbers of files.\n" +

@@ -7,15 +7,8 @@
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-19 21:01:33>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
@@ -24,6 +17,9 @@
 //
 // ------------------------------------------------------------------
 //
+
+using System;
+using System.IO;
 
 namespace Ionic.Zip
 {
@@ -1279,7 +1275,7 @@ namespace Ionic.Zip
         ///   The input stream from which to grab content for the file
         /// </param>
         /// <returns>The <c>ZipEntry</c> added.</returns>
-        public ZipEntry AddEntry(string entryName, Stream stream)
+        public ZipEntry AddEntry(string entryName, System.IO.Stream stream)
         {
             ZipEntry ze = ZipEntry.CreateForStream(entryName, stream);
             ze.SetEntryTimes(DateTime.Now,DateTime.Now,DateTime.Now);
@@ -1788,7 +1784,7 @@ namespace Ionic.Zip
         ///
         /// <param name="stream">The input stream from which to read file data.</param>
         /// <returns>The <c>ZipEntry</c> added.</returns>
-        public ZipEntry UpdateEntry(string entryName, Stream stream)
+        public ZipEntry UpdateEntry(string entryName, System.IO.Stream stream)
         {
             RemoveEntryForUpdate(entryName);
             return AddEntry(entryName, stream);

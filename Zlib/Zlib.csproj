@@ -1,14 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+<!--
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+-->
     <Nullable>disable</Nullable>
+    <AssemblyTitle>Ionic's Zlib Library</AssemblyTitle>
+    <AssemblyName>Ionic.Zlib</AssemblyName>
+    <Version>2025.02.15</Version>
+    <Authors>Dino Chiesa</Authors>
+    <Company>Dino Chiesa</Company>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\CommonSrc\CRC32.cs">
       <Link>CRC32.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonSrc\StreamExtensions.ReadExactly.cs">
+      <Link>StreamExtensions.ReadExactly.cs</Link>
     </Compile>
   </ItemGroup>
 

@@ -1,41 +1,28 @@
 // UnZip.cs
 //
 // ----------------------------------------------------------------------
-// Copyright (c) 2006, 2007, 2008 Microsoft Corporation.  All rights reserved.
-//
-// This example is released under the Microsoft Public License .
-// See the license.txt file accompanying this release for
-// full details.
-//
-// ----------------------------------------------------------------------
+// Copyright (c) 2006, 2007, 2008, 2025 Dino Chiesa.  All rights reserved.
 //
 // This command-line utility unzips a zipfile into the specified directory,
 // or lists the entries in a zipfile without unzipping.
 //
-// compile with:
-//     csc /target:exe /r:Ionic.Zip.dll /out:UnZip.exe UnZip.cs
+// ------------------------------------------------------------------
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
-// created
-// Wed, 29 Mar 2006  14:36
-//
-
-
-using System;
-using System.Collections.Generic;
-using Ionic.Zip;
+// ------------------------------------------------------------------
 
 namespace Ionic.Zip.Examples
 {
     public class UnZip
     {
-
         private static void Usage()
         {
-            Console.WriteLine("UnZip.exe:  extract or list or test the entries in a zip file.");
-            Console.WriteLine("            Depends on Ionic's DotNetZip library. This is version {0} of the utility.",
+            Console.WriteLine("dnzunzip.exe:  extract or list or test the entries in a zip file.");
+            Console.WriteLine("         Depends on Ionic's DotNetZip library. This is version {0} of the utility.",
                   System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
             Console.WriteLine("usage:\n" +
-                  "  unzip [options] <zipfile> [<entryname>...]  \n" +
+                  "  dnzunzip [options] <zipfile> [<entryname>...]  \n" +
                   "     unzips all files in the archive.\n" +
                   "     options:\n" +
                   "       -                 emit extracted content to stdout.\n" +

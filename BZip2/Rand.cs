@@ -1,7 +1,7 @@
 // Rand.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2011 Dino Chiesa.
+// Copyright (c) 2011, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.

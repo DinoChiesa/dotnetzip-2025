@@ -1,35 +1,27 @@
 // ExtractExistingFileAction.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c)  2009 Dino Chiesa
+// Copyright (c) 2009 Dino Chiesa
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License. 
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs): 
-// Time-stamp: <2025-January-18 19:28:14>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
 // This module defines the ExtractExistingFileAction enum
 //
-// 
 // ------------------------------------------------------------------
 
 namespace Ionic.Zip
 {
     /// <summary>
-    /// An enum for the options when extracting an entry would overwrite an existing file. 
+    /// An enum for the options when extracting an entry would overwrite an existing file.
     /// </summary>
-    /// 
+    ///
     /// <remarks>
     ///   <para>
     ///     This enum describes the actions that the library can take when an
@@ -55,7 +47,7 @@ namespace Ionic.Zip
         OverwriteSilently,
 
         /// <summary>
-        /// When extraction would overwrite an existing file, don't overwrite the file, silently. 
+        /// When extraction would overwrite an existing file, don't overwrite the file, silently.
         /// (For COM clients, this is a 2.)
         /// </summary>
         DoNotOverwrite,

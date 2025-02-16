@@ -1,21 +1,14 @@
 // DeflateStream.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009-2010 Dino Chiesa.
+// Copyright (c) 2009-2010, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2011-July-31 14:48:11>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
@@ -737,4 +730,3 @@ namespace Ionic.Zlib
     }
 
 }
-

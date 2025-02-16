@@ -1,7 +1,7 @@
 Saturday, 18 January 2025, 20:51
 
 
-run tests
+run all tests
 
   dotnet test 
 
@@ -21,17 +21,26 @@ with "live output"
   dotnet test --logger "console;verbosity=detailed"  --filter ZipOutputStream_Parallel  -- xUnit.ShowLiveOutput=true
 
 
-selecting subsets of tests
+to exclude tests: 
+
+  dotnet test --logger "console;verbosity=detailed"  --filter "FullyQualifiedName!~Zip64Tests"  -- xUnit.ShowLiveOutput=true xUnit.StopOnFail=true  
+
+more on filters:
+  https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest
+
+
+selecting tests by the Trait named "subset":
 
   dotnet test --logger "console;verbosity=detailed"  --filter subset=create  -- xUnit.ShowLiveOutput=true
 
 
-stop on first fail
+stop on first fail:
 
   dotnet test --logger "console;verbosity=detailed"  -- xUnit.StopOnFail=true  
 
   dotnet test --logger "console;verbosity=detailed"  -- xUnit.StopOnFail=true  xUnit.ShowLiveOutput=true
 
+  dotnet test --logger "console;verbosity=detailed"  --filter Progress_AddFiles  -- xUnit.StopOnFail=true  xUnit.ShowLiveOutput=true
 
 
 

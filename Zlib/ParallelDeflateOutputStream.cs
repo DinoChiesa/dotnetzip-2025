@@ -7,20 +7,16 @@
 // divide-and-conquer approach with multiple threads to exploit multiple
 // CPUs for the DEFLATE computation.
 //
-// last saved: <2011-July-31 14:49:40>
-//
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009-2011 by Dino Chiesa
+// Copyright (c) 2009-2011, 2025 by Dino Chiesa
 // All rights reserved!
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 
@@ -1382,5 +1378,3 @@ namespace Ionic.Zlib
     }
 
 }
-
-

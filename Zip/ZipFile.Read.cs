@@ -7,15 +7,8 @@
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-18 20:23:10>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
@@ -23,6 +16,10 @@
 //
 // ------------------------------------------------------------------
 //
+
+using System;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Ionic.Zip
 {

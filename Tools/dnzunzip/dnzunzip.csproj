@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zlib\Zlib.csproj" />
+    <ProjectReference Include="..\..\Zip\Zip.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
+    <AssemblyName>dnzunzip</AssemblyName>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <Version>2025.02.03</Version>
+    <Authors>Dino Chiesa</Authors>
+    <Company>Dino Chiesa</Company>
   </PropertyGroup>
 
 </Project>

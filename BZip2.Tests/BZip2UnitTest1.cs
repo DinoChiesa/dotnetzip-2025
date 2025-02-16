@@ -11,8 +11,8 @@
 //
 // ------------------------------------------------------------------
 
-using Ionic.Zip.Tests.Utilities;
 using System.Text;
+using Ionic.Zip.Tests.Utilities;
 using Xunit.Abstractions;
 using Assert = XunitAssertMessages.AssertM;
 
@@ -20,7 +20,7 @@ namespace Ionic.BZip2.Tests
 {
     public class UnitTest1 : IDisposable
     {
-        System.Random rnd;
+        private System.Random rnd;
         protected System.Collections.Generic.List<string> _DirsToRemove;
         private string CurrentDir = null;
         private string TopLevelDir = null;
@@ -34,8 +34,10 @@ namespace Ionic.BZip2.Tests
         static UnitTest1()
         {
             string lorem = TestStrings["LoremIpsum"];
-            LoremIpsumWords = lorem.Split(" ".ToCharArray(),
-                                          System.StringSplitOptions.RemoveEmptyEntries);
+            LoremIpsumWords = lorem.Split(
+                " ".ToCharArray(),
+                System.StringSplitOptions.RemoveEmptyEntries
+            );
         }
 
         public UnitTest1(ITestOutputHelper output)
@@ -53,73 +55,6 @@ namespace Ionic.BZip2.Tests
         {
             TestUtilities.CleanUp(CurrentDir, _DirsToRemove, _output);
         }
-
-
-        // public void Dispose()
-        // {
-        //     Assert.AreNotEqual<string>(Path.GetFileName(CurrentDir), "Temp", "at finish");
-        //     Directory.SetCurrentDirectory(CurrentDir);
-        //     IOException GotException = null;
-        //     int Tries = 0;
-        //     do
-        //     {
-        //         try
-        //         {
-        //             GotException = null;
-        //             foreach (string filename in FilesToRemove)
-        //             {
-        //                 if (Directory.Exists(filename))
-        //                 {
-        //                     // turn off any ReadOnly attributes
-        //                     ClearReadOnly(filename);
-        //                     Directory.Delete(filename, true);
-        //                 }
-        //                 if (File.Exists(filename))
-        //                 {
-        //                     File.Delete(filename);
-        //                 }
-        //             }
-        //             Tries++;
-        //         }
-        //         catch (IOException ioexc)
-        //         {
-        //             GotException = ioexc;
-        //             // use an backoff interval before retry
-        //             System.Threading.Thread.Sleep(200 * Tries);
-        //         }
-        //     } while ((GotException != null) && (Tries < 4));
-        //     if (GotException != null) throw GotException;
-        //     FilesToRemove.Clear();
-        // }
-        //
-        //
-        // public static void ClearReadOnly(string dirname)
-        // {
-        //     // don't traverse reparse points
-        //     if ((File.GetAttributes(dirname) & FileAttributes.ReparsePoint) != 0)
-        //         return;
-        //
-        //     foreach (var d in Directory.GetDirectories(dirname))
-        //     {
-        //         ClearReadOnly(d); // recurse
-        //     }
-        //
-        //     foreach (var f in Directory.GetFiles(dirname))
-        //     {
-        //         // clear ReadOnly and System attributes
-        //         var a = File.GetAttributes(f);
-        //         if ((a & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-        //         {
-        //             a ^= FileAttributes.ReadOnly;
-        //             File.SetAttributes(f, a);
-        //         }
-        //         if ((a & FileAttributes.System) == FileAttributes.System)
-        //         {
-        //             a ^= FileAttributes.System;
-        //             File.SetAttributes(f, a);
-        //         }
-        //     }
-        // }
 
         #region Helpers
         private static void CopyStream(System.IO.Stream src, System.IO.Stream dest)
@@ -176,20 +111,24 @@ namespace Ionic.BZip2.Tests
             return output;
         }
 
-        internal static int Exec_NoContext(string program, string args, bool waitForExit, out string output)
+        internal static int Exec_NoContext(
+            string program,
+            string args,
+            bool waitForExit,
+            out string output
+        )
         {
             System.Diagnostics.Process p = new System.Diagnostics.Process
+            {
+                StartInfo =
                 {
-                    StartInfo =
-                    {
-                        FileName = program,
-                        CreateNoWindow = true,
-                        Arguments = args,
-                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
-                        UseShellExecute = false,
-                    }
-
-                };
+                    FileName = program,
+                    CreateNoWindow = true,
+                    Arguments = args,
+                    WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                },
+            };
 
             if (waitForExit)
             {
@@ -204,7 +143,9 @@ namespace Ionic.BZip2.Tests
                         sb.Append(e.Data);
                 };
 
-                p.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(stdErrorRead);
+                p.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(
+                    stdErrorRead
+                );
                 p.Start();
                 p.BeginErrorReadLine();
                 output = p.StandardOutput.ReadToEnd();
@@ -233,14 +174,16 @@ namespace Ionic.BZip2.Tests
                 {
                     // pick a word at random
                     int n = this.rnd.Next(L);
-                    int batchLength = LoremIpsumWords[n].Length +
-                        LoremIpsumWords[n+1].Length +
-                        LoremIpsumWords[n+2].Length + 3;
+                    int batchLength =
+                        LoremIpsumWords[n].Length
+                        + LoremIpsumWords[n + 1].Length
+                        + LoremIpsumWords[n + 2].Length
+                        + 3;
                     sw.Write(LoremIpsumWords[n]);
                     sw.Write(" ");
-                    sw.Write(LoremIpsumWords[n+1]);
+                    sw.Write(LoremIpsumWords[n + 1]);
                     sw.Write(" ");
-                    sw.Write(LoremIpsumWords[n+2]);
+                    sw.Write(LoremIpsumWords[n + 2]);
                     sw.Write(" ");
                     bytesRemaining -= batchLength;
                 } while (bytesRemaining > 0);
@@ -262,27 +205,39 @@ namespace Ionic.BZip2.Tests
 
             CreateAndFillTextFile(filename, minSize);
 
-            Func<Stream,Stream>[] getBzStream = {
-                new Func<Stream,Stream>( s0 => {
-                        return new Ionic.BZip2.BZip2OutputStream(s0);
-                    }),
-                new Func<Stream,Stream>( s1 => {
-                        return new Ionic.BZip2.ParallelBZip2OutputStream(s1);
-                    })
+            Func<Stream, Stream>[] getBzStream =
+            {
+                new Func<Stream, Stream>(s0 =>
+                {
+                    return new Ionic.BZip2.BZip2OutputStream(s0);
+                }),
+                new Func<Stream, Stream>(s1 =>
+                {
+                    return new Ionic.BZip2.ParallelBZip2OutputStream(s1);
+                }),
             };
 
             int NUM_TRIALS = getBzStream.Length;
             var ts = new TimeSpan[getBzStream.Length];
-            for (int k=0; k < NUM_TRIALS; k++)
+            for (int k = 0; k < NUM_TRIALS; k++)
             {
                 var stopwatch = new System.Diagnostics.Stopwatch();
-                _output.WriteLine("Trial {0}/{1}", k+1, NUM_TRIALS);
+                _output.WriteLine("Trial {0}/{1}", k + 1, NUM_TRIALS);
                 stopwatch.Start();
-                string bzFname = Path.Combine(tld, String.Format("{0}.{1}{2}.bz2",
-                    Path.GetFileNameWithoutExtension(filename), k, Path.GetExtension(filename)));
-                using (Stream input = File.OpenRead(filename),
-                       output = File.Create(bzFname),
-                       compressor = getBzStream[k](output))
+                string bzFname = Path.Combine(
+                    tld,
+                    String.Format(
+                        "{0}.{1}{2}.bz2",
+                        Path.GetFileNameWithoutExtension(filename),
+                        k,
+                        Path.GetExtension(filename)
+                    )
+                );
+                using (
+                    Stream input = File.OpenRead(filename),
+                        output = File.Create(bzFname),
+                        compressor = getBzStream[k](output)
+                )
                 {
                     CopyStream(input, compressor);
                 }
@@ -291,10 +246,8 @@ namespace Ionic.BZip2.Tests
                 _output.WriteLine("Trial complete {0}. elapsed: {1}", k, ts[k]);
             }
 
-            Assert.True(ts[1]<ts[0], "Parallel compression took MORE time.");
+            Assert.True(ts[1] < ts[0], "Parallel compression took MORE time.");
         }
-
-
 
         [Fact]
         //[Timeout(15 * 60*1000)] // 60*1000 = 1min
@@ -312,7 +265,7 @@ namespace Ionic.BZip2.Tests
             _output.WriteLine($"Emitting {numIterations} lines into that file");
             using (var sw = new StreamWriter(File.Create(fname)))
             {
-                for (int k=0; k < numIterations; k++)
+                for (int k = 0; k < numIterations; k++)
                 {
                     sw.WriteLine(line);
                 }
@@ -320,35 +273,43 @@ namespace Ionic.BZip2.Tests
             int crcOriginal = GetCrc(fname);
             int blockSize = 0;
 
-            Func<Stream,Stream>[] getBzStream = {
-                new Func<Stream,Stream>( s0 => {
-                        var decorator = new Ionic.BZip2.BZip2OutputStream(s0, blockSize);
-                        return decorator;
-                    }),
-                new Func<Stream,Stream>( s1 => {
-                        var decorator = new Ionic.BZip2.ParallelBZip2OutputStream(s1, blockSize);
-                        return decorator;
-                    })
+            Func<Stream, Stream>[] getBzStream =
+            {
+                new Func<Stream, Stream>(s0 =>
+                {
+                    var decorator = new Ionic.BZip2.BZip2OutputStream(s0, blockSize);
+                    return decorator;
+                }),
+                new Func<Stream, Stream>(s1 =>
+                {
+                    var decorator = new Ionic.BZip2.ParallelBZip2OutputStream(s1, blockSize);
+                    return decorator;
+                }),
             };
 
-            int[] blockSizes = { 1,2,3,4,5,6,7,8,9 };
+            int[] blockSizes = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-            for (int k=0; k < getBzStream.Length; k++)
+            for (int k = 0; k < getBzStream.Length; k++)
             {
-                for (int m=0; m < blockSizes.Length; m++)
+                for (int m = 0; m < blockSizes.Length; m++)
                 {
                     blockSize = blockSizes[m];
                     var getStream = getBzStream[k];
                     var root = Path.GetFileNameWithoutExtension(fname);
                     var ext = Path.GetExtension(fname);
                     // compress into bz2
-                    var bzFname = Path.Combine(tld,
-                        String.Format("{0}.{1}.blocksize{2}{3}.bz2",
+                    var bzFname = Path.Combine(
+                        tld,
+                        String.Format(
+                            "{0}.{1}.blocksize{2}{3}.bz2",
                             root,
                             (k == 0) ? "SingleThread" : "MultiThread",
-                            blockSize, ext));
+                            blockSize,
+                            ext
+                        )
+                    );
 
-                    _output.WriteLine("Compress cycle ({0},{1})", k,m);
+                    _output.WriteLine("Compress cycle ({0},{1})", k, m);
                     _output.WriteLine("file {0}", bzFname);
                     using (var fs = File.OpenRead(fname))
                     {
@@ -363,17 +324,22 @@ namespace Ionic.BZip2.Tests
 
                     _output.WriteLine("Decompress");
                     var decompressedFname = Path.GetFileNameWithoutExtension(bzFname);
-                    using (Stream fs = File.OpenRead(bzFname),
-                           output = File.Create(decompressedFname),
-                           decompressor = new Ionic.BZip2.BZip2InputStream(fs))
+                    using (
+                        Stream fs = File.OpenRead(bzFname),
+                            output = File.Create(decompressedFname),
+                            decompressor = new Ionic.BZip2.BZip2InputStream(fs)
+                    )
                     {
                         CopyStream(decompressor, output);
                     }
 
                     _output.WriteLine("Check CRC");
                     int crcDecompressed = GetCrc(decompressedFname);
-                    Assert.Equal<int>(crcOriginal, crcDecompressed,
-                        String.Format("CRC mismatch {0:X8} != {1:X8}", crcOriginal, crcDecompressed));
+                    Assert.Equal<int>(
+                        crcOriginal,
+                        crcDecompressed,
+                        String.Format("CRC mismatch {0:X8} != {1:X8}", crcOriginal, crcDecompressed)
+                    );
                     _output.WriteLine("");
 
                     // just for the sake of disk space economy:
@@ -387,15 +353,22 @@ namespace Ionic.BZip2.Tests
         public void BZ_Reading_Not_A_bzipped_file()
         {
             string testSrc = TestUtilities.GetTestSrcDir();
-            var dnzBzip2exe = Path.Combine(testSrc, "..\\Tools\\BZip2\\bin\\Debug\\net9.0", "bzip2.exe");
-            Assert.True(File.Exists(dnzBzip2exe), $"bzip2.exe is missing {dnzBzip2exe}" );
+            var dnzBzip2exe = Path.Combine(
+                testSrc,
+                "..\\Tools\\BZip2\\bin\\Debug\\net9.0",
+                "bzip2.exe"
+            );
+            Assert.True(File.Exists(dnzBzip2exe), $"bzip2.exe is missing {dnzBzip2exe}");
             string decompressedFname = "ThisWillNotWork.txt";
 
-            Assert.Throws<IOException>(() => {
-            using (Stream input = File.OpenRead(dnzBzip2exe),
-                   decompressor = new Ionic.BZip2.BZip2InputStream(input),
-                   output = File.Create(decompressedFname))
-                CopyStream(decompressor, output);
+            Assert.Throws<IOException>(() =>
+            {
+                using (
+                    Stream input = File.OpenRead(dnzBzip2exe),
+                        decompressor = new Ionic.BZip2.BZip2InputStream(input),
+                        output = File.Create(decompressedFname)
+                )
+                    CopyStream(decompressor, output);
             });
         }
 
@@ -403,11 +376,14 @@ namespace Ionic.BZip2.Tests
         public void BZ_EmptyInputStream()
         {
             string decompressedFname = "ThisWillNotWork.txt";
-            Assert.Throws<IOException>(() => {
-            using (Stream input = new MemoryStream(), // empty stream
-                   decompressor = new Ionic.BZip2.BZip2InputStream(input),
-                   output = File.Create(decompressedFname))
-                CopyStream(decompressor, output);
+            Assert.Throws<IOException>(() =>
+            {
+                using (
+                    Stream input = new MemoryStream(), // empty stream
+                        decompressor = new Ionic.BZip2.BZip2InputStream(input),
+                        output = File.Create(decompressedFname)
+                )
+                    CopyStream(decompressor, output);
             });
         }
 
@@ -416,21 +392,27 @@ namespace Ionic.BZip2.Tests
         {
             string tld = new String(TopLevelDir); // copy to avoid changes
             string testSrc = TestUtilities.GetTestSrcDir();
-            var dnzBzip2exe = Path.GetFullPath(Path.Combine(testSrc, "..\\Tools\\BZip2\\bin\\Debug\\net9.0", "bzip2.exe"));
-            Assert.True(File.Exists(dnzBzip2exe), $"bzip2.exe is missing {dnzBzip2exe}" );
+            var dnzBzip2exe = Path.GetFullPath(
+                Path.Combine(testSrc, "..\\Tools\\BZip2\\bin\\Debug\\net9.0", "bzip2.exe")
+            );
+            Assert.True(File.Exists(dnzBzip2exe), $"bzip2.exe is missing {dnzBzip2exe}");
 
             var unxBzip2exe = Path.Combine(testSrc, "Resources\\bzip2.exe");
-            Assert.True(File.Exists(unxBzip2exe), $"unxUtils bzip2.exe is missing {unxBzip2exe}" );
+            Assert.True(File.Exists(unxBzip2exe), $"unxUtils bzip2.exe is missing {unxBzip2exe}");
 
             foreach (var key in TestStrings.Keys)
             {
                 int numLinesToWrite = this.rnd.Next(2802) + 420;
-                _output.WriteLine("\n====\nWriting string from {0}, {1} times", key, numLinesToWrite);
+                _output.WriteLine(
+                    "\n====\nWriting string from {0}, {1} times",
+                    key,
+                    numLinesToWrite
+                );
                 var s = TestStrings[key];
                 var fname = Path.Combine(tld, $"Pippo-{key}-{numLinesToWrite}.txt");
                 using (var sw = new StreamWriter(File.Create(fname)))
                 {
-                    for (int k=0; k < numLinesToWrite; k++)
+                    for (int k = 0; k < numLinesToWrite; k++)
                     {
                         sw.WriteLine(s);
                     }
@@ -443,26 +425,28 @@ namespace Ionic.BZip2.Tests
                 string bzout = this.Exec(dnzBzip2exe, args);
 
                 var bzfile = fname + ".bz2";
-                Assert.True(File.Exists(bzfile), $"Compressed output file is missing. {bzfile}" );
+                Assert.True(File.Exists(bzfile), $"Compressed output file is missing. {bzfile}");
 
                 _output.WriteLine("Deleting the original content file...");
                 File.Delete(fname);
-                Assert.False(File.Exists(fname), $"The delete failed. {fname}" );
+                Assert.False(File.Exists(fname), $"The delete failed. {fname}");
 
                 System.Threading.Thread.Sleep(1200);
 
                 _output.WriteLine("De-Compressing with unxUtils bzip2.exe");
-                args = "-dfk "+ bzfile;
+                args = "-dfk " + bzfile;
                 bzout = this.Exec(unxBzip2exe, args);
-                Assert.True(File.Exists(fname), $"File is missing. {fname}" );
+                Assert.True(File.Exists(fname), $"File is missing. {fname}");
 
                 int crcDecompressed = GetCrc(fname);
-                Assert.Equal<int>(crcOriginal, crcDecompressed,
-                    String.Format("CRC mismatch {0:X8}!={1:X8}", crcOriginal, crcDecompressed));
+                Assert.Equal<int>(
+                    crcOriginal,
+                    crcDecompressed,
+                    String.Format("CRC mismatch {0:X8}!={1:X8}", crcOriginal, crcDecompressed)
+                );
                 _output.WriteLine("CRC matches");
             }
         }
-
 
         [Fact]
         public void BZ_Samples()
@@ -493,17 +477,23 @@ namespace Ionic.BZip2.Tests
             }
         }
 
-
-        internal static Dictionary<String,String> TestStrings = new Dictionary<String,String>() {
-            {"LetMeDoItNow", "I expect to pass through the world but once. Any good therefore that I can do, or any kindness I can show to any creature, let me do it now. Let me not defer it, for I shall not pass this way again. -- Anonymous, although some have attributed it to Stephen Grellet" },
-
-            {"UntilHeExtends", "Until he extends the circle of his compassion to all living things, man will not himself find peace. - Albert Schweitzer, early 20th-century German Nobel Peace Prize-winning mission doctor and theologian." },
-
-        {"WhatWouldThingsHaveBeenLike","'What would things have been like [in Russia] if during periods of mass arrests people had not simply sat there, paling with terror at every bang on the downstairs door and at every step on the staircase, but understood they had nothing to lose and had boldly set up in the downstairs hall an ambush of half a dozen people?' -- Alexander Solzhenitsyn"
-                },
-
-            {"GoPlacidly",
-            @"Go placidly amid the noise and haste, and remember what peace there may be in silence.
+        internal static Dictionary<String, String> TestStrings = new Dictionary<String, String>()
+        {
+            {
+                "LetMeDoItNow",
+                "I expect to pass through the world but once. Any good therefore that I can do, or any kindness I can show to any creature, let me do it now. Let me not defer it, for I shall not pass this way again. -- Anonymous, although some have attributed it to Stephen Grellet"
+            },
+            {
+                "UntilHeExtends",
+                "Until he extends the circle of his compassion to all living things, man will not himself find peace. - Albert Schweitzer, early 20th-century German Nobel Peace Prize-winning mission doctor and theologian."
+            },
+            {
+                "WhatWouldThingsHaveBeenLike",
+                "'What would things have been like [in Russia] if during periods of mass arrests people had not simply sat there, paling with terror at every bang on the downstairs door and at every step on the staircase, but understood they had nothing to lose and had boldly set up in the downstairs hall an ambush of half a dozen people?' -- Alexander Solzhenitsyn"
+            },
+            {
+                "GoPlacidly",
+                @"Go placidly amid the noise and haste, and remember what peace there may be in silence.
 
 As far as possible, without surrender, be on good terms with all persons. Speak your truth quietly and clearly; and listen to others, even to the dull and the ignorant, they too have their story. Avoid loud and aggressive persons, they are vexations to the spirit.
 
@@ -522,9 +512,11 @@ With all its sham, drudgery and broken dreams, it is still a beautiful world.
 Be cheerful. Strive to be happy.
 
 Max Ehrmann c.1920
-"},
-
-            {"IhaveaDream", @"Let us not wallow in the valley of despair, I say to you today, my friends.
+"
+            },
+            {
+                "IhaveaDream",
+                @"Let us not wallow in the valley of despair, I say to you today, my friends.
 
 And so even though we face the difficulties of today and tomorrow, I still have a dream. It is a dream deeply rooted in the American dream.
 
@@ -543,68 +535,69 @@ I have a dream that one day, down in Alabama, with its vicious racists, with its
 I have a dream today!
 
 I have a dream that one day every valley shall be exalted, and every hill and mountain shall be made low, the rough places will be made plain, and the crooked places will be made straight; 'and the glory of the Lord shall be revealed and all flesh shall see it together.'2
-"},
-
-            {            "LoremIpsum",
-"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer " +
-"vulputate, nibh non rhoncus euismod, erat odio pellentesque lacus, sit " +
-"amet convallis mi augue et odio. Phasellus cursus urna facilisis " +
-"quam. Suspendisse nec metus et sapien scelerisque euismod. Nullam " +
-"molestie sem quis nisl. Fusce pellentesque, ante sed semper egestas, sem " +
-"nulla vestibulum nulla, quis sollicitudin leo lorem elementum " +
-"wisi. Aliquam vestibulum nonummy orci. Sed in dolor sed enim ullamcorper " +
-"accumsan. Duis vel nibh. Class aptent taciti sociosqu ad litora torquent " +
-"per conubia nostra, per inceptos hymenaeos. Sed faucibus, enim sit amet " +
-"venenatis laoreet, nisl elit posuere est, ut sollicitudin tortor velit " +
-"ut ipsum. Aliquam erat volutpat. Phasellus tincidunt vehicula " +
-"eros. Curabitur vitae erat. " +
-"\n " +
-"Quisque pharetra lacus quis sapien. Duis id est non wisi sagittis " +
-"adipiscing. Nulla facilisi. Etiam quam erat, lobortis eu, facilisis nec, " +
-"blandit hendrerit, metus. Fusce hendrerit. Nunc magna libero, " +
-"sollicitudin non, vulputate non, ornare id, nulla.  Suspendisse " +
-"potenti. Nullam in mauris. Curabitur et nisl vel purus vehicula " +
-"sodales. Class aptent taciti sociosqu ad litora torquent per conubia " +
-"nostra, per inceptos hymenaeos. Cum sociis natoque penatibus et magnis " +
-"dis parturient montes, nascetur ridiculus mus. Donec semper, arcu nec " +
-"dignissim porta, eros odio tempus pede, et laoreet nibh arcu et " +
-"nisl. Morbi pellentesque eleifend ante. Morbi dictum lorem non " +
-"ante. Nullam et augue sit amet sapien varius mollis. " +
-"\n " +
-"Nulla erat lorem, fringilla eget, ultrices nec, dictum sed, " +
-"sapien. Aliquam libero ligula, porttitor scelerisque, lobortis nec, " +
-"dignissim eu, elit. Etiam feugiat, dui vitae laoreet faucibus, tellus " +
-"urna molestie purus, sit amet pretium lorem pede in erat.  Ut non libero " +
-"et sapien porttitor eleifend. Vestibulum ante ipsum primis in faucibus " +
-"orci luctus et ultrices posuere cubilia Curae; In at lorem et lacus " +
-"feugiat iaculis. Nunc tempus eros nec arcu tristique egestas. Quisque " +
-"metus arcu, pretium in, suscipit dictum, bibendum sit amet, " +
-"mauris. Aliquam non urna. Suspendisse eget diam. Aliquam erat " +
-"volutpat. In euismod aliquam lorem. Mauris dolor nisl, consectetuer sit " +
-"amet, suscipit sodales, rutrum in, lorem. Nunc nec nisl. Nulla ante " +
-"libero, aliquam porttitor, aliquet at, imperdiet sed, diam. Pellentesque " +
-"tincidunt nisl et ipsum. Suspendisse purus urna, semper quis, laoreet " +
-"in, vestibulum vel, arcu. Nunc elementum eros nec mauris. " +
-"\n " +
-"Vivamus congue pede at quam. Aliquam aliquam leo vel turpis. Ut " +
-"commodo. Integer tincidunt sem a risus. Cras aliquam libero quis " +
-"arcu. Integer posuere. Nulla malesuada, wisi ac elementum sollicitudin, " +
-"libero libero molestie velit, eu faucibus est ante eu libero. Sed " +
-"vestibulum, dolor ac ultricies consectetuer, tellus risus interdum diam, " +
-"a imperdiet nibh eros eget mauris. Donec faucibus volutpat " +
-"augue. Phasellus vitae arcu quis ipsum ultrices fermentum. Vivamus " +
-"ultricies porta ligula. Nullam malesuada. Ut feugiat urna non " +
-"turpis. Vivamus ipsum. Vivamus eleifend condimentum risus. Curabitur " +
-"pede. Maecenas suscipit pretium tortor. Integer pellentesque. " +
-"\n " +
-"Mauris est. Aenean accumsan purus vitae ligula. Lorem ipsum dolor sit " +
-"amet, consectetuer adipiscing elit. Nullam at mauris id turpis placerat " +
-"accumsan. Sed pharetra metus ut ante. Aenean vel urna sit amet ante " +
-"pretium dapibus. Sed nulla. Sed nonummy, lacus a suscipit semper, erat " +
-"wisi convallis mi, et accumsan magna elit laoreet sem. Nam leo est, " +
-"cursus ut, molestie ac, laoreet id, mauris. Suspendisse auctor nibh. " +
-                         "\n"}
+"
+            },
+            {
+                "LoremIpsum",
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer "
+                    + "vulputate, nibh non rhoncus euismod, erat odio pellentesque lacus, sit "
+                    + "amet convallis mi augue et odio. Phasellus cursus urna facilisis "
+                    + "quam. Suspendisse nec metus et sapien scelerisque euismod. Nullam "
+                    + "molestie sem quis nisl. Fusce pellentesque, ante sed semper egestas, sem "
+                    + "nulla vestibulum nulla, quis sollicitudin leo lorem elementum "
+                    + "wisi. Aliquam vestibulum nonummy orci. Sed in dolor sed enim ullamcorper "
+                    + "accumsan. Duis vel nibh. Class aptent taciti sociosqu ad litora torquent "
+                    + "per conubia nostra, per inceptos hymenaeos. Sed faucibus, enim sit amet "
+                    + "venenatis laoreet, nisl elit posuere est, ut sollicitudin tortor velit "
+                    + "ut ipsum. Aliquam erat volutpat. Phasellus tincidunt vehicula "
+                    + "eros. Curabitur vitae erat. "
+                    + "\n "
+                    + "Quisque pharetra lacus quis sapien. Duis id est non wisi sagittis "
+                    + "adipiscing. Nulla facilisi. Etiam quam erat, lobortis eu, facilisis nec, "
+                    + "blandit hendrerit, metus. Fusce hendrerit. Nunc magna libero, "
+                    + "sollicitudin non, vulputate non, ornare id, nulla.  Suspendisse "
+                    + "potenti. Nullam in mauris. Curabitur et nisl vel purus vehicula "
+                    + "sodales. Class aptent taciti sociosqu ad litora torquent per conubia "
+                    + "nostra, per inceptos hymenaeos. Cum sociis natoque penatibus et magnis "
+                    + "dis parturient montes, nascetur ridiculus mus. Donec semper, arcu nec "
+                    + "dignissim porta, eros odio tempus pede, et laoreet nibh arcu et "
+                    + "nisl. Morbi pellentesque eleifend ante. Morbi dictum lorem non "
+                    + "ante. Nullam et augue sit amet sapien varius mollis. "
+                    + "\n "
+                    + "Nulla erat lorem, fringilla eget, ultrices nec, dictum sed, "
+                    + "sapien. Aliquam libero ligula, porttitor scelerisque, lobortis nec, "
+                    + "dignissim eu, elit. Etiam feugiat, dui vitae laoreet faucibus, tellus "
+                    + "urna molestie purus, sit amet pretium lorem pede in erat.  Ut non libero "
+                    + "et sapien porttitor eleifend. Vestibulum ante ipsum primis in faucibus "
+                    + "orci luctus et ultrices posuere cubilia Curae; In at lorem et lacus "
+                    + "feugiat iaculis. Nunc tempus eros nec arcu tristique egestas. Quisque "
+                    + "metus arcu, pretium in, suscipit dictum, bibendum sit amet, "
+                    + "mauris. Aliquam non urna. Suspendisse eget diam. Aliquam erat "
+                    + "volutpat. In euismod aliquam lorem. Mauris dolor nisl, consectetuer sit "
+                    + "amet, suscipit sodales, rutrum in, lorem. Nunc nec nisl. Nulla ante "
+                    + "libero, aliquam porttitor, aliquet at, imperdiet sed, diam. Pellentesque "
+                    + "tincidunt nisl et ipsum. Suspendisse purus urna, semper quis, laoreet "
+                    + "in, vestibulum vel, arcu. Nunc elementum eros nec mauris. "
+                    + "\n "
+                    + "Vivamus congue pede at quam. Aliquam aliquam leo vel turpis. Ut "
+                    + "commodo. Integer tincidunt sem a risus. Cras aliquam libero quis "
+                    + "arcu. Integer posuere. Nulla malesuada, wisi ac elementum sollicitudin, "
+                    + "libero libero molestie velit, eu faucibus est ante eu libero. Sed "
+                    + "vestibulum, dolor ac ultricies consectetuer, tellus risus interdum diam, "
+                    + "a imperdiet nibh eros eget mauris. Donec faucibus volutpat "
+                    + "augue. Phasellus vitae arcu quis ipsum ultrices fermentum. Vivamus "
+                    + "ultricies porta ligula. Nullam malesuada. Ut feugiat urna non "
+                    + "turpis. Vivamus ipsum. Vivamus eleifend condimentum risus. Curabitur "
+                    + "pede. Maecenas suscipit pretium tortor. Integer pellentesque. "
+                    + "\n "
+                    + "Mauris est. Aenean accumsan purus vitae ligula. Lorem ipsum dolor sit "
+                    + "amet, consectetuer adipiscing elit. Nullam at mauris id turpis placerat "
+                    + "accumsan. Sed pharetra metus ut ante. Aenean vel urna sit amet ante "
+                    + "pretium dapibus. Sed nulla. Sed nonummy, lacus a suscipit semper, erat "
+                    + "wisi convallis mi, et accumsan magna elit laoreet sem. Nam leo est, "
+                    + "cursus ut, molestie ac, laoreet id, mauris. Suspendisse auctor nibh. "
+                    + "\n"
+            },
         };
     }
-
 }

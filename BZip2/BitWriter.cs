@@ -1,20 +1,14 @@
 // BitWriter.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2011 Dino Chiesa.
+// Copyright (c) 2011, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// Last Saved: <2011-July-25 18:57:31>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //

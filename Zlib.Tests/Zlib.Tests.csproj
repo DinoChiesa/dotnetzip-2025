@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Zlib\Zlib.csproj" />
+    <ProjectReference Include="..\Tools\dnzgzip\dnzgzip.csproj" />
   </ItemGroup>
 
 </Project>

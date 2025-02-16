@@ -4,6 +4,13 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <AssemblyTitle>Ionic's BZip2 Library</AssemblyTitle>
+    <AssemblyName>Ionic.BZip2</AssemblyName>
+
+    <Version>2025.02.03</Version>
+    <Authors>Dino Chiesa</Authors>
+    <Company>Dino Chiesa</Company>
+
   </PropertyGroup>
 
   <ItemGroup>

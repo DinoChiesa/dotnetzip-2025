@@ -1,29 +1,22 @@
 // ZipCrypto.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2008, 2009, 2011 Dino Chiesa
+// Copyright (c) 2008, 2009, 2011, 2025 Dino Chiesa
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2025-January-18 19:26:24>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
 // This module provides the implementation for "traditional" Zip encryption.
 //
-// Created Tue Apr 15 17:39:56 2008
-//
 // ------------------------------------------------------------------
+
+using System;
 
 namespace Ionic.Zip
 {
@@ -333,7 +326,7 @@ namespace Ionic.Zip
         //}
 
         // private fields for the crypto stuff:
-        private UInt32[] _Keys = { 0x12345678, 0x23456789, 0x34567890 };
+        private System.UInt32[] _Keys = { 0x12345678, 0x23456789, 0x34567890 };
         private Ionic.Crc.CRC32 crc32 = new Ionic.Crc.CRC32();
 
     }

@@ -40,24 +40,30 @@ namespace Ionic.Zip.Tests
             for (int j = 0; j < numFilesToCreate; j++)
             {
                 String filename = String.Format("file{0:D3}.txt", j);
-                String repeatedLine = $"This line is repeated over and over and over in file {filename}";
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                String repeatedLine =
+                    $"This line is repeated over and over and over in file {filename}";
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 entriesAdded++;
             }
             return entriesAdded;
         }
-
 
         [Fact]
         public void AddNewDirectory()
         {
             string marker = TestUtilities.GetMarker();
             string zipFileToCreate = Path.Combine(TopLevelDir, "AddNewDirectory.zip");
-            String CommentOnArchive = "UpdateTests::AddNewDirectory(): This archive will be overwritten.";
+            String CommentOnArchive =
+                "UpdateTests::AddNewDirectory(): This archive will be overwritten.";
             string newComment = "This comment has been OVERWRITTEN." + DateTime.Now.ToString("G");
             string dirToZip = Path.Combine(TopLevelDir, $"zipup-{marker}");
 
-            int i, j;
+            int i,
+                j;
             int numEntries = 0;
             string subdir = null;
             String filename = null;
@@ -83,8 +89,11 @@ namespace Ionic.Zip.Tests
                 zip.Save(zipFileToCreate);
             }
 
-            Assert.Equal<int>(numEntries, CountEntries(zipFileToCreate),
-                    "The created Zip file has an unexpected number of entries.");
+            Assert.Equal<int>(
+                numEntries,
+                CountEntries(zipFileToCreate),
+                "The created Zip file has an unexpected number of entries."
+            );
 
             BasicVerifyZip(zipFileToCreate);
 
@@ -104,17 +113,17 @@ namespace Ionic.Zip.Tests
                 zip.Save();
             }
 
-            Assert.Equal<int>(numEntries, CountEntries(zipFileToCreate),
-                    "The overwritten Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                numEntries,
+                CountEntries(zipFileToCreate),
+                "The overwritten Zip file has the wrong number of entries."
+            );
 
             using (ZipFile readzip = new ZipFile(zipFileToCreate))
             {
-                Assert.Equal<string>(newComment,
-                                        readzip.Comment,
-                                        "The zip comment is incorrect.");
+                Assert.Equal<string>(newComment, readzip.Comment, "The zip comment is incorrect.");
             }
         }
-
 
         [Fact]
         public void ChangeMetadata_AES()
@@ -135,7 +144,9 @@ namespace Ionic.Zip.Tests
                 //TestUtilities.CreateAndFillFileText(filename, 500);
             }
 
-            string password = Path.GetRandomFileName() + Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
+            string password =
+                Path.GetRandomFileName()
+                + Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
 
             using (var zip = new ZipFile())
             {
@@ -146,8 +157,11 @@ namespace Ionic.Zip.Tests
             }
 
             // Verify the correct number of files are in the zip
-            Assert.Equal<int>(numFilesToCreate, CountEntries(zipFileToCreate),
-                                 "The updated Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                numFilesToCreate,
+                CountEntries(zipFileToCreate),
+                "The updated Zip file has the wrong number of entries."
+            );
 
             // test extract (and implicitly check CRCs, passwords, etc)
             VerifyZip(zipFileToCreate, password);
@@ -165,13 +179,15 @@ namespace Ionic.Zip.Tests
             }
 
             // Verify the correct number of files are in the zip
-            Assert.Equal<int>(numFilesToCreate + 1, CountEntries(zipFileToCreate),
-                                 "The updated Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                numFilesToCreate + 1,
+                CountEntries(zipFileToCreate),
+                "The updated Zip file has the wrong number of entries."
+            );
 
             // test extract (and implicitly check CRCs, passwords, etc)
             VerifyZip(zipFileToCreate, password);
         }
-
 
         private void VerifyZip(string zipfile, string password)
         {
@@ -189,7 +205,6 @@ namespace Ionic.Zip.Tests
             }
             System.Threading.Thread.Sleep(0x500);
         }
-
 
         [Fact]
         public void RemoveEntry_ByLastModTime()
@@ -219,16 +234,20 @@ namespace Ionic.Zip.Tests
                 foreach (String f in filenames)
                 {
                     ZipEntry e = zip1.AddFile(f, "");
-                    e.LastModified = origDate + new TimeSpan(24 * 31 * ix, 0, 0);  // 31 days * number of entries
+                    e.LastModified = origDate + new TimeSpan(24 * 31 * ix, 0, 0); // 31 days * number of entries
                     ix++;
                 }
-                zip1.Comment = "UpdateTests::RemoveEntry_ByLastModTime(): This archive will soon be updated.";
+                zip1.Comment =
+                    "UpdateTests::RemoveEntry_ByLastModTime(): This archive will soon be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // selectively remove a few files in the zip archive
             var threshold = new TimeSpan(24 * 31 * (2 + _rnd.Next(ix - 12)), 0, 0);
@@ -254,20 +273,26 @@ namespace Ionic.Zip.Tests
                 foreach (ZipEntry zombie in entriesToRemove)
                     zip2.RemoveEntry(zombie);
 
-                zip2.Comment = "UpdateTests::RemoveEntry_ByLastModTime(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::RemoveEntry_ByLastModTime(): This archive has been updated.";
                 zip2.Save();
             }
 
             // Verify the correct number of files are in the zip
-            Assert.Equal<int>(entriesAdded - numRemoved, CountEntries(zipFileToCreate),
-                "The updated Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded - numRemoved,
+                CountEntries(zipFileToCreate),
+                "The updated Zip file has the wrong number of entries."
+            );
 
             // verify that all entries in the archive are within the threshold
             using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
             {
                 foreach (ZipEntry e in zip3)
-                    Assert.True((e.LastModified >= origDate + threshold),
-                        "The updated Zip file has entries that lie outside the threshold.");
+                    Assert.True(
+                        (e.LastModified >= origDate + threshold),
+                        "The updated Zip file has entries that lie outside the threshold."
+                    );
             }
         }
 
@@ -291,13 +316,17 @@ namespace Ionic.Zip.Tests
                 zip1.Password = password;
                 zip1.AddFiles(filenames, "");
 
-                zip1.Comment = "UpdateTests::RemoveEntry_ByFilename_WithPassword(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::RemoveEntry_ByFilename_WithPassword(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // selectively remove a few files in the zip archive
             var filesToRemove = new List<string>();
@@ -319,7 +348,6 @@ namespace Ionic.Zip.Tests
                 zip2.Save();
             }
 
-
             // extract all files, verify the contents of the files that remain.
             using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
             {
@@ -336,25 +364,38 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                            s1
+                        )
+                    );
                 }
             }
 
             // Verify the number of files remaining in the zip
-            Assert.Equal<int>(entriesAdded - filesToRemove.Count, CountEntries(zipFileToCreate),
-                "The updated Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded - filesToRemove.Count,
+                CountEntries(zipFileToCreate),
+                "The updated Zip file has the wrong number of entries."
+            );
         }
-
 
         [Fact]
         public void RenameEntry()
         {
             string marker = TestUtilities.GetMarker();
-            string dirToZip = Path.Combine(TopLevelDir, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
-            var files = TestUtilities.GenerateFilesFlat(dirToZip,
-                                                        _rnd.Next(13) + 24,
-                                                        42 * 1024 + _rnd.Next(20000));
+            string dirToZip = Path.Combine(
+                TopLevelDir,
+                Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+            );
+            var files = TestUtilities.GenerateFilesFlat(
+                dirToZip,
+                _rnd.Next(13) + 24,
+                42 * 1024 + _rnd.Next(20000)
+            );
 
             // Two passes:  in pass 1, simply rename the file;
             // in pass 2, rename it so that it has a directory.
@@ -363,11 +404,13 @@ namespace Ionic.Zip.Tests
             {
                 string zipFileToCreate = Path.Combine(TopLevelDir, $"RenameEntry-{k}.zip");
                 _output.WriteLine("-----------------------------");
-                _output.WriteLine("{0}: Trial {1}, adding {2} files into '{3}'...",
-                                      DateTime.Now.ToString("HH:mm:ss"),
-                                      k,
-                                      files.Length,
-                                      zipFileToCreate);
+                _output.WriteLine(
+                    "{0}: Trial {1}, adding {2} files into '{3}'...",
+                    DateTime.Now.ToString("HH:mm:ss"),
+                    k,
+                    files.Length,
+                    zipFileToCreate
+                );
 
                 // Add the files to the zip, save the zip
                 using (ZipFile zip1 = new ZipFile())
@@ -379,8 +422,11 @@ namespace Ionic.Zip.Tests
                 }
 
                 // Verify the number of files in the zip
-                Assert.Equal<int>(files.Length, CountEntries(zipFileToCreate),
-                                     "the Zip file has the wrong number of entries.");
+                Assert.Equal<int>(
+                    files.Length,
+                    CountEntries(zipFileToCreate),
+                    "the Zip file has the wrong number of entries."
+                );
 
                 // selectively rename a few files in the zip archive
                 int renameCount = 0;
@@ -398,9 +444,8 @@ namespace Ionic.Zip.Tests
 
                     foreach (ZipEntry e in toRename)
                     {
-                        var newname = (k == 0)
-                            ? e.FileName + "-renamed"
-                            : "renamed_files\\" + e.FileName;
+                        var newname =
+                            (k == 0) ? e.FileName + "-renamed" : "renamed_files\\" + e.FileName;
 
                         _output.WriteLine("  renaming {0} to {1}", e.FileName, newname);
                         e.FileName = newname;
@@ -408,7 +453,10 @@ namespace Ionic.Zip.Tests
                         renameCount++;
                     }
 
-                    zip2.Comment = String.Format("This archive has been modified. {0} files have been renamed.", renameCount);
+                    zip2.Comment = String.Format(
+                        "This archive has been modified. {0} files have been renamed.",
+                        renameCount
+                    );
                     zip2.Save();
                 }
 
@@ -421,22 +469,28 @@ namespace Ionic.Zip.Tests
                     foreach (string s1 in zip3.EntryFileNames)
                     {
                         zip3[s1].Extract(Path.Combine(TopLevelDir, extractDir));
-                        string origFilename = Path.GetFileName((s1.Contains("renamed"))
-                            ? s1.Replace("-renamed", "")
-                            : s1);
+                        string origFilename = Path.GetFileName(
+                            (s1.Contains("renamed")) ? s1.Replace("-renamed", "") : s1
+                        );
 
-                        if (zip3[s1].Comment == "renamed") renameCount2++;
+                        if (zip3[s1].Comment == "renamed")
+                            renameCount2++;
                     }
                 }
 
-                Assert.Equal<int>(renameCount, renameCount2,
-                    "The updated Zip file has the wrong number of renamed entries.");
+                Assert.Equal<int>(
+                    renameCount,
+                    renameCount2,
+                    "The updated Zip file has the wrong number of renamed entries."
+                );
 
-                Assert.Equal<int>(files.Length, CountEntries(zipFileToCreate),
-                    "Wrong number of entries.");
+                Assert.Equal<int>(
+                    files.Length,
+                    CountEntries(zipFileToCreate),
+                    "Wrong number of entries."
+                );
             }
         }
-
 
         [Fact]
         public void UpdateEntryComment()
@@ -447,11 +501,13 @@ namespace Ionic.Zip.Tests
                 string zipFileToCreate = Path.Combine(TopLevelDir, $"UpdateEntryComment-{k}.zip");
                 String subdir = null;
                 int entriesAdded = CreateDirAndSomeFiles($"{marker}-{k}", out subdir);
-                _output.WriteLine("\n-----------------------------\r\nUpdateEntryComment {0} Trial {1}, adding {2} files into '{3}'...",
+                _output.WriteLine(
+                    "\n-----------------------------\r\nUpdateEntryComment {0} Trial {1}, adding {2} files into '{3}'...",
                     DateTime.Now.ToString("HH:mm:ss"),
                     k,
                     entriesAdded,
-                    zipFileToCreate);
+                    zipFileToCreate
+                );
 
                 // Add the files to the zip, and save it
                 using (ZipFile zip1 = new ZipFile())
@@ -460,14 +516,18 @@ namespace Ionic.Zip.Tests
                     foreach (String f in filenames)
                         zip1.AddFile(f, "");
 
-                    zip1.Comment = "UpdateTests::UpdateEntryComment(): This archive will be updated.";
+                    zip1.Comment =
+                        "UpdateTests::UpdateEntryComment(): This archive will be updated.";
                     zip1.Save(zipFileToCreate);
                 }
 
                 // Verify the files are in the zip
                 int n = CountEntries(zipFileToCreate);
-                Assert.Equal<int>(entriesAdded, n,
-                    $"the Zip file has the wrong number of entries. expected({entriesAdded}) actual({n})");
+                Assert.Equal<int>(
+                    entriesAdded,
+                    n,
+                    $"the Zip file has the wrong number of entries. expected({entriesAdded}) actual({n})"
+                );
 
                 // update the comments for a few files in the zip archive
                 int updateCount = 0;
@@ -482,13 +542,16 @@ namespace Ionic.Zip.Tests
                             {
                                 if (String.IsNullOrEmpty(e.Comment))
                                 {
-                                    e.Comment = $"This is update {updateCount}, a new comment on entry " + e.FileName;
+                                    e.Comment =
+                                        $"This is update {updateCount}, a new comment on entry "
+                                        + e.FileName;
                                     updateCount++;
                                 }
                             }
                         }
                     } while (updateCount < numToUpdate);
-                    zip2.Comment = $"This archive has been modified.  Comments on {updateCount} entries have been inserted.";
+                    zip2.Comment =
+                        $"This archive has been modified.  Comments on {updateCount} entries have been inserted.";
                     zip2.Save();
                 }
 
@@ -501,15 +564,22 @@ namespace Ionic.Zip.Tests
                     {
                         string dir = Path.Combine(TopLevelDir, $"ex-{marker}-{k}");
                         zip3[s1].Extract(dir);
-                        String repeatedLine = $"This line is repeated over and over and over in file {s1}";
+                        String repeatedLine =
+                            $"This line is repeated over and over and over in file {s1}";
 
                         // verify the content of the updated file.
                         var sr = new StreamReader(Path.Combine(dir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                    String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
 
                         if (!String.IsNullOrEmpty(zip3[s1].Comment))
                         {
@@ -518,12 +588,18 @@ namespace Ionic.Zip.Tests
                     }
                 }
 
-                Assert.Equal<int>(updateCount, commentCount,
-                    "The updated Zip file has the wrong number of entries with comments.");
+                Assert.Equal<int>(
+                    updateCount,
+                    commentCount,
+                    "The updated Zip file has the wrong number of entries with comments."
+                );
 
                 n = CountEntries(zipFileToCreate);
-                Assert.Equal<int>(entriesAdded, n,
-                    $"the Zip file has the wrong number of entries. expected({entriesAdded}) actual({n})");
+                Assert.Equal<int>(
+                    entriesAdded,
+                    n,
+                    $"the Zip file has the wrong number of entries. expected({entriesAdded}) actual({n})"
+                );
             }
         }
 
@@ -536,7 +612,10 @@ namespace Ionic.Zip.Tests
                 int j;
                 string filename = null;
                 string repeatedLine = null;
-                string zipFileToCreate = Path.Combine(TopLevelDir, $"RemoveEntry_ByFilename-{k}.zip");
+                string zipFileToCreate = Path.Combine(
+                    TopLevelDir,
+                    $"RemoveEntry_ByFilename-{k}.zip"
+                );
                 String subdir = null;
                 int entriesAdded = CreateDirAndSomeFiles($"{marker}-{k}", out subdir);
 
@@ -548,7 +627,8 @@ namespace Ionic.Zip.Tests
                     foreach (String f in filenames)
                         zip1.AddFile(f, "");
 
-                    zip1.Comment = "UpdateTests::RemoveEntry_ByFilename(): This archive will be updated.";
+                    zip1.Comment =
+                        "UpdateTests::RemoveEntry_ByFilename(): This archive will be updated.";
                     zip1.Save(zipFileToCreate);
 
                     // conditionally remove a single entry, only on the 2nd trial.
@@ -561,8 +641,11 @@ namespace Ionic.Zip.Tests
                 }
 
                 // Verify the files are in the zip
-                Assert.Equal<int>(entriesAdded - k, CountEntries(zipFileToCreate),
-                    $"Trial {k}: the Zip file has the wrong number of entries.");
+                Assert.Equal<int>(
+                    entriesAdded - k,
+                    CountEntries(zipFileToCreate),
+                    $"Trial {k}: the Zip file has the wrong number of entries."
+                );
 
                 if (k == 0)
                 {
@@ -581,10 +664,10 @@ namespace Ionic.Zip.Tests
                             // add this file to the list
                             filesToRemove.Add(filename);
                             zip2.RemoveEntry(filename);
-
                         }
 
-                        zip2.Comment = "This archive has been modified. Some files have been removed.";
+                        zip2.Comment =
+                            "This archive has been modified. Some files have been removed.";
                         zip2.Save();
                     }
 
@@ -595,30 +678,40 @@ namespace Ionic.Zip.Tests
                         string extractDir = $"ex-{marker}-{k}";
                         foreach (string s1 in zip3.EntryFileNames)
                         {
-                            Assert.False(filesToRemove.Contains(s1),
-                                           $"File ({s1}) was not expected.");
+                            Assert.False(
+                                filesToRemove.Contains(s1),
+                                $"File ({s1}) was not expected."
+                            );
 
                             zip3[s1].Extract(Path.Combine(TopLevelDir, extractDir));
-                            repeatedLine = $"This line is repeated over and over and over in file {s1}";
+                            repeatedLine =
+                                $"This line is repeated over and over and over in file {s1}";
 
                             // verify the content of the updated file.
                             var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                             string sLine = sr.ReadLine();
                             sr.Close();
 
-                            Assert.Equal<string>(repeatedLine, sLine,
-                                        String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
-
+                            Assert.Equal<string>(
+                                repeatedLine,
+                                sLine,
+                                String.Format(
+                                    "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                    s1
+                                )
+                            );
                         }
                     }
 
                     // Verify the files are in the zip
-                    Assert.Equal<int>(entriesAdded - filesToRemove.Count, CountEntries(zipFileToCreate),
-                                         "The updated Zip file has the wrong number of entries.");
+                    Assert.Equal<int>(
+                        entriesAdded - filesToRemove.Count,
+                        CountEntries(zipFileToCreate),
+                        "The updated Zip file has the wrong number of entries."
+                    );
                 }
             }
         }
-
 
         [Fact]
         public void RemoveEntry_ViaIndexer_WithPassword()
@@ -629,7 +722,10 @@ namespace Ionic.Zip.Tests
             string repeatedLine = null;
             int j;
 
-            string zipFileToCreate = Path.Combine(TopLevelDir, "RemoveEntry_ViaIndexer_WithPassword.zip");
+            string zipFileToCreate = Path.Combine(
+                TopLevelDir,
+                "RemoveEntry_ViaIndexer_WithPassword.zip"
+            );
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -641,13 +737,17 @@ namespace Ionic.Zip.Tests
                 foreach (String f in filenames)
                     zip.AddFile(f, "");
 
-                zip.Comment = "UpdateTests::OpenForUpdate_Password_RemoveViaIndexer(): This archive will be updated.";
+                zip.Comment =
+                    "UpdateTests::OpenForUpdate_Password_RemoveViaIndexer(): This archive will be updated.";
                 zip.Save(zipFileToCreate);
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // selectively remove a few files in the zip archive
             var filesToRemove = new List<string>();
@@ -688,17 +788,23 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine,
-                                            sLine,
-                                            String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
-
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                            s1
+                        )
+                    );
                 }
             }
 
-            Assert.Equal<int>(entriesAdded - filesToRemove.Count, CountEntries(zipFileToCreate),
-                                 "The updated Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded - filesToRemove.Count,
+                CountEntries(zipFileToCreate),
+                "The updated Zip file has the wrong number of entries."
+            );
         }
-
 
         [Fact]
         public void RemoveAllEntries()
@@ -722,8 +828,11 @@ namespace Ionic.Zip.Tests
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // remove all the entries from the zip archive
             using (ZipFile zip2 = ZipFile.Read(zipFileToCreate))
@@ -734,17 +843,22 @@ namespace Ionic.Zip.Tests
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(0, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                0,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
         }
-
 
         [Fact]
         public void AddFile_OldEntriesWithPassword()
         {
             string marker = TestUtilities.GetMarker();
             string password = "Secret!";
-            string zipFileToCreate = Path.Combine(TopLevelDir, "AddFile_OldEntriesWithPassword.zip");
+            string zipFileToCreate = Path.Combine(
+                TopLevelDir,
+                "AddFile_OldEntriesWithPassword.zip"
+            );
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -755,13 +869,17 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip1.AddFile(f, "");
-                zip1.Comment = "UpdateTests::AddFile_OldEntriesWithPassword(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::AddFile_OldEntriesWithPassword(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // Create a bunch of new files...
             var addedFiles = new List<string>();
@@ -771,9 +889,16 @@ namespace Ionic.Zip.Tests
                 // select a new, uniquely named file to create
                 String filename = String.Format("newfile{0:D3}.txt", j);
                 // create a new file, and fill that new file with text data
-                String repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                String repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 addedFiles.Add(filename);
             }
 
@@ -782,13 +907,17 @@ namespace Ionic.Zip.Tests
             {
                 foreach (string s in addedFiles)
                     zip2.AddFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::AddFile_OldEntriesWithPassword(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::AddFile_OldEntriesWithPassword(): This archive has been updated.";
                 zip2.Save();
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded + addedFiles.Count, CountEntries(zipFileToCreate),
-                                 "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded + addedFiles.Count,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // now extract the newly-added files and verify their contents
             using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
@@ -796,17 +925,26 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in addedFiles)
                 {
-                    String repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                    zip3[s].Extract(Path.Combine(TopLevelDir,extractDir));
+                    String repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
+                    zip3[s].Extract(Path.Combine(TopLevelDir, extractDir));
 
                     // verify the content of the updated file.
                     var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s));
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
 
@@ -819,27 +957,35 @@ namespace Ionic.Zip.Tests
                     bool addedLater = false;
                     foreach (string s2 in addedFiles)
                     {
-                        if (s2 == s1) addedLater = true;
+                        if (s2 == s1)
+                            addedLater = true;
                     }
                     if (!addedLater)
                     {
-                        zip4[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password);
-                        String repeatedLine = String.Format("This line is repeated over and over and over in file {0}",
-                            s1);
+                        zip4[s1]
+                            .ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password);
+                        String repeatedLine = String.Format(
+                            "This line is repeated over and over and over in file {0}",
+                            s1
+                        );
 
                         // verify the content of the updated file.
                         var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
                     }
                 }
             }
         }
-
-
 
         [Fact]
         public void UpdateItem()
@@ -860,8 +1006,11 @@ namespace Ionic.Zip.Tests
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // create another subdirectory
             subdir = Path.Combine(TopLevelDir, $"B-{marker}");
@@ -872,10 +1021,16 @@ namespace Ionic.Zip.Tests
             for (int j = 0; j < newFileCount; j++)
             {
                 String filename = String.Format("file{0:D3}.txt", j);
-                String repeatedLine = String.Format("Content for the updated file {0} {1}",
+                String repeatedLine = String.Format(
+                    "Content for the updated file {0} {1}",
                     filename,
-                    System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(1000) + 2000);
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(1000) + 2000
+                );
                 entriesAdded++;
             }
 
@@ -890,8 +1045,11 @@ namespace Ionic.Zip.Tests
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(newFileCount, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                newFileCount,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // now extract the files and verify their contents
             using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
@@ -899,9 +1057,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in zip3.EntryFileNames)
                 {
-                    String repeatedLine = String.Format("Content for the updated file {0} {1}",
+                    String repeatedLine = String.Format(
+                        "Content for the updated file {0} {1}",
                         s,
-                        System.DateTime.Now.ToString("yyyy-MM-dd"));
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip3[s].Extract(Path.Combine(TopLevelDir, extractDir));
 
                     // verify the content of the updated file.
@@ -909,12 +1069,17 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
         }
-
 
         [Fact]
         public void AddFile_NewEntriesWithPassword()
@@ -926,7 +1091,10 @@ namespace Ionic.Zip.Tests
             int j;
 
             // select the name of the zip file
-            string zipFileToCreate = Path.Combine(TopLevelDir, "AddFile_NewEntriesWithPassword.zip");
+            string zipFileToCreate = Path.Combine(
+                TopLevelDir,
+                "AddFile_NewEntriesWithPassword.zip"
+            );
 
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
@@ -936,13 +1104,17 @@ namespace Ionic.Zip.Tests
             {
                 String[] filenames = Directory.GetFiles(subdir);
                 zip.AddFiles(filenames, "");
-                zip.Comment = "UpdateTests::AddFile_NewEntriesWithPassword(): This archive will be updated.";
+                zip.Comment =
+                    "UpdateTests::AddFile_NewEntriesWithPassword(): This archive will be updated.";
                 zip.Save(zipFileToCreate);
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // Create a bunch of new files...
             var addedFiles = new List<string>();
@@ -952,9 +1124,16 @@ namespace Ionic.Zip.Tests
                 // select a new, uniquely named file to create
                 filename = String.Format("newfile{0:D3}.txt", j);
                 // create a new file, and fill that new file with text data
-                repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 addedFiles.Add(filename);
             }
 
@@ -964,12 +1143,16 @@ namespace Ionic.Zip.Tests
                 zip2.Password = password;
                 foreach (string s in addedFiles)
                     zip2.AddFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::AddFile_OldEntriesWithPassword(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::AddFile_OldEntriesWithPassword(): This archive has been updated.";
                 zip2.Save();
             }
 
-            Assert.Equal<int>(entriesAdded + addedFiles.Count, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded + addedFiles.Count,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // now extract the newly-added files and verify their contents
             using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
@@ -977,8 +1160,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in addedFiles)
                 {
-                    repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
+                    repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip3[s].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password);
 
                     // verify the content of the updated file.
@@ -986,11 +1172,16 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
-
 
             // extract all the other files and verify their contents
             using (ZipFile zip4 = ZipFile.Read(zipFileToCreate))
@@ -1001,26 +1192,34 @@ namespace Ionic.Zip.Tests
                     bool addedLater = false;
                     foreach (string s2 in addedFiles)
                     {
-                        if (s2 == s1) addedLater = true;
+                        if (s2 == s1)
+                            addedLater = true;
                     }
                     if (!addedLater)
                     {
                         zip4[s1].Extract(Path.Combine(TopLevelDir, extractDir));
-                        repeatedLine = String.Format("This line is repeated over and over and over in file {0}",
-                            s1);
+                        repeatedLine = String.Format(
+                            "This line is repeated over and over and over in file {0}",
+                            s1
+                        );
 
                         // verify the content of the updated file.
                         var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
                     }
                 }
             }
         }
-
 
         [Fact]
         public void AddFile_DifferentPasswords()
@@ -1045,13 +1244,17 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip1.AddFile(f, "");
-                zip1.Comment = "UpdateTests::AddFile_DifferentPasswords(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::AddFile_DifferentPasswords(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // Create a bunch of new files...
             var addedFiles = new List<string>();
@@ -1062,9 +1265,16 @@ namespace Ionic.Zip.Tests
                 // select a new, uniquely named file to create
                 filename = String.Format("newfile{0:D3}.txt", j);
                 // create a new file, and fill that new file with text data
-                repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 addedFiles.Add(filename);
             }
 
@@ -1074,13 +1284,17 @@ namespace Ionic.Zip.Tests
                 zip2.Password = password2;
                 foreach (string s in addedFiles)
                     zip2.AddFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::AddFile_OldEntriesWithPassword(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::AddFile_OldEntriesWithPassword(): This archive has been updated.";
                 zip2.Save();
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded + addedFiles.Count, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded + addedFiles.Count,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // now extract the newly-added files and verify their contents
             using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
@@ -1088,8 +1302,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in addedFiles)
                 {
-                    repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
+                    repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip3[s].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password2);
 
                     // verify the content of the updated file.
@@ -1097,11 +1314,16 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
-
 
             // extract all the other files and verify their contents
             using (ZipFile zip4 = ZipFile.Read(zipFileToCreate))
@@ -1112,11 +1334,13 @@ namespace Ionic.Zip.Tests
                     bool addedLater = false;
                     foreach (string s2 in addedFiles)
                     {
-                        if (s2 == s1) addedLater = true;
+                        if (s2 == s1)
+                            addedLater = true;
                     }
                     if (!addedLater)
                     {
-                        zip4[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password1);
+                        zip4[s1]
+                            .ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), password1);
                         repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
                         // verify the content of the updated file.
@@ -1124,15 +1348,18 @@ namespace Ionic.Zip.Tests
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
                     }
                 }
             }
         }
-
-
-
 
         [Fact]
         public void UpdateFile_NoPasswords()
@@ -1154,13 +1381,17 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip1.AddFile(f, "");
-                zip1.Comment = "UpdateTests::UpdateFile_NoPasswords(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::UpdateFile_NoPasswords(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "Zoiks! The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "Zoiks! The Zip file has the wrong number of entries."
+            );
 
             // create another subdirectory
             subdir = Path.Combine(TopLevelDir, $"updates-{marker}");
@@ -1177,9 +1408,16 @@ namespace Ionic.Zip.Tests
                     filename = String.Format("file{0:D3}.txt", _rnd.Next(entriesAdded));
                 } while (updatedFiles.Contains(filename));
                 // create a new file, and fill that new file with text data
-                repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 updatedFiles.Add(filename);
             }
 
@@ -1188,7 +1426,8 @@ namespace Ionic.Zip.Tests
             {
                 foreach (string s in updatedFiles)
                     zip2.UpdateFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::UpdateFile_OldEntriesWithPassword(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::UpdateFile_OldEntriesWithPassword(): This archive has been updated.";
                 zip2.Save();
             }
 
@@ -1198,8 +1437,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in updatedFiles)
                 {
-                    repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
+                    repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip3[s].Extract(Path.Combine(TopLevelDir, extractDir));
 
                     // verify the content of the updated file.
@@ -1207,8 +1449,14 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
 
@@ -1221,7 +1469,8 @@ namespace Ionic.Zip.Tests
                     bool NotUpdated = true;
                     foreach (string s2 in updatedFiles)
                     {
-                        if (s2 == s1) NotUpdated = false;
+                        if (s2 == s1)
+                            NotUpdated = false;
                     }
                     if (NotUpdated)
                     {
@@ -1233,13 +1482,18 @@ namespace Ionic.Zip.Tests
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
                     }
                 }
             }
         }
-
 
         [Fact]
         public void UpdateFile_2_NoPasswords()
@@ -1261,13 +1515,17 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip1.UpdateFile(f, "");
-                zip1.Comment = "UpdateTests::UpdateFile_NoPasswords(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::UpdateFile_NoPasswords(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "Zoiks! The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "Zoiks! The Zip file has the wrong number of entries."
+            );
 
             // create another subdirectory
             subdir = Path.Combine(TopLevelDir, $"updates-{marker}");
@@ -1284,9 +1542,16 @@ namespace Ionic.Zip.Tests
                     filename = String.Format("file{0:D3}.txt", _rnd.Next(entriesAdded));
                 } while (updatedFiles.Contains(filename));
                 // create a new file, and fill that new file with text data
-                repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 updatedFiles.Add(filename);
             }
 
@@ -1295,20 +1560,25 @@ namespace Ionic.Zip.Tests
             {
                 foreach (string s in updatedFiles)
                     zip2.UpdateFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::UpdateFile_NoPasswords(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::UpdateFile_NoPasswords(): This archive has been updated.";
                 zip2.Save();
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "Zoiks! The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "Zoiks! The Zip file has the wrong number of entries."
+            );
 
             // update those files AGAIN in the zip archive
             using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
             {
                 foreach (string s in updatedFiles)
                     zip3.UpdateFile(Path.Combine(subdir, s), "");
-                zip3.Comment = "UpdateTests::UpdateFile_NoPasswords(): This archive has been re-updated.";
+                zip3.Comment =
+                    "UpdateTests::UpdateFile_NoPasswords(): This archive has been re-updated.";
                 zip3.Save();
             }
 
@@ -1318,8 +1588,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in updatedFiles)
                 {
-                    repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
+                    repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip4[s].Extract(Path.Combine(TopLevelDir, extractDir));
 
                     // verify the content of the updated file.
@@ -1327,8 +1600,14 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
 
@@ -1341,7 +1620,8 @@ namespace Ionic.Zip.Tests
                     bool NotUpdated = true;
                     foreach (string s2 in updatedFiles)
                     {
-                        if (s2 == s1) NotUpdated = false;
+                        if (s2 == s1)
+                            NotUpdated = false;
                     }
                     if (NotUpdated)
                     {
@@ -1353,14 +1633,18 @@ namespace Ionic.Zip.Tests
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
                     }
                 }
             }
         }
-
-
 
         [Fact]
         public void UpdateFile_OldEntriesWithPassword()
@@ -1372,7 +1656,10 @@ namespace Ionic.Zip.Tests
             string repeatedLine = null;
 
             // select the name of the zip file
-            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateFile_OldEntriesWithPassword.zip");
+            string zipFileToCreate = Path.Combine(
+                TopLevelDir,
+                "UpdateFile_OldEntriesWithPassword.zip"
+            );
 
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
@@ -1384,13 +1671,17 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip1.AddFile(f, "");
-                zip1.Comment = "UpdateTests::UpdateFile_OldEntriesWithPassword(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::UpdateFile_OldEntriesWithPassword(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the number of files in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // create another subdirectory
             subdir = Path.Combine(TopLevelDir, $"updates-{marker}");
@@ -1407,9 +1698,16 @@ namespace Ionic.Zip.Tests
                     filename = String.Format("file{0:D3}.txt", _rnd.Next(entriesAdded));
                 } while (updatedFiles.Contains(filename));
                 // create a new file, and fill that new file with text data
-                repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 updatedFiles.Add(filename);
             }
 
@@ -1418,7 +1716,8 @@ namespace Ionic.Zip.Tests
             {
                 foreach (string s in updatedFiles)
                     zip2.UpdateFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::UpdateFile_OldEntriesWithPassword(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::UpdateFile_OldEntriesWithPassword(): This archive has been updated.";
                 zip2.Save();
             }
 
@@ -1428,8 +1727,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in updatedFiles)
                 {
-                    repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
+                    repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip3[s].Extract(Path.Combine(TopLevelDir, extractDir));
 
                     // verify the content of the updated file.
@@ -1437,8 +1739,14 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
 
@@ -1451,11 +1759,13 @@ namespace Ionic.Zip.Tests
                     bool NotUpdated = true;
                     foreach (string s2 in updatedFiles)
                     {
-                        if (s2 == s1) NotUpdated = false;
+                        if (s2 == s1)
+                            NotUpdated = false;
                     }
                     if (NotUpdated)
                     {
-                        zip4[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), Password);
+                        zip4[s1]
+                            .ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), Password);
                         repeatedLine = $"This line is repeated over and over and over in file {s1}";
 
                         // verify the content of the updated file.
@@ -1463,13 +1773,18 @@ namespace Ionic.Zip.Tests
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
                     }
                 }
             }
         }
-
 
         [Fact]
         public void UpdateFile_NewEntriesWithPassword()
@@ -1480,7 +1795,10 @@ namespace Ionic.Zip.Tests
             string repeatedLine = null;
             int j = 0;
 
-            string zipFileToCreate = Path.Combine(TopLevelDir, "UpdateFile_NewEntriesWithPassword.zip");
+            string zipFileToCreate = Path.Combine(
+                TopLevelDir,
+                "UpdateFile_NewEntriesWithPassword.zip"
+            );
             String subdir = null;
             int entriesAdded = CreateDirAndSomeFiles(marker, out subdir);
 
@@ -1491,13 +1809,17 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip1.AddFile(f, "");
-                zip1.Comment = "UpdateTests::UpdateFile_NewEntriesWithPassword(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::UpdateFile_NewEntriesWithPassword(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // create another subdirectory
             subdir = Path.Combine(TopLevelDir, $"updates-{marker}");
@@ -1515,9 +1837,16 @@ namespace Ionic.Zip.Tests
                     filename = String.Format("file{0:D3}.txt", _rnd.Next(entriesAdded));
                 } while (updatedFiles.Contains(filename));
                 // create the new file, and fill that new file with text data
-                repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 updatedFiles.Add(filename);
             }
 
@@ -1527,7 +1856,8 @@ namespace Ionic.Zip.Tests
                 zip2.Password = Password;
                 foreach (string s in updatedFiles)
                     zip2.UpdateFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::UpdateFile_NewEntriesWithPassword(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::UpdateFile_NewEntriesWithPassword(): This archive has been updated.";
                 zip2.Save();
             }
 
@@ -1537,8 +1867,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in updatedFiles)
                 {
-                    repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
+                    repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip3[s].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), Password);
 
                     // verify the content of the updated file.
@@ -1546,8 +1879,14 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(repeatedLine, sLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        repeatedLine,
+                        sLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
 
@@ -1560,7 +1899,8 @@ namespace Ionic.Zip.Tests
                     bool NotUpdated = true;
                     foreach (string s2 in updatedFiles)
                     {
-                        if (s2 == s1) NotUpdated = false;
+                        if (s2 == s1)
+                            NotUpdated = false;
                     }
                     if (NotUpdated)
                     {
@@ -1572,13 +1912,18 @@ namespace Ionic.Zip.Tests
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                String.Format("The content of the originally added file ({0}) in the zip archive is incorrect.", s1));
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            String.Format(
+                                "The content of the originally added file ({0}) in the zip archive is incorrect.",
+                                s1
+                            )
+                        );
                     }
                 }
             }
         }
-
 
         [Fact]
         public void UpdateFile_DifferentPasswords()
@@ -1601,13 +1946,17 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip1.AddFile(f, "");
-                zip1.Comment = "UpdateTests::UpdateFile_DifferentPasswords(): This archive will be updated.";
+                zip1.Comment =
+                    "UpdateTests::UpdateFile_DifferentPasswords(): This archive will be updated.";
                 zip1.Save(zipFileToCreate);
             }
 
             // Verify the files are in the zip
-            Assert.Equal<int>(entriesAdded, CountEntries(zipFileToCreate),
-                "The Zip file has the wrong number of entries.");
+            Assert.Equal<int>(
+                entriesAdded,
+                CountEntries(zipFileToCreate),
+                "The Zip file has the wrong number of entries."
+            );
 
             // create another subdirectory
             subdir = Path.Combine(TopLevelDir, "updates");
@@ -1624,9 +1973,16 @@ namespace Ionic.Zip.Tests
                     filename = String.Format("file{0:D3}.txt", _rnd.Next(entriesAdded));
                 } while (updatedFiles.Contains(filename));
                 // create a new file, and fill that new file with text data
-                repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                    filename, System.DateTime.Now.ToString("yyyy-MM-dd"));
-                TestUtilities.CreateAndFillFileText(Path.Combine(subdir, filename), repeatedLine, _rnd.Next(34000) + 5000);
+                repeatedLine = String.Format(
+                    "**UPDATED** This file ({0}) has been updated on {1}.",
+                    filename,
+                    System.DateTime.Now.ToString("yyyy-MM-dd")
+                );
+                TestUtilities.CreateAndFillFileText(
+                    Path.Combine(subdir, filename),
+                    repeatedLine,
+                    _rnd.Next(34000) + 5000
+                );
                 updatedFiles.Add(filename);
             }
 
@@ -1636,7 +1992,8 @@ namespace Ionic.Zip.Tests
                 zip2.Password = Password2;
                 foreach (string s in updatedFiles)
                     zip2.UpdateFile(Path.Combine(subdir, s), "");
-                zip2.Comment = "UpdateTests::UpdateFile_DifferentPasswords(): This archive has been updated.";
+                zip2.Comment =
+                    "UpdateTests::UpdateFile_DifferentPasswords(): This archive has been updated.";
                 zip2.Save();
             }
 
@@ -1646,8 +2003,11 @@ namespace Ionic.Zip.Tests
                 string extractDir = $"ex-{marker}";
                 foreach (string s in updatedFiles)
                 {
-                    repeatedLine = String.Format("**UPDATED** This file ({0}) has been updated on {1}.",
-                        s, System.DateTime.Now.ToString("yyyy-MM-dd"));
+                    repeatedLine = String.Format(
+                        "**UPDATED** This file ({0}) has been updated on {1}.",
+                        s,
+                        System.DateTime.Now.ToString("yyyy-MM-dd")
+                    );
                     zip3[s].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), Password2);
 
                     // verify the content of the updated file.
@@ -1655,8 +2015,14 @@ namespace Ionic.Zip.Tests
                     string sLine = sr.ReadLine();
                     sr.Close();
 
-                    Assert.Equal<string>(sLine, repeatedLine,
-                            String.Format("The content of the Updated file ({0}) in the zip archive is incorrect.", s));
+                    Assert.Equal<string>(
+                        sLine,
+                        repeatedLine,
+                        String.Format(
+                            "The content of the Updated file ({0}) in the zip archive is incorrect.",
+                            s
+                        )
+                    );
                 }
             }
 
@@ -1669,27 +2035,33 @@ namespace Ionic.Zip.Tests
                     bool wasUpdated = false;
                     foreach (string s2 in updatedFiles)
                     {
-                        if (s2 == s1) wasUpdated = true;
+                        if (s2 == s1)
+                            wasUpdated = true;
                     }
                     if (!wasUpdated)
                     {
                         // use original password
-                        zip4[s1].ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), Password1);
-                        repeatedLine = String.Format("This line is repeated over and over and over in file {0}",
-                            s1);
+                        zip4[s1]
+                            .ExtractWithPassword(Path.Combine(TopLevelDir, extractDir), Password1);
+                        repeatedLine = String.Format(
+                            "This line is repeated over and over and over in file {0}",
+                            s1
+                        );
 
                         // verify the content of the updated file.
                         var sr = new StreamReader(Path.Combine(TopLevelDir, extractDir, s1));
                         string sLine = sr.ReadLine();
                         sr.Close();
 
-                        Assert.Equal<string>(repeatedLine, sLine,
-                                $"The content of the originally added file ({s1}) in the zip archive is incorrect.");
+                        Assert.Equal<string>(
+                            repeatedLine,
+                            sLine,
+                            $"The content of the originally added file ({s1}) in the zip archive is incorrect."
+                        );
                     }
                 }
             }
         }
-
 
         [Fact]
         public void AddFile_ExistingFile_Error()
@@ -1716,30 +2088,34 @@ namespace Ionic.Zip.Tests
                 String[] filenames = Directory.GetFiles(subdir);
                 foreach (String f in filenames)
                     zip.AddFile(f, "");
-                zip.Comment = "UpdateTests::AddFile_ExistingFile_Error(): This archive will be updated.";
+                zip.Comment =
+                    "UpdateTests::AddFile_ExistingFile_Error(): This archive will be updated.";
                 zip.Save(zipFileToCreate);
             }
 
             // create and file a new file with text data
             int FileToUpdate = _rnd.Next(fileCount);
             filename = Path.Combine(TopLevelDir, String.Format("file{0:D3}.txt", FileToUpdate));
-            string repeatedLine = String.Format("**UPDATED** UpdateTests.AddFile_ExistingFile_Error() This file ({0}) was updated at {1}.",
-                        filename,
-                        System.DateTime.Now.ToString("G"));
+            string repeatedLine = String.Format(
+                "**UPDATED** UpdateTests.AddFile_ExistingFile_Error() This file ({0}) was updated at {1}.",
+                filename,
+                System.DateTime.Now.ToString("G")
+            );
             TestUtilities.CreateAndFillFileText(filename, repeatedLine, _rnd.Next(21567) + 23872);
 
             // Try to again add that file in the zip archive.
-            Assert.Throws<ArgumentException>(() => {
-            using (ZipFile z = ZipFile.Read(zipFileToCreate))
+            Assert.Throws<ArgumentException>(() =>
             {
-                // Try Adding a file again.  THIS SHOULD THROW.
-                ZipEntry e = z.AddFile(filename, "");
-                z.Comment = "UpdateTests::AddFile_ExistingFile_Error(): This archive has been updated.";
-                z.Save();
-            }
+                using (ZipFile z = ZipFile.Read(zipFileToCreate))
+                {
+                    // Try Adding a file again.  THIS SHOULD THROW.
+                    ZipEntry e = z.AddFile(filename, "");
+                    z.Comment =
+                        "UpdateTests::AddFile_ExistingFile_Error(): This archive has been updated.";
+                    z.Save();
+                }
             });
         }
-
 
         [Fact]
         public void MultipleSaves_wi10319()
@@ -1783,12 +2159,10 @@ namespace Ionic.Zip.Tests
                         _zipFile.Save();
                         _zipFile.UpdateEntry("test3.txt", "This is another string for content.");
                         _zipFile.Save();
-
                     }
                 }
             }
         }
-
 
         [Fact]
         public void MultipleSaves_wi10694()
@@ -1806,8 +2180,11 @@ namespace Ionic.Zip.Tests
                 zip1.Save(zipFileToCreate);
             }
 
-            Assert.Equal<int>(2 * filesToZip.Length, CountEntries(zipFileToCreate),
-                                 "Incorrect number of entries in the zip file.");
+            Assert.Equal<int>(
+                2 * filesToZip.Length,
+                CountEntries(zipFileToCreate),
+                "Incorrect number of entries in the zip file."
+            );
 
             using (var zip2 = ZipFile.Read(zipFileToCreate))
             {
@@ -1824,24 +2201,31 @@ namespace Ionic.Zip.Tests
                 zip2.Save();
             }
 
-            Assert.Equal<int>(2 * filesToZip.Length, CountEntries(zipFileToCreate),
-                                 "Incorrect number of entries in the zip file.");
+            Assert.Equal<int>(
+                2 * filesToZip.Length,
+                CountEntries(zipFileToCreate),
+                "Incorrect number of entries in the zip file."
+            );
         }
-
 
         [Fact]
         public void MultipleSavesWithRename_wi10544()
         {
             // select the name of the zip file
-            string originalZipLocation = Path.Combine(TopLevelDir, "Update_MultipleSaves_wi10319.zip");
+            string originalZipLocation = Path.Combine(
+                TopLevelDir,
+                "Update_MultipleSaves_wi10319.zip"
+            );
             const int numEntries = 10;
             _output.WriteLine("Creating zip file... ");
             using (var zip = new ZipFile())
             {
-                for (int i = 0; i < numEntries; i++) {
+                for (int i = 0; i < numEntries; i++)
+                {
                     string entryName = $"Entry{i}.txt";
                     _output.WriteLine($"  writing entry {i}: {entryName}");
-                    string dataForTheEntry = $"This is the data for Entry {i}.\n" + DateTime.Now.ToString("G");
+                    string dataForTheEntry =
+                        $"This is the data for Entry {i}.\n" + DateTime.Now.ToString("G");
                     byte[] a = System.Text.Encoding.ASCII.GetBytes(dataForTheEntry.ToCharArray());
                     zip.AddEntry(new String(entryName), a);
                 }
@@ -1853,7 +2237,7 @@ namespace Ionic.Zip.Tests
             for (int i = 0; i < N; i++)
             {
                 string tempZipFile = Path.Combine(TopLevelDir, $"cycle-{i}.zip.tmp");
-                _output.WriteLine("==== Update cycle {0}/{1}... ", i+1,N);
+                _output.WriteLine("==== Update cycle {0}/{1}... ", i + 1, N);
                 using (var zip1 = ZipFile.Read(originalZipLocation))
                 {
                     // create a new zip file
@@ -1864,24 +2248,36 @@ namespace Ionic.Zip.Tests
                         _output.WriteLine($"  selected entry {selected}: {selectedEntryName}... ");
 
                         // for all entries in the original
-                        foreach (ZipEntry e in zip1) {
+                        foreach (ZipEntry e in zip1)
+                        {
                             _output.WriteLine($"  handling entry {e.FileName}...");
-                            zip.AddEntry(e.FileName, (name, stream) => {
-                                // read the entry from zip1
-                                var src = zip1[name].OpenReader();
-                                int n;
-                                byte[] b = new byte[2048];
-                                while ((n = src.Read(b, 0, b.Length)) > 0)
-                                stream.Write(b, 0, n);
+                            zip.AddEntry(
+                                e.FileName,
+                                (name, stream) =>
+                                {
+                                    // read the entry from zip1
+                                    var src = zip1[name].OpenReader();
+                                    int n;
+                                    byte[] b = new byte[2048];
+                                    while ((n = src.Read(b, 0, b.Length)) > 0)
+                                        stream.Write(b, 0, n);
 
-                                // also write more, if this is the selected entry
-                                if (e.FileName == selectedEntryName) {
-                                    string update = String.Format("For cycle {0}, this is updated content for entry {1} at {2}\n", N, i, DateTime.Now.ToString("G"));
-                                    byte[] a = System.Text.Encoding.ASCII.GetBytes(update.ToCharArray());
-                                    stream.Write(a, 0, a.Length);
+                                    // also write more, if this is the selected entry
+                                    if (e.FileName == selectedEntryName)
+                                    {
+                                        string update = String.Format(
+                                            "For cycle {0}, this is updated content for entry {1} at {2}\n",
+                                            N,
+                                            i,
+                                            DateTime.Now.ToString("G")
+                                        );
+                                        byte[] a = System.Text.Encoding.ASCII.GetBytes(
+                                            update.ToCharArray()
+                                        );
+                                        stream.Write(a, 0, a.Length);
+                                    }
                                 }
-
-                            });
+                            );
                         }
 
                         zip.Save(tempZipFile);
@@ -1892,7 +2288,6 @@ namespace Ionic.Zip.Tests
                 File.Move(tempZipFile, originalZipLocation);
             }
         }
-
 
         [Fact]
         public void FromRoot_wi11988()
@@ -1926,6 +2321,5 @@ namespace Ionic.Zip.Tests
                 this.Exec(substExe, "/D G:");
             }
         }
-
     }
 }

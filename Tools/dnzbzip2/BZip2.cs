@@ -17,10 +17,6 @@
 //
 // ----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using Ionic.BZip2;
-
 namespace Ionic.Zip.Examples
 {
     public class BZip2
@@ -28,11 +24,11 @@ namespace Ionic.Zip.Examples
         private static void Usage()
         {
             string UsageMessage =
-            "BZip2.exe:  compress a file using BZip2, or decompress a BZip2-compressed file. \n"+
+            "dnzbzip2.exe:  compress a file using BZip2, or decompress a BZip2-compressed file. \n"+
             "            The original file is deleted after processing.\n" +
             "            This tool depends on Ionic's DotNetZip library. This is version {0} \n" +
             "            of the utility. See http://dotnetzip.codeplex.com for info.\n"+
-            "  usage:\n   BZip2.exe <FileToProcess> [arguments]\n" +
+            "  usage:\n   dnzbzip2.exe <FileToProcess> [arguments]\n" +
             "\n  arguments: \n" +
             "    -v         - verbose output.\n" +
             "    -f         - force overwrite of any existing files.\n" +

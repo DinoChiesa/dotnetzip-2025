@@ -35,11 +35,13 @@ namespace Ionic.Zip.Tests
             string tld = new String(TopLevelDir); // copy to avoid changes
             string marker = TestUtilities.GetMarker();
             int i;
-            string origComment = "This is a Unicode comment. "+
-                                 "Chinese: 弹 出 应 用 程 序 "+
-                                 "Norwegian/Danish: æøåÆØÅ. "+
-                                 "Portugese: Configurações.";
-            string[] formats = {
+            string origComment =
+                "This is a Unicode comment. "
+                + "Chinese: 弹 出 应 用 程 序 "
+                + "Norwegian/Danish: æøåÆØÅ. "
+                + "Portugese: Configurações.";
+            string[] formats =
+            {
                 "弹出应用程序{0:D3}.bin",
                 "n.æøåÆØÅ{0:D3}.bin",
                 "Configurações-弹出-ÆØÅ-xx{0:D3}.bin"
@@ -64,11 +66,21 @@ namespace Ionic.Zip.Tests
                 for (int j = 0; j < 2; j++)
                 {
                     // select the name of the zip file
-                    string zipFileToCreate = Path.Combine(tld, $"Create_UnicodeEntries_{k}_{j}.zip");
-                    Assert.False(File.Exists(zipFileToCreate),
-                        $"The zip file '{zipFileToCreate}' already exists.");
+                    string zipFileToCreate = Path.Combine(
+                        tld,
+                        $"Create_UnicodeEntries_{k}_{j}.zip"
+                    );
+                    Assert.False(
+                        File.Exists(zipFileToCreate),
+                        $"The zip file '{zipFileToCreate}' already exists."
+                    );
 
-                    _output.WriteLine("\n\nFormat {0}, trial {1}.  filename: {2}...", k, j, zipFileToCreate);
+                    _output.WriteLine(
+                        "\n\nFormat {0}, trial {1}.  filename: {2}...",
+                        k,
+                        j,
+                        zipFileToCreate
+                    );
                     string dirInArchive = String.Format("{0}-{1}", Path.GetFileName(subdir), j);
 
                     using (ZipFile zip1 = new ZipFile())
@@ -80,22 +92,29 @@ namespace Ionic.Zip.Tests
                         {
                             // use the local filename (not fully qualified)
                             ZipEntry e = zip1.AddFile(filesToZip[i], dirInArchive);
-                            e.Comment = String.Format("This entry encoded with {0}", (j == 0) ? "unicode" : "the default code page.");
+                            e.Comment = String.Format(
+                                "This entry encoded with {0}",
+                                (j == 0) ? "unicode" : "the default code page."
+                            );
                         }
                         zip1.Comment = origComment;
                         zip1.Save(zipFileToCreate);
                     }
 
                     // Verify the number of files in the zip
-                    Assert.Equal<int>(filesToZip.Length, CountEntries(zipFileToCreate),
-                            "Incorrect number of entries in the zip file.");
+                    Assert.Equal<int>(
+                        filesToZip.Length,
+                        CountEntries(zipFileToCreate),
+                        "Incorrect number of entries in the zip file."
+                    );
 
                     i = 0;
 
                     // verify the filenames are (or are not) unicode
 
-                    var options = new ReadOptions {
-                        Encoding = (j == 0) ? System.Text.Encoding.UTF8 : ZipFile.DefaultEncoding
+                    var options = new ReadOptions
+                    {
+                        Encoding = (j == 0) ? System.Text.Encoding.UTF8 : ZipFile.DefaultEncoding,
                     };
                     using (ZipFile zip2 = ZipFile.Read(zipFileToCreate, options))
                     {
@@ -113,19 +132,18 @@ namespace Ionic.Zip.Tests
                             i++;
                         }
 
-
                         // according to the spec,
                         // unicode is not supported on the zip archive comment!
                         // But this library won't enforce that.
                         // We will leave it up to the application.
                         // Assert.AreNotEqual<String>(origComment, zip2.Comment);
-
                     }
                 }
             }
         }
 
-        string[] miscNameFormats = {
+        string[] miscNameFormats =
+        {
             "file{0:D3}.bin",         // keep this at index==0
             "弹出应用程序{0:D3}.bin",   // Chinese
             "codeplexの更新RSSを見てふと書いた投稿だったけど日本語情報がないかは調{0:D3}.bin", // Japanese
@@ -136,7 +154,6 @@ namespace Ionic.Zip.Tests
             "Ελληνικό αλφάβητο {0:D3}.b",
             "א ב ג ד ה ו ז ח ט י " + "{0:D3}",  // I don't know what language this is
         };
-
 
         private List<string> _CreateUnicodeFiles(string tld)
         {
@@ -158,7 +175,6 @@ namespace Ionic.Zip.Tests
             return filesToZip;
         }
 
-
         [Fact]
         public void Create_UnicodeEntries_Mixed()
         {
@@ -173,7 +189,10 @@ namespace Ionic.Zip.Tests
             for (int j = 0; j < 4; j++)
             {
                 string zipFileToCreate = Path.Combine(tld, $"Archive-{j}.zip");
-                Assert.False(File.Exists(zipFileToCreate), $"The file already exists ({zipFileToCreate}).");
+                Assert.False(
+                    File.Exists(zipFileToCreate),
+                    $"The file already exists ({zipFileToCreate})."
+                );
 
                 using (ZipFile zip1 = new ZipFile(zipFileToCreate))
                 {
@@ -204,15 +223,15 @@ namespace Ionic.Zip.Tests
                 }
 
                 // Verify the number of files in the zip
-                Assert.Equal<int>(CountEntries(zipFileToCreate), filesToZip.Count,
-                        "Incorrect number of entries in the zip file.");
+                Assert.Equal<int>(
+                    CountEntries(zipFileToCreate),
+                    filesToZip.Count,
+                    "Incorrect number of entries in the zip file."
+                );
 
                 _CheckUnicodeZip(zipFileToCreate, j);
             }
         }
-
-
-
 
         [Fact]
         public void Unicode_Create_ZOS_wi12634()
@@ -231,7 +250,10 @@ namespace Ionic.Zip.Tests
                 _output.WriteLine("========");
                 _output.WriteLine("Trial {0}", j);
 
-                Assert.False(File.Exists(zipFileToCreate), $"The zip file '{zipFileToCreate}' already exists.");
+                Assert.False(
+                    File.Exists(zipFileToCreate),
+                    $"The zip file '{zipFileToCreate}' already exists."
+                );
                 _output.WriteLine("file {0}", zipFileToCreate);
 
                 int excCount = 0;
@@ -271,19 +293,19 @@ namespace Ionic.Zip.Tests
                     }
                 }
 
-                Assert.True(excCount==0,
-                              "Exceptions occurred during zip creation.");
+                Assert.True(excCount == 0, "Exceptions occurred during zip creation.");
 
                 // Verify the number of files in the zip
-                Assert.Equal<int>(CountEntries(zipFileToCreate), filesToZip.Count,
-                        "Incorrect number of entries in the zip file.");
+                Assert.Equal<int>(
+                    CountEntries(zipFileToCreate),
+                    filesToZip.Count,
+                    "Incorrect number of entries in the zip file."
+                );
 
                 _CheckUnicodeZip(zipFileToCreate, j);
                 _output.WriteLine("Trial {0} file checks ok", j);
             }
         }
-
-
 
         [Fact]
         public void UnicodeComment_wi10392()
@@ -303,9 +325,7 @@ namespace Ionic.Zip.Tests
 
             string comment2 = null;
             _output.WriteLine("==== checking zip");
-            var options = new ReadOptions {
-                Encoding = Encoding.UTF8
-            };
+            var options = new ReadOptions { Encoding = Encoding.UTF8 };
             using (ZipFile zip2 = ZipFile.Read(zipFileToCreate, options))
             {
                 comment2 = zip2.Comment;
@@ -313,7 +333,6 @@ namespace Ionic.Zip.Tests
 
             Assert.Equal<String>(cyrillicComment, comment2, "The comments are not equal.");
         }
-
 
         [Fact]
         public void UnicodeUpdate_wi12744()
@@ -323,17 +342,19 @@ namespace Ionic.Zip.Tests
 
             // two passes: one that uses the old "useUnicodeAsNecessary" property,
             // and the second that uses the newer property.
-            for (int k=0; k < 2; k++)
+            for (int k = 0; k < 2; k++)
             {
-
-                string zipFileToCreate = Path.Combine(tld, String.Format("UnicodeUpdate_wi12744-{0}.zip", k));
+                string zipFileToCreate = Path.Combine(
+                    tld,
+                    String.Format("UnicodeUpdate_wi12744-{0}.zip", k)
+                );
 
                 _output.WriteLine("\n========\nUnicodeUpdate_wi12744 - trial {0}", k);
                 _output.WriteLine("==== creating zip {0}", zipFileToCreate);
 
                 using (ZipFile zip1 = new ZipFile())
                 {
-                    if (k==0)
+                    if (k == 0)
                     {
 #pragma warning disable 618
                         zip1.UseUnicodeAsNecessary = true;
@@ -349,11 +370,10 @@ namespace Ionic.Zip.Tests
                     zip1.Save(zipFileToCreate);
                 }
 
-
                 _output.WriteLine("==== create a directory with 2 addl files in it");
-                string subdir = Path.Combine(TopLevelDir, "files"+k);
+                string subdir = Path.Combine(TopLevelDir, "files" + k);
                 Directory.CreateDirectory(subdir);
-                for (int i=0; i < 2; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     var filename = Path.Combine(subdir, $"file-{i}.txt");
                     TestUtilities.CreateAndFillFileText(filename, _rnd.Next(5000) + 2000);
@@ -370,14 +390,11 @@ namespace Ionic.Zip.Tests
                 using (ZipFile zip3 = ZipFile.Read(zipFileToCreate))
                 {
                     var e = zip3[specialEntryName];
-                    Assert.True(e!=null, "Entry not found");
+                    Assert.True(e != null, "Entry not found");
                     Assert.True(e.FileName == specialEntryName, "name mismatch");
                 }
             }
         }
-
-
-
 
         private void _CheckUnicodeZip(string filename, int j)
         {
@@ -395,23 +412,31 @@ namespace Ionic.Zip.Tests
                     string fname = String.Format(miscNameFormats[k], i);
                     if (j != 1 || k == 0)
                     {
-                        Assert.Equal<String>(fname, e.FileName, String.Format("cycle ({0},{1},{2})", i, j, k));
+                        Assert.Equal<String>(
+                            fname,
+                            e.FileName,
+                            String.Format("cycle ({0},{1},{2})", i, j, k)
+                        );
                     }
                     else
                     {
-                        Assert.NotEqual<String>(fname, e.FileName, String.Format("cycle ({0},{1},{2})", i, j, k));
+                        Assert.NotEqual<String>(
+                            fname,
+                            e.FileName,
+                            String.Format("cycle ({0},{1},{2})", i, j, k)
+                        );
                     }
                     i++;
                 }
             }
         }
 
-
         struct CodepageTrial
         {
             public string codepage;
             public string filenameFormat;
             public bool exceptionExpected; // not all codepages will yield legal filenames for a given filenameFormat
+
             public CodepageTrial(string cp, string format, bool except)
             {
                 codepage = cp;
@@ -425,7 +450,8 @@ namespace Ionic.Zip.Tests
         {
             string tld = new String(TopLevelDir); // copy to avoid changes
             int i;
-            CodepageTrial[] trials = {
+            CodepageTrial[] trials =
+            {
                 new CodepageTrial( "big5",   "弹出应用程序{0:D3}.bin", true),
                 new CodepageTrial ("big5",   "您好{0:D3}.bin",        false),
                 new CodepageTrial ("gb2312", "弹出应用程序{0:D3}.bin", false),
@@ -447,7 +473,10 @@ namespace Ionic.Zip.Tests
                 string[] filesToZip = new string[numFiles];
                 for (i = 0; i < numFiles; i++)
                 {
-                    filesToZip[i] = Path.Combine(subdir, String.Format(trials[k].filenameFormat, i));
+                    filesToZip[i] = Path.Combine(
+                        subdir,
+                        String.Format(trials[k].filenameFormat, i)
+                    );
                     TestUtilities.CreateAndFillFileBinary(filesToZip[i], _rnd.Next(5000) + 2000);
                 }
 
@@ -456,12 +485,18 @@ namespace Ionic.Zip.Tests
                 // three cases: one for old-style
                 // ProvisionalAlternateEncoding, one for "AsNecessary"
                 // and one for "Always"
-                for (int j=0; j < 3; j++)
+                for (int j = 0; j < 3; j++)
                 {
-
                     // select the name of the zip file
-                    string zipFileToCreate = Path.Combine(tld, String.Format("WithSpecifiedCodepage_{0}_{1}_{2}.zip",
-                                                                                     k, j, trials[k].codepage));
+                    string zipFileToCreate = Path.Combine(
+                        tld,
+                        String.Format(
+                            "WithSpecifiedCodepage_{0}_{1}_{2}.zip",
+                            k,
+                            j,
+                            trials[k].codepage
+                        )
+                    );
 
                     _output.WriteLine("");
                     _output.WriteLine("---------------Creating zip, trial ({0},{1})....", k, j);
@@ -472,15 +507,20 @@ namespace Ionic.Zip.Tests
                         {
                             case 0:
 #pragma warning disable 618
-                                zip1.ProvisionalAlternateEncoding = System.Text.Encoding.GetEncoding(trials[k].codepage);
+                                zip1.ProvisionalAlternateEncoding =
+                                    System.Text.Encoding.GetEncoding(trials[k].codepage);
 #pragma warning restore 618
                                 break;
                             case 1:
-                                zip1.AlternateEncoding = System.Text.Encoding.GetEncoding(trials[k].codepage);
+                                zip1.AlternateEncoding = System.Text.Encoding.GetEncoding(
+                                    trials[k].codepage
+                                );
                                 zip1.AlternateEncodingUsage = ZipOption.AsNecessary;
                                 break;
                             case 2:
-                                zip1.AlternateEncoding = System.Text.Encoding.GetEncoding(trials[k].codepage);
+                                zip1.AlternateEncoding = System.Text.Encoding.GetEncoding(
+                                    trials[k].codepage
+                                );
                                 zip1.AlternateEncodingUsage = ZipOption.Always;
                                 break;
                         }
@@ -490,7 +530,10 @@ namespace Ionic.Zip.Tests
                             _output.WriteLine("adding entry {0}", filesToZip[i]);
                             // use the local filename (not fully qualified)
                             ZipEntry e = zip1.AddFile(filesToZip[i], "");
-                            e.Comment = String.Format("This entry was encoded in the {0} codepage", trials[k].codepage);
+                            e.Comment = String.Format(
+                                "This entry was encoded in the {0} codepage",
+                                trials[k].codepage
+                            );
                         }
                         zip1.Save();
                     }
@@ -501,15 +544,26 @@ namespace Ionic.Zip.Tests
                     try
                     {
                         // verify the filenames are (or are not) unicode
-                        var options = new ReadOptions {
-                            Encoding = System.Text.Encoding.GetEncoding(trials[k].codepage)
+                        var options = new ReadOptions
+                        {
+                            Encoding = System.Text.Encoding.GetEncoding(trials[k].codepage),
                         };
                         using (ZipFile zip2 = ZipFile.Read(zipFileToCreate, options))
                         {
                             foreach (ZipEntry e in zip2)
                             {
                                 _output.WriteLine("found entry {0}", e.FileName);
-                                e.Extract(Path.Combine(tld, String.Format("trial{0}-{1}-{2}-extract", k, j, trials[k].codepage)));
+                                e.Extract(
+                                    Path.Combine(
+                                        tld,
+                                        String.Format(
+                                            "trial{0}-{1}-{2}-extract",
+                                            k,
+                                            j,
+                                            trials[k].codepage
+                                        )
+                                    )
+                                );
                             }
                         }
                     }
@@ -519,15 +573,11 @@ namespace Ionic.Zip.Tests
                             _output.WriteLine("caught expected exception");
                         else
                             throw new System.Exception("while extracting", e1);
-
                     }
                 }
-
             }
             _output.WriteLine("\n---------------------Done.");
         }
-
-
 
         [Fact]
         public void CodePage_UpdateZip_AlternateEncoding_wi10180()
@@ -536,15 +586,12 @@ namespace Ionic.Zip.Tests
             System.Text.Encoding JIS = System.Text.Encoding.GetEncoding("shift_jis");
             _output.WriteLine("The CP for JIS is: {0}", JIS.CodePage);
             ReadOptions options = new ReadOptions { Encoding = JIS };
-            string[] filenames = {
-                "日本語.txt",
-                "日本語テスト.txt"
-            };
+            string[] filenames = { "日本語.txt", "日本語テスト.txt" };
 
             // three trials: one for old-style
             // ProvisionalAlternateEncoding, one for "AsNecessary"
             // and one for "Always"
-            for (int j=0; j < 3; j++)
+            for (int j = 0; j < 3; j++)
             {
                 string zipFileToCreate = Path.Combine(tld, $"wi10180-{j}.zip");
 
@@ -580,12 +627,17 @@ namespace Ionic.Zip.Tests
                 {
                     foreach (var e in zip0)
                     {
-                        _output.WriteLine("existing entry name: {0}  encoding: {1}",
-                                              e.FileName, e.AlternateEncoding.EncodingName );
-                        Assert.Equal<System.Text.Encoding>
-                            (options.Encoding, e.AlternateEncoding);
+                        _output.WriteLine(
+                            "existing entry name: {0}  encoding: {1}",
+                            e.FileName,
+                            e.AlternateEncoding.EncodingName
+                        );
+                        Assert.Equal<System.Text.Encoding>(options.Encoding, e.AlternateEncoding);
                     }
-                    zip0.AddEntry(filenames[1], "This is more content..." + System.DateTime.UtcNow.ToString("G"));
+                    zip0.AddEntry(
+                        filenames[1],
+                        "This is more content..." + System.DateTime.UtcNow.ToString("G")
+                    );
                     _output.WriteLine("adding file: {0}", filenames[1]);
                     zip0.Save();
                 }
@@ -596,14 +648,15 @@ namespace Ionic.Zip.Tests
                 {
                     foreach (string f in filenames)
                     {
-                        Assert.Equal<string>(f, zip0[f].FileName,
-                            String.Format("The FileName was not expected, (cycle {0}) ", j));
+                        Assert.Equal<string>(
+                            f,
+                            zip0[f].FileName,
+                            String.Format("The FileName was not expected, (cycle {0}) ", j)
+                        );
                     }
                 }
             }
         }
-
-
 
         [Fact]
         public void Unicode_AddDirectoryByName_wi8984()
@@ -616,14 +669,17 @@ namespace Ionic.Zip.Tests
             // three trials: one for old-style
             // ProvisionalAlternateEncoding, one for "AsNecessary"
             // and one for "Always"
-            for (int j=0; j < 3; j++)
+            for (int j = 0; j < 3; j++)
             {
                 _output.WriteLine("Trial {0}", j);
                 for (int n = 1; n <= 10; n++)
                 {
                     _output.WriteLine("nEntries {0}", n);
                     var dirsAdded = new System.Collections.Generic.List<String>();
-                    var zipFileToCreate = Path.Combine(tld, String.Format("wi8984-{0}-{1:N2}.zip", j, n));
+                    var zipFileToCreate = Path.Combine(
+                        tld,
+                        String.Format("wi8984-{0}-{1:N2}.zip", j, n)
+                    );
                     using (ZipFile zip1 = new ZipFile(zipFileToCreate))
                     {
                         switch (j)
@@ -652,15 +708,20 @@ namespace Ionic.Zip.Tests
                         zip1.Save();
                     }
 
-
-                    string extractDir = Path.Combine(tld, String.Format("extract-{0}-{1:D3}", j, n));
+                    string extractDir = Path.Combine(
+                        tld,
+                        String.Format("extract-{0}-{1:D3}", j, n)
+                    );
                     int dirCount = 0;
                     using (ZipFile zip2 = ZipFile.Read(zipFileToCreate))
                     {
                         foreach (var e in zip2)
                         {
                             _output.WriteLine("dir: {0}", e.FileName);
-                            Assert.True(dirsAdded.Contains(e.FileName), $"Cannot find the expected entry ({e.FileName})");
+                            Assert.True(
+                                dirsAdded.Contains(e.FileName),
+                                $"Cannot find the expected entry ({e.FileName})"
+                            );
                             Assert.True(e.IsDirectory);
                             e.Extract(extractDir);
                             dirCount++;
@@ -672,6 +733,5 @@ namespace Ionic.Zip.Tests
                 _output.WriteLine("");
             }
         }
-
     }
 }

@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+<!--
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+-->
+    <TargetFramework>netstandard2.0</TargetFramework>
+
     <Nullable>disable</Nullable>
     <AssemblyTitle>Ionic's Zip Library</AssemblyTitle>
     <AssemblyName>Ionic.Zip</AssemblyName>
 
     <PackageId>DotNetZip.Original</PackageId>
-    <Version>2025.01.26</Version>
+    <Version>2025.02.15</Version>
     <Authors>Dino Chiesa</Authors>
     <Company>Dino Chiesa</Company>
 
@@ -25,8 +29,11 @@
     <Compile Include="..\CommonSrc\CRC32.cs">
       <Link>CRC32.cs</Link>
     </Compile>
-    <Compile Include="..\BZip2-lib\*.cs">
-      <Link>BZip2-lib\%(FileName)</Link>
+    <Compile Include="..\CommonSrc\StreamExtensions.ReadExactly.cs">
+      <Link>StreamExtensions.ReadExactly.cs</Link>
+    </Compile>
+    <Compile Include="..\BZip2\*.cs">
+      <Link>BZip2\%(FileName)</Link>
     </Compile>
     <Compile Include="..\Zlib\*.cs">
       <Link>Zlib\%(FileName)</Link>

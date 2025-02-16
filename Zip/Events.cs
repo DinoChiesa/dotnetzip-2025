@@ -1,31 +1,21 @@
 // Events.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2006, 2007, 2008, 2009 Dino Chiesa and Microsoft Corporation.
+// Copyright (c) 2006, 2007, 2008, 2009, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2011-August-06 12:26:24>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
 // This module defines events used by the ZipFile class.
 //
-//
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ionic.Zip
 {

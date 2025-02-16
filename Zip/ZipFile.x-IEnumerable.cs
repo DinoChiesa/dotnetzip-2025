@@ -1,33 +1,23 @@
 // ZipFile.x-IEnumerable.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2006, 2007, 2008, 2009 Dino Chiesa and Microsoft Corporation.
+// Copyright (c) 2006, 2007, 2008, 2009 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// last saved (in emacs):
-// Time-stamp: <2009-December-26 15:13:26>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
 // This module defines smoe methods for IEnumerable support. It is
 // particularly important for COM to have these things in a separate module.
 //
-// ------------------------------------------------------------------
-
 
 namespace Ionic.Zip
 {
-
     // For some weird reason, the method with the DispId(-4) attribute, which is used as
     // the _NewEnum() method, and which is required to get enumeration to work from COM
     // environments like VBScript and Javascript (etc) must be the LAST MEMBER in the
@@ -37,14 +27,8 @@ namespace Ionic.Zip
     // here in this oddly-named module, for this reason.
     //
 
-
-
     public partial class ZipFile
     {
-
-
-
-
         /// <summary>
         /// Generic IEnumerator support, for use of a ZipFile in an enumeration.
         /// </summary>

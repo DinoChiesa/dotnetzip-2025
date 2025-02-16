@@ -5,15 +5,14 @@
 //
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2009 by Dino Chiesa
+// Copyright (c) 2009, 2025 by Dino Chiesa
 // All rights reserved!
 //
 // ------------------------------------------------------------------
-
-
-using System;
-using System.IO;
-
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
+//
+// ------------------------------------------------------------------
 
 namespace Ionic.Zip.Tests
 {

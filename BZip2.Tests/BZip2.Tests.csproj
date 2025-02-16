@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BZip2-lib\BZip2-lib.csproj" />
-    <ProjectReference Include="..\Tools\BZip2\BZip2.csproj" />
+    <ProjectReference Include="..\BZip2\BZip2.csproj" />
+    <ProjectReference Include="..\Tools\dnzbzip2\dnzbzip2.csproj" />
   </ItemGroup>
 
 </Project>

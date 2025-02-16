@@ -1,6 +1,6 @@
 // ZipFile.cs
 //
-// Copyright (c) 2006-2010,2025 Dino Chiesa
+// Copyright (c) 2006-2010, 2025 Dino Chiesa
 // All rights reserved.
 //
 // This module is part of DotNetZip, a zipfile class library.
@@ -21,9 +21,10 @@
 // does not require J#. It does require .NET 2.0.  It balances a good set of
 // features, with ease of use and speed of performance.
 //
-// This code is released under the Microsoft Public License .
-// See the License.txt for details.
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
+// ------------------------------------------------------------------
 //
 // NB: This implementation originally relied on the
 // System.IO.Compression.DeflateStream base class in the .NET Framework
@@ -31,6 +32,10 @@
 //
 // Thu, 08 Oct 2009  17:04
 //
+
+using System;
+using System.IO;
+using System.Collections.Generic;
 
 using Interop = System.Runtime.InteropServices;
 

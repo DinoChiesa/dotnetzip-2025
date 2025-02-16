@@ -1,20 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BZip2-lib\BZip2-lib.csproj"/>
+    <ProjectReference Include="..\..\BZip2\BZip2.csproj"/>
   </ItemGroup>
 
   <PropertyGroup>
-    <AssemblyName>bzip2</AssemblyName>
+    <AssemblyName>dnzbzip2</AssemblyName>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <Version>2025.02.03</Version>
+    <Authors>Dino Chiesa</Authors>
+    <Company>Dino Chiesa</Company>
   </PropertyGroup>
 
+<!--
   <Target Name="RenameOutputExecutable" AfterTargets="Publish">
     <Move SourceFiles="$(PublishDir)$(AssemblyName)" DestinationFiles="$(PublishDir)new-name-here"/>
     <Message Text="Renamed executable file from $(PublishDir)$(AssemblyName) to $(PublishDir)new-name-here" Importance="high"/>
   </Target>
+-->
 
 </Project>

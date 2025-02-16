@@ -3,20 +3,14 @@
 // BZip2OutputStream.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c) 2011 Dino Chiesa.
+// Copyright (c) 2011, 2025 Dino Chiesa.
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License.
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
-//
-// ------------------------------------------------------------------
-//
-// Last Saved: <2011-August-02 16:44:11>
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
@@ -26,7 +20,7 @@
 // applies to the original Apache code.
 //
 // ------------------------------------------------------------------
-// flymake: csc.exe /t:module BZip2InputStream.cs BZip2Compressor.cs Rand.cs BCRC32.cs @@FILE@@
+
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

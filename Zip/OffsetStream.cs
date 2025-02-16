@@ -1,29 +1,25 @@
 // OffsetStream.cs
 // ------------------------------------------------------------------
 //
-// Copyright (c)  2009 Dino Chiesa
+// Copyright (c) 2009-2011, 2025 Dino Chiesa
 // All rights reserved.
 //
 // This code module is part of DotNetZip, a zipfile class library.
 //
 // ------------------------------------------------------------------
-//
-// This code is licensed under the Microsoft Public License. 
-// See the file License.txt for the license details.
-// More info on: http://dotnetzip.codeplex.com
+// This code is licensed under the Apache 2.0 License.
+// See the file LICENSE.txt that accompanies the source code, for the license details.
 //
 // ------------------------------------------------------------------
 //
-// last saved (in emacs): 
-// Time-stamp: <2025-January-18 19:26:41>
-//
-// ------------------------------------------------------------------
-//
-// This module defines logic for handling reading of zip archives embedded 
+// This module defines logic for handling reading of zip archives embedded
 // into larger streams.  The initial position of the stream serves as
 // the base offset for all future Seek() operations.
-// 
+//
 // ------------------------------------------------------------------
+
+using System;
+using System.IO;
 
 namespace Ionic.Zip
 {
