@@ -4,6 +4,7 @@
 # dotnet
 */**/bin/*
 */**/obj/*
+**/*.nupkg
 
 *.log
 **/*~

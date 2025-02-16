@@ -1,0 +1,5 @@
+﻿VERIFICATION
+
+I, Dino Chiesa, username:DChiesa on chocolatey.org , am the author of the
+DotNetZip project, from which the dotnetzip-tools are built.
+

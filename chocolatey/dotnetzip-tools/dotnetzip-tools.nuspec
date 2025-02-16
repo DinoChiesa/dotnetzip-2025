@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>dotnetzip-tools</id>
+    <version>2025.02.15</version>
+    <!-- <packageSourceUrl>Where is this Chocolatey package located (think GitHub)? packageSourceUrl is highly recommended for the community feed</packageSourceUrl>-->
+
+    <title>dotnetzip-tools (Install)</title>
+    <authors>Dino Chiesa</authors>
+    <!-- projectUrl is required for the community feed -->
+    <projectUrl>https://github.com/DinoChiesa/dotnetzip-2025</projectUrl>
+    <!--<iconUrl>http://rawcdn.githack.com/__REPLACE_YOUR_REPO__/master/icons/dotnetzip-tools.png</iconUrl>-->
+    <copyright>2025 Dino Chiesa</copyright>
+    <licenseUrl>https://github.com/DinoChiesa/dotnetzip-2025/blob/main/LICENSE.txt</licenseUrl>
+    <!-- <requireLicenseAcceptance>true</requireLicenseAcceptance> -->
+    <projectSourceUrl>https://github.com/DinoChiesa/dotnetzip-2025</projectSourceUrl>
+
+    <!--<docsUrl>At what url are the software docs located?</docsUrl>-->
+    <!--<mailingListUrl></mailingListUrl>-->
+    <!--<bugTrackerUrl></bugTrackerUrl>-->
+    <tags>zip archive</tags>
+    <summary>a set of command line tools built on .NET that can zip or unzip files, or create or read gzip or bzip2 files</summary>
+    <description>## DotNetZip Tools
+    There are four command-line tools included here:
+    * dnzzip - create or update zip archives.
+    * dnzunzip - read or extract zip archives.
+    * dnzgzip - create or read gzip files
+    * dnzbzip2 - create or read bzip2 files
+
+    ### Who needs another zip tool?
+
+    The dnzzip.exe may be interesting because it offers a number of options for creating zip files, setting timestamps on the contents, setting comments on the archive, and so on.
+
+    ### Examples
+
+    This is what is used to create a zipped release that I attach to the github repo:
+
+    ```
+    dnzzip.exe  Release-2025.02.15.zip  -UTnow -zc "Release 2025.02.15" `
+    -d Zip `
+    Zip\bin\Release\net9.0 `
+    -d Zlib `
+    Zlib\bin\Release\net9.0 `
+    -d BZip2 `
+    BZip2\bin\Release\net9.0 `
+    -d Tools\dnzgzip `
+    Tools\dnzgzip\bin\Release\net9.0 `
+    -d Tools\dnzzip `
+    Tools\dnzzip\bin\Release\net9.0 `
+    -d Tools\dnzunzip `
+    Tools\dnzunzip\bin\Release\net9.0 `
+    -d Tools\dnzbzip2 `
+    Tools\dnzbzip2\bin\Release\net9.0
+    ```
+
+    </description>
+
+    <releaseNotes>This is the first release. </releaseNotes>
+    <!-- =============================== -->
+
+    <!-- Specifying dependencies and version ranges? https://docs.nuget.org/create/versioning#specifying-version-ranges-in-.nuspec-files -->
+    <!--<dependencies>
+      <dependency id="" version="__MINIMUM_VERSION__" />
+      <dependency id="" version="[__EXACT_VERSION__]" />
+      <dependency id="" version="[_MIN_VERSION_INCLUSIVE, MAX_VERSION_INCLUSIVE]" />
+      <dependency id="" version="[_MIN_VERSION_INCLUSIVE, MAX_VERSION_EXCLUSIVE)" />
+      <dependency id="" />
+      <dependency id="chocolatey-core.extension" version="1.1.0" />
+    </dependencies>-->
+    <!-- chocolatey-core.extension - https://community.chocolatey.org/packages/chocolatey-core.extension -->
+
+    <!--<provides>NOT YET IMPLEMENTED</provides>-->
+    <!--<conflicts>NOT YET IMPLEMENTED</conflicts>-->
+    <!--<replaces>NOT YET IMPLEMENTED</replaces>-->
+  </metadata>
+  <files>
+    <!-- this section controls what actually gets packaged into the Chocolatey package -->
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
